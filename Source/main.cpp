@@ -261,20 +261,4 @@ public:
     }
 };
 
-/**
-* This macro is expaneded to (roughly, depending on OS) this:
-*
-* > int RunApplication()
-* > {
-* > Urho3D::SharedPtr<Urho3D::Context> context(new Urho3D::Context());
-* > Urho3D::SharedPtr<className> application(new className(context));
-* > return application->Run();
-* > }
-* >
-* > int main(int argc, char** argv)
-* > {
-* > Urho3D::ParseArguments(argc, argv);
-* > return function;
-* > }
-*/
 DEFINE_APPLICATION_MAIN(MyApp)
