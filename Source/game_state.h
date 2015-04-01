@@ -41,13 +41,15 @@ class game_state : public Urho3D::Object
 {
 public:
     std::vector<Urho3D::Node*> nodes;   ///< Put all your nodes here so that they are removed on game state deletion.
+    std::vector<Urho3D::UIElement*> gui_elements;   ///< Put all your nodes here so that they are removed on game state deletion.
     // there could be other vectors here with stuff that will be automatically removed in the destructor
 
     game_state() : Urho3D::Object(globals::instance()->context) {}
     /// Removes all GUI elements amd all nodes in the ´nodes´ vector.
     virtual ~game_state()
     {
-        globals::instance()->ui_root->RemoveAllChildren();
+        for(auto e:gui_elements)
+            e->Remove();
         for(auto n:nodes)
             n->Remove();
         nodes.clear();

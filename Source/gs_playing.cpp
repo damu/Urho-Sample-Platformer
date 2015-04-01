@@ -7,6 +7,7 @@ using namespace Urho3D;
 gs_playing::gs_playing() : game_state()
 {
     text_=new Text(context_);
+    gui_elements.push_back(text_);
     text_->SetText("Keys: tab = toggle mouse, AWSD = move camera, Shift = fast mode, Esc = quit.\nWait a bit to see FPS.");
     text_->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),20);
     text_->SetColor(Color(.3,0,.3));
@@ -14,6 +15,7 @@ gs_playing::gs_playing() : game_state()
     text_->SetVerticalAlignment(VA_TOP);
     GetSubsystem<UI>()->GetRoot()->AddChild(text_);
     Button* button=new Button(context_);
+    gui_elements.push_back(button);
     GetSubsystem<UI>()->GetRoot()->AddChild(button);
     button->SetName("Button Quit");
     button->SetStyle("Button");

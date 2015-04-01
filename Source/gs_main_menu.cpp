@@ -56,6 +56,7 @@ gs_main_menu::gs_main_menu() : game_state()
 
 
     Window* window_=new Window(globals::instance()->context);
+    gui_elements.push_back(window_);
     globals::instance()->ui_root->AddChild(window_);
 
     window_->SetMinSize(384,192);
