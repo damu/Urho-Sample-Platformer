@@ -8,3 +8,4 @@ Build/*.cmake
 Build/libUrho-Sample-Platformer.dll.a
 Build/Urho-Sample-Platformer.cbp
 Build/Urho-Sample-Platformer.layout
+*.blend1
