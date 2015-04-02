@@ -41,6 +41,8 @@ gs_playing::gs_playing() : game_state()
         body->SetCollisionLayer(2); // Use layer bitmask 2 for static geometry
         CollisionShape* shape=boxNode_->CreateComponent<CollisionShape>();
         shape->SetTriangleMesh(globals::instance()->cache->GetResource<Model>("Models/level_1.mdl"));
+
+        body->GetPhysicsWorld()->SetGravity(Vector3(0,-9.81*2,0));
     }
 
     {
@@ -181,7 +183,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             }
 
             static float jump_force_applied=0;
-            static const float max_jump_force_applied=400;
+            static const float max_jump_force_applied=600;
             if(jumping==1&&jump_force_applied<max_jump_force_applied)   // jump higher if we are jumping and
             {
                 if(jump_force_applied>max_jump_force_applied)
@@ -192,15 +194,15 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
                 {
                     // I want to limit the jump height by limiting the force pumped into it. Doesn't fully work yet.
                     float f=0;//(max_jump_force_applied-jump_force_applied)*timeStep*2000;
-                    moveDir+=Vector3::UP*1.5*f;
-                    moveDir_global=result.normal_*1.5*f;
-                    jump_force_applied+=timeStep*2000;
+                    moveDir+=Vector3::UP*2*f;
+                    moveDir_global=result.normal_*1*f;
+                    jump_force_applied+=timeStep*3000;
                 }
                 else
                 {
-                    jump_force_applied+=timeStep*2000;
-                    moveDir+=Vector3::UP*1.5;
-                    moveDir_global=result.normal_*1.5;
+                    moveDir+=Vector3::UP*2;
+                    moveDir_global=result.normal_*1;
+                    jump_force_applied+=timeStep*3000;
                 }
             }
             if(jumping!=1)
@@ -211,10 +213,10 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         Quaternion quat;
         quat.FromLookRotation(node_camera->GetDirection()*Vector3(1,0,1),Vector3::UP);
         body_player->SetRotation(quat);
-        body_player->ApplyImpulse(moveDir_global*timeStep*2000);
+        body_player->ApplyImpulse(moveDir_global*timeStep*3000);
         Vector3 vel=body_player->GetLinearVelocity()*Vector3(1,0,1);
         float speed_old=vel.Length();
-        vel+=rot*moveDir*timeStep*2000/body_player->GetMass();
+        vel+=rot*moveDir*timeStep*3000/body_player->GetMass();
         float speed_new=vel.Length();
         if(speed_new>15&&speed_new>speed_old)   // over limit. Don't increase speed further but make direction change possible.
         {
@@ -225,7 +227,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             s+=std::to_string(vel.Length());
             LOGINFO(String(s.data(),s.size()));
         }
-        body_player->SetLinearVelocity(Vector3(vel.x_,body_player->GetLinearVelocity().y_+(rot*moveDir*timeStep*2000/body_player->GetMass()).y_,vel.z_));
+        body_player->SetLinearVelocity(Vector3(vel.x_,body_player->GetLinearVelocity().y_+(rot*moveDir*timeStep*3000/body_player->GetMass()).y_,vel.z_));
 
         auto vec_rot=body_player->GetLinearVelocity()*Vector3(1,0,1);
         float s=vec_rot.Length();
