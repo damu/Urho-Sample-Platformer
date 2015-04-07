@@ -8,7 +8,7 @@ gs_main_menu::gs_main_menu() : game_state()
     Node* node_camera=globals::instance()->camera->GetNode();
     node_camera->SetPosition(Vector3(0,0,0));
     node_camera->SetDirection(Vector3::FORWARD);
-
+     
     boxNode_=globals::instance()->scene->CreateChild("Flag");
     nodes.push_back(boxNode_);
     boxNode_->SetPosition(Vector3(0,-0.5,6));
@@ -98,14 +98,16 @@ gs_main_menu::gs_main_menu() : game_state()
         button->SetStyleAuto();
         {
             Text* t = new Text(globals::instance()->context);
+            t->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),20);
             t->SetHorizontalAlignment(HA_CENTER);
             t->SetVerticalAlignment(VA_CENTER);
             t->SetName("Text");
-            t->SetText("Quit");
+            t->SetText("Play");
             //button->AddChild(t);
             t->SetStyle("Text");
-            t->SetMinHeight(100);
+            t->SetMinHeight(VA_CENTER);
             button->AddChild(t);
+
         }
         window_->AddChild(button);
         SubscribeToEvent(button,E_RELEASED,HANDLER(gs_main_menu,HandlePlayPressed));
@@ -117,17 +119,19 @@ gs_main_menu::gs_main_menu() : game_state()
         button->SetStyleAuto();
         {
             Text* t = new Text(globals::instance()->context);
+            t->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),20);
             t->SetHorizontalAlignment(HA_CENTER);
             t->SetVerticalAlignment(VA_CENTER);
             t->SetName("Text");
             t->SetText("Quit");
             //button->AddChild(t);
             t->SetStyle("Text");
-            t->SetMinHeight(100);
+            t->SetMinHeight(VA_CENTER);
             button->AddChild(t);
         }
         window_->AddChild(button);
         SubscribeToEvent(button,E_RELEASED,HANDLER(gs_main_menu,HandleClosePressed));
+
     }
 
 
