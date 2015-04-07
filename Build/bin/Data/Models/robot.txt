@@ -1,0 +1,6 @@
+Materials/robot_dark_grey.xml
+Materials/robot_white.xml
+Materials/robot_dark.xml
+Materials/robot_light.xml
+Materials/robot_black.xml
+Materials/robot_eyes.xml

@@ -29,7 +29,7 @@ gs_playing::gs_playing() : game_state()
     SubscribeToEvent(E_KEYDOWN,HANDLER(gs_playing,HandleKeyDown));
 
     {
-        auto boxNode_=globals::instance()->scene->CreateChild("Box");
+        Node* boxNode_=globals::instance()->scene->CreateChild("Box");
         nodes.push_back(boxNode_);
         boxNode_->SetPosition(Vector3(0,0,-10));
         StaticModel* boxObject=boxNode_->CreateComponent<StaticModel>();
@@ -52,8 +52,13 @@ gs_playing::gs_playing() : game_state()
         node_player_model=globals::instance()->scene->CreateChild();
         nodes.push_back(node_player_model);
         StaticModel* boxObject=node_player_model->CreateComponent<StaticModel>();
-        boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/Jack.mdl"));
-        boxObject->SetMaterial(globals::instance()->cache->GetResource<Material>("Materials/Jack.xml"));
+        boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/robot.mdl"));
+        boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/robot_dark_grey.xml"));
+        boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/robot_white.xml"));
+        boxObject->SetMaterial(2,globals::instance()->cache->GetResource<Material>("Materials/robot_dark.xml"));
+        boxObject->SetMaterial(3,globals::instance()->cache->GetResource<Material>("Materials/robot_light.xml"));
+        boxObject->SetMaterial(4,globals::instance()->cache->GetResource<Material>("Materials/robot_black.xml"));
+        boxObject->SetMaterial(5,globals::instance()->cache->GetResource<Material>("Materials/robot_eyes.xml"));
         boxObject->SetCastShadows(true);
 
         body_player=node_player->CreateComponent<RigidBody>();
@@ -64,7 +69,7 @@ gs_playing::gs_playing() : game_state()
         body_player->SetAngularFactor(Vector3(0,1,0));
         body_player->SetFriction(0.8);
         CollisionShape* shape=node_player->CreateComponent<CollisionShape>();
-        shape->SetCapsule(1,2,Vector3(0,1,0));
+        shape->SetCapsule(1,2,Vector3(0,1.05,0));
     }
 
     {

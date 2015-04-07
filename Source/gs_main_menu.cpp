@@ -8,7 +8,7 @@ gs_main_menu::gs_main_menu() : game_state()
     Node* node_camera=globals::instance()->camera->GetNode();
     node_camera->SetPosition(Vector3(0,0,0));
     node_camera->SetDirection(Vector3::FORWARD);
-     
+
     boxNode_=globals::instance()->scene->CreateChild("Flag");
     nodes.push_back(boxNode_);
     boxNode_->SetPosition(Vector3(0,-0.5,6));
@@ -141,10 +141,6 @@ gs_main_menu::gs_main_menu() : game_state()
     SubscribeToEvent(E_UPDATE,HANDLER(gs_main_menu,update));
     SubscribeToEvent(E_KEYDOWN,HANDLER(gs_main_menu,HandleKeyDown));
     SubscribeToEvent(buttonClose,E_RELEASED,HANDLER(gs_main_menu,HandleClosePressed));
-}
-
-gs_main_menu::~gs_main_menu()
-{
 }
 
 void gs_main_menu::update(StringHash eventType,VariantMap& eventData)

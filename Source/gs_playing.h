@@ -32,7 +32,7 @@ class gs_playing : public game_state
 public:
     int framecount_=0;
     float time_=0;
-    Urho3D::SharedPtr<Urho3D::Text> text_;
+    Urho3D::Text* text_;
     Urho3D::Node* node_player;
     Urho3D::Node* node_player_model;
     Urho3D::RigidBody* body_player;
