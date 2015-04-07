@@ -143,10 +143,8 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         Vector3 moveDir=Vector3::ZERO;
         Vector3 moveDir_global=Vector3::ZERO;
         if(input->GetKeyDown('D'))
-            //torqueVec+=Vector3(0,1,0)*0.5;
             moveDir+=Vector3::RIGHT*1;
         if(input->GetKeyDown('A'))
-            //torqueVec+=Vector3(0,-1,0)*0.5;
             moveDir-=Vector3::RIGHT*1;
         if(input->GetKeyDown('W'))
             moveDir+=Vector3::FORWARD*1;
@@ -156,6 +154,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         if(moveDir.Length()>0.5)
             moveDir.Normalize();
 
+        Vector3 vel=body_player->GetLinearVelocity()*Vector3(1,0,1);
         {
             static bool on_floor;
             static bool at_wall;
@@ -188,7 +187,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             }
 
             static float jump_force_applied=0;
-            static const float max_jump_force_applied=600;
+            static const float max_jump_force_applied=500;
             if(jumping==1&&jump_force_applied<max_jump_force_applied)   // jump higher if we are jumping and
             {
                 if(jump_force_applied>max_jump_force_applied)
@@ -201,13 +200,16 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
                     float f=0;//(max_jump_force_applied-jump_force_applied)*timeStep*2000;
                     moveDir+=Vector3::UP*2*f;
                     moveDir_global=result.normal_*1*f;
-                    jump_force_applied+=timeStep*3000;
+                    jump_force_applied+=timeStep*2500;
                 }
                 else
                 {
-                    moveDir+=Vector3::UP*2;
-                    moveDir_global=result.normal_*1;
-                    jump_force_applied+=timeStep*3000;
+                    float f=1;
+                    if(moveDir.Angle(vel)>90&&vel.Length()>1&&on_floor) // direction change jump / side sommersault
+                        f=1.3;
+                    moveDir+=Vector3::UP*2*f;
+                    moveDir_global=result.normal_*1*f;
+                    jump_force_applied+=timeStep*2500;
                 }
             }
             if(jumping!=1)
@@ -218,10 +220,9 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         Quaternion quat;
         quat.FromLookRotation(node_camera->GetDirection()*Vector3(1,0,1),Vector3::UP);
         body_player->SetRotation(quat);
-        body_player->ApplyImpulse(moveDir_global*timeStep*3000);
-        Vector3 vel=body_player->GetLinearVelocity()*Vector3(1,0,1);
+        body_player->ApplyImpulse(moveDir_global*timeStep*2500);
         float speed_old=vel.Length();
-        vel+=rot*moveDir*timeStep*3000/body_player->GetMass();
+        vel+=rot*moveDir*timeStep*2500/body_player->GetMass();
         float speed_new=vel.Length();
         if(speed_new>15&&speed_new>speed_old)   // over limit. Don't increase speed further but make direction change possible.
         {

@@ -50,6 +50,7 @@ public:
     {
         for(auto e:gui_elements)
             e->Remove();
+        gui_elements.clear();
         for(auto n:nodes)
             n->Remove();
         nodes.clear();

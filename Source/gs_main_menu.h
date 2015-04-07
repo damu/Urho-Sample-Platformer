@@ -24,11 +24,10 @@
 class gs_main_menu : public game_state
 {
 public:
-    Urho3D::SharedPtr<Urho3D::Node> boxNode_;
+    Urho3D::Node* boxNode_;
     Urho3D::Window* window_;
 
     gs_main_menu();
-    ~gs_main_menu();
     void update(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
     void HandlePlayPressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
     void HandleKeyDown(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
