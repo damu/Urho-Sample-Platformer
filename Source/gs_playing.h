@@ -36,6 +36,7 @@ public:
     Urho3D::Node* node_player;
     Urho3D::Node* node_player_model;
     Urho3D::RigidBody* body_player;
+    float cam_distance=8;
 
     gs_playing();
     void update(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);

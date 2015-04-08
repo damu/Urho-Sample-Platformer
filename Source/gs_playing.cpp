@@ -128,6 +128,9 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
 
     Node* node_camera=globals::instance()->camera->GetNode();
     {
+        cam_distance-=input->GetMouseMoveWheel();
+        cam_distance=Clamp(cam_distance,2.0,20.0);
+
         node_camera->SetPosition(node_player->GetPosition());
         node_camera->SetDirection(Vector3::FORWARD);
         static float yaw=20;
@@ -135,9 +138,17 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         node_camera->Yaw(yaw);
         static float pitch=20;
         pitch+=mouseMove.y_*0.1;
-        pitch=Clamp(pitch,-90.0,90.0);
+        pitch=Clamp(pitch,-85.0,85.0);
+        node_camera->Translate(Vector3(0,1,0));
         node_camera->Pitch(pitch);
-        node_camera->Translate(Vector3(0,2,-8));
+
+        PhysicsRaycastResult result;
+        Ray ray(node_camera->GetPosition(),-node_camera->GetDirection());
+        body_player->GetPhysicsWorld()->SphereCast(result,ray,0.2,cam_distance,2);
+        if(result.distance_<=cam_distance)
+            node_camera->Translate(Vector3(0,0,-result.distance_+0.1));
+        else
+            node_camera->Translate(Vector3(0,0,-cam_distance));
     }
     {
         Vector3 moveDir=Vector3::ZERO;
@@ -193,6 +204,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
 
             static float jump_force_applied=0;
             static const float max_jump_force_applied=500;
+            Vector3 moveDir_world=node_player->GetWorldRotation()*moveDir;
             if(jumping==1&&jump_force_applied<max_jump_force_applied)   // jump higher if we are jumping and
             {
                 if(jump_force_applied>max_jump_force_applied)
@@ -210,10 +222,10 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
                 else
                 {
                     float f=1;
-                    if(moveDir.Angle(vel)>90&&vel.Length()>3&&on_floor) // direction change jump / side sommersault
+                    if(moveDir_world.Angle(vel)>90&&vel.Length()>3&&on_floor) // direction change jump / side sommersault
                     {
                         f=1.3;
-                        body_player->SetLinearVelocity(Vector3(moveDir.x_*10,body_player->GetLinearVelocity().y_,moveDir.z_*10));
+                        body_player->SetLinearVelocity(Vector3(moveDir_world.x_*10,body_player->GetLinearVelocity().y_,moveDir_world.z_*10));
                         vel=body_player->GetLinearVelocity()*Vector3(1,0,1);
                     }
                     moveDir+=Vector3::UP*2*f;
@@ -235,11 +247,11 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         if(speed_new>15&&speed_new>speed_old)   // over limit. Don't increase speed further but make direction change possible.
         {
             vel=vel.Normalized()*speed_old;
-            std::string s;
+/*            std::string s;
             s+=std::to_string(speed_old);
             s+=std::to_string(speed_new);
             s+=std::to_string(vel.Length());
-            LOGINFO(String(s.data(),s.size()));
+            LOGINFO(String(s.data(),s.size()));*/
         }
         body_player->SetLinearVelocity(Vector3(vel.x_,body_player->GetLinearVelocity().y_+(rot*moveDir*timeStep*3000/body_player->GetMass()).y_,vel.z_));
         body_player->ApplyImpulse(moveDir_global*timeStep*2500);
