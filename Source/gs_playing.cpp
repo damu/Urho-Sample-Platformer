@@ -64,7 +64,7 @@ gs_playing::gs_playing() : game_state()
         body_player=node_player->CreateComponent<RigidBody>();
         body_player->SetCollisionLayer(1);
         body_player->SetMass(80.0);
-        body_player->SetLinearDamping(0.01f);
+        body_player->SetLinearDamping(0.0f);
         body_player->SetAngularDamping(0.98f);
         body_player->SetAngularFactor(Vector3(0,1,0));
         body_player->SetFriction(0.8);
@@ -165,7 +165,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             float height=0;
             PhysicsRaycastResult result;
             Ray ray(node_player->GetPosition()+Vector3(0,1.0,0),Vector3::DOWN);
-            body_player->GetPhysicsWorld()->SphereCast(result,ray,0.8,3,2);
+            body_player->GetPhysicsWorld()->SphereCast(result,ray,0.2,2,2);
             if(result.distance_<=2)
                 on_floor=true;
             else
@@ -180,11 +180,16 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             if(input->GetKeyDown(KEY_SPACE)&&jumping==false&&(on_floor||at_wall))
             {
                 jumping=1;   // start jumping
+                if(at_wall) // to avoid using one wall for walljump chaining
+                {
+                    auto v=result.normal_*Vector3(1,0,1)+vel*Vector3(1,0,1)*0.2;
+                    v.Normalize();
+                    body_player->SetLinearVelocity(Vector3(v.x_*10,0,v.z_*10));
+                    vel=body_player->GetLinearVelocity()*Vector3(1,0,1);
+                }
             }
             else if(!input->GetKeyDown(KEY_SPACE))
-            {
                 jumping=0;
-            }
 
             static float jump_force_applied=0;
             static const float max_jump_force_applied=500;
@@ -196,7 +201,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
                 }
                 else if(jump_force_applied+timeStep*2000>max_jump_force_applied)
                 {
-                    // I want to limit the jump height by limiting the force pumped into it. Doesn't fully work yet.
+                    // I want to limit the jump more exactly height by limiting the force pumped into it and applieng the remaining rest here. Doesn't fully work yet.
                     float f=0;//(max_jump_force_applied-jump_force_applied)*timeStep*2000;
                     moveDir+=Vector3::UP*2*f;
                     moveDir_global=result.normal_*1*f;
@@ -205,8 +210,12 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
                 else
                 {
                     float f=1;
-                    if(moveDir.Angle(vel)>90&&vel.Length()>1&&on_floor) // direction change jump / side sommersault
+                    if(moveDir.Angle(vel)>90&&vel.Length()>3&&on_floor) // direction change jump / side sommersault
+                    {
                         f=1.3;
+                        body_player->SetLinearVelocity(Vector3(moveDir.x_*10,body_player->GetLinearVelocity().y_,moveDir.z_*10));
+                        vel=body_player->GetLinearVelocity()*Vector3(1,0,1);
+                    }
                     moveDir+=Vector3::UP*2*f;
                     moveDir_global=result.normal_*1*f;
                     jump_force_applied+=timeStep*2500;
@@ -220,7 +229,6 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         Quaternion quat;
         quat.FromLookRotation(node_camera->GetDirection()*Vector3(1,0,1),Vector3::UP);
         body_player->SetRotation(quat);
-        body_player->ApplyImpulse(moveDir_global*timeStep*2500);
         float speed_old=vel.Length();
         vel+=rot*moveDir*timeStep*2500/body_player->GetMass();
         float speed_new=vel.Length();
@@ -234,6 +242,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             LOGINFO(String(s.data(),s.size()));
         }
         body_player->SetLinearVelocity(Vector3(vel.x_,body_player->GetLinearVelocity().y_+(rot*moveDir*timeStep*3000/body_player->GetMass()).y_,vel.z_));
+        body_player->ApplyImpulse(moveDir_global*timeStep*2500);
 
         auto vec_rot=body_player->GetLinearVelocity()*Vector3(1,0,1);
         float s=vec_rot.Length();
@@ -242,7 +251,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         if(vec_rot.z_<0)
             yaw=-yaw-180;
         node_player_model->SetPosition(node_player->GetPosition());
-        if(s>0.5)
+        if(s>1)
         {
             node_player_model->SetDirection(Vector3::FORWARD);
             node_player_model->Yaw(yaw);

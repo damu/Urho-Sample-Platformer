@@ -102,6 +102,7 @@ public:
     }
     virtual void Stop()
     {
+        globals::instance()->game_state_.reset();
     }
 
     void HandleKeyDown(StringHash eventType,VariantMap& eventData)
