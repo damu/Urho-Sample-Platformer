@@ -16,6 +16,7 @@ gs_main_menu::gs_main_menu() : game_state()
     boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/flag.mdl"));
     boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/flag_pole.xml"));
     boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/flag_cloth.xml"));
+    boxObject->SetCastShadows(true);
 
     for(int x=-30;x<30;x+=3)
         for(int y=-30;y<30;y+=3)
@@ -147,7 +148,7 @@ void gs_main_menu::update(StringHash eventType,VariantMap& eventData)
 {
     float timeStep=eventData[Update::P_TIMESTEP].GetFloat();
 
-    boxNode_->Rotate(Quaternion(0,32*timeStep,0));
+    boxNode_->Rotate(Quaternion(0,64*timeStep,0));
 }
 
 void gs_main_menu::HandlePlayPressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData)

@@ -10,7 +10,7 @@ gs_playing::gs_playing() : game_state()
     gui_elements.push_back(text_);
     text_->SetText("Keys: tab = toggle mouse, AWSD = move camera, Shift = fast mode, Esc = quit.\nWait a bit to see FPS.");
     text_->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),20);
-    text_->SetColor(Color(.3,0,.3));
+    text_->SetColor(Color(.6,.3,.3));
     text_->SetHorizontalAlignment(HA_CENTER);
     text_->SetVerticalAlignment(VA_TOP);
     GetSubsystem<UI>()->GetRoot()->AddChild(text_);
@@ -98,6 +98,27 @@ gs_playing::gs_playing() : game_state()
         light->SetBrightness(2.0);
         light->SetColor(Color(.8,1,.8,1.0));
     }
+
+    {   // "load" flags
+        flag_positions.emplace_back(20.1,14,-46.9);
+        flag_positions.emplace_back(-10.1,14,-46.9);
+        flag_positions.emplace_back(1.1,0.5,-180.4);
+        flag_positions.emplace_back(18.2,21.6,-8.1);
+        flag_positions.emplace_back(28.7,33.9,82.6);
+
+        for(auto p:flag_positions)
+        {
+            Node* n=globals::instance()->scene->CreateChild("Flag");
+            nodes.push_back(n);
+            n->SetPosition(Vector3(p.x_,p.y_,p.z_));
+            StaticModel* boxObject=n->CreateComponent<StaticModel>();
+            boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/flag.mdl"));
+            boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/flag_pole.xml"));
+            boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/flag_cloth.xml"));
+            boxObject->SetCastShadows(true);
+            flag_nodes.push_back(n);
+        }
+    }
 }
 
 void gs_playing::update(StringHash eventType,VariantMap& eventData)
@@ -106,20 +127,43 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
     float timeStep=eventData[Update::P_TIMESTEP].GetFloat();
     framecount_++;
     time_+=timeStep;
-    if(time_ >=1)
+
     {
+        static std::string str_inner;
+        if(time_ >=1)
+        {
+            str_inner="";
+            str_inner.append("Keys: tab = toggle mouse, AWSD = move camera, Shift = fast mode, Esc = quit.\n");
+            str_inner.append(std::to_string(framecount_));
+            str_inner.append(" frames in ");
+            str_inner.append(std::to_string(time_));
+            str_inner.append(" seconds = ");
+            str_inner.append(std::to_string((float)framecount_ / time_));
+            str_inner.append(" fps\nLevel Time: ");
+            framecount_=0;
+            time_=0;
+        }
         std::string str;
-        str.append("Keys: tab = toggle mouse, AWSD = move camera, Shift = fast mode, Esc = quit.\n");
-        str.append(std::to_string(framecount_));
-        str.append(" frames in ");
-        str.append(std::to_string(time_));
-        str.append(" seconds = ");
-        str.append(std::to_string((float)framecount_ / time_));
-        str.append(" fps");
+        str.append(str_inner);
+
+        if(goal_time>0)
+            str.append(std::to_string(goal_time));
+        else
+        {
+            str.append(std::to_string(timer_playing.until_now()));
+            if(!flag_nodes.size())
+                goal_time=timer_playing.until_now();
+        }
+
+        str.append("s\nRemaining Flags: ");
+        str.append(std::to_string(flag_nodes.size()));
+        str.append("/");
+        str.append(std::to_string(flag_positions.size()));
+        if(goal_time>0)
+            str.append("\nFinished!");
+
         String s(str.c_str(),str.size());
         text_->SetText(s);
-        framecount_=0;
-        time_=0;
     }
 
     IntVector2 mouseMove(0,0);
@@ -267,6 +311,26 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         {
             node_player_model->SetDirection(Vector3::FORWARD);
             node_player_model->Yaw(yaw);
+        }
+    }
+
+    Vector3 player_pos=node_player->GetPosition();
+    for(int i=0;i<flag_nodes.size();i++)
+    {
+        auto n=flag_nodes[i];
+        n->Yaw(64*timeStep);
+        if((player_pos-n->GetPosition()).Length()<2)
+        {
+            flag_nodes.erase(flag_nodes.begin()+i);
+            n->Remove();
+            for(int j=0;j<nodes.size();j++) // theoretically it should be better to use a set instead of a vector when
+                if(nodes[j]==n)             // needing to search for stuff, but benchmarks show otherwise and this is not done that often
+                {
+                    nodes.erase(nodes.begin()+j);
+                    break;
+                }
+
+            break;
         }
     }
 }
