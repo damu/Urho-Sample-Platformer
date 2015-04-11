@@ -42,7 +42,7 @@ gs_playing::gs_playing() : game_state()
         CollisionShape* shape=boxNode_->CreateComponent<CollisionShape>();
         shape->SetTriangleMesh(globals::instance()->cache->GetResource<Model>("Models/level_1.mdl"));
 
-        body->GetPhysicsWorld()->SetGravity(Vector3(0,-9.81*2,0));
+        body->GetPhysicsWorld()->SetGravity(Vector3(0,-9.81*4,0));
     }
 
     {
@@ -67,7 +67,7 @@ gs_playing::gs_playing() : game_state()
         body_player->SetLinearDamping(0.0f);
         body_player->SetAngularDamping(0.98f);
         body_player->SetAngularFactor(Vector3(0,1,0));
-        body_player->SetFriction(0.8);
+        body_player->SetFriction(0.6);
         CollisionShape* shape=node_player->CreateComponent<CollisionShape>();
         shape->SetCapsule(1,2,Vector3(0,1.05,0));
     }
@@ -105,6 +105,7 @@ gs_playing::gs_playing() : game_state()
         flag_positions.emplace_back(1.1,0.5,-180.4);
         flag_positions.emplace_back(18.2,21.6,-8.1);
         flag_positions.emplace_back(28.7,33.9,82.6);
+        flag_positions.emplace_back(110,38.7,57.1);
 
         for(auto p:flag_positions)
         {
@@ -210,6 +211,8 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             moveDir.Normalize();
 
         Vector3 vel=body_player->GetLinearVelocity()*Vector3(1,0,1);
+        Quaternion rot=node_player->GetRotation();
+
         {
             static bool on_floor;
             static bool at_wall;
@@ -230,14 +233,14 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
                     at_wall=true;
             }
             if(!on_floor)
-                moveDir*=0.2;
+                moveDir*=0.35;
 
             if(input->GetKeyDown(KEY_SPACE)&&jumping==false&&(on_floor||at_wall))
             {
-                jumping=1;   // start jumping
-                if(at_wall) // to avoid using one wall for walljump chaining
+                jumping=1;  // start jumping
+                if(at_wall)
                 {
-                    auto v=result.normal_*Vector3(1,0,1)+vel*Vector3(1,0,1)*0.2;
+                    auto v=result.normal_*Vector3(1,0,1)*1.7+vel*Vector3(1,0,1)*0.2;
                     v.Normalize();
                     body_player->SetLinearVelocity(Vector3(v.x_*10,0,v.z_*10));
                     vel=body_player->GetLinearVelocity()*Vector3(1,0,1);
@@ -247,7 +250,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
                 jumping=0;
 
             static float jump_force_applied=0;
-            static const float max_jump_force_applied=500;
+            static const float max_jump_force_applied=700;
             Vector3 moveDir_world=node_player->GetWorldRotation()*moveDir;
             if(jumping==1&&jump_force_applied<max_jump_force_applied)   // jump higher if we are jumping and
             {
@@ -255,13 +258,13 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
                 {
                     // do nothing if max jump force reached
                 }
-                else if(jump_force_applied+timeStep*2000>max_jump_force_applied)
+                else if(jump_force_applied+timeStep*4000>max_jump_force_applied)
                 {
                     // I want to limit the jump more exactly height by limiting the force pumped into it and applieng the remaining rest here. Doesn't fully work yet.
                     float f=0;//(max_jump_force_applied-jump_force_applied)*timeStep*2000;
                     moveDir+=Vector3::UP*2*f;
                     moveDir_global=result.normal_*1*f;
-                    jump_force_applied+=timeStep*2500;
+                    jump_force_applied+=timeStep*5000;
                 }
                 else
                 {
@@ -274,21 +277,20 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
                     }
                     moveDir+=Vector3::UP*2*f;
                     moveDir_global=result.normal_*1*f;
-                    jump_force_applied+=timeStep*2500;
+                    jump_force_applied+=timeStep*5000;
                 }
             }
             if(jumping!=1)
                 jump_force_applied=0;
         }
 
-        Quaternion rot=node_player->GetRotation();
         Quaternion quat;
         quat.FromLookRotation(node_camera->GetDirection()*Vector3(1,0,1),Vector3::UP);
         body_player->SetRotation(quat);
         float speed_old=vel.Length();
-        vel+=rot*moveDir*timeStep*2500/body_player->GetMass();
+        vel+=rot*moveDir*timeStep*4000/body_player->GetMass();
         float speed_new=vel.Length();
-        if(speed_new>15&&speed_new>speed_old)   // over limit. Don't increase speed further but make direction change possible.
+        if(speed_new>20&&speed_new>speed_old)   // over limit. Don't increase speed further but make direction change possible.
         {
             vel=vel.Normalized()*speed_old;
 /*            std::string s;
@@ -297,8 +299,8 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             s+=std::to_string(vel.Length());
             LOGINFO(String(s.data(),s.size()));*/
         }
-        body_player->SetLinearVelocity(Vector3(vel.x_,body_player->GetLinearVelocity().y_+(rot*moveDir*timeStep*3000/body_player->GetMass()).y_,vel.z_));
-        body_player->ApplyImpulse(moveDir_global*timeStep*2500);
+        body_player->SetLinearVelocity(Vector3(vel.x_,body_player->GetLinearVelocity().y_+(rot*moveDir*timeStep*6000/body_player->GetMass()).y_,vel.z_));
+        body_player->ApplyImpulse(moveDir_global*timeStep*5000);
 
         auto vec_rot=body_player->GetLinearVelocity()*Vector3(1,0,1);
         float s=vec_rot.Length();
@@ -311,6 +313,21 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         {
             node_player_model->SetDirection(Vector3::FORWARD);
             node_player_model->Yaw(yaw);
+        }
+
+        {   // physic raycast to avoid the player glitching through stuff when moving very fast
+            Vector3 player_pos=body_player->GetPosition()+Vector3(0,1,0);
+            static Vector3 player_pos_last=player_pos;
+            PhysicsRaycastResult result;
+            Ray ray(player_pos_last,player_pos-player_pos_last);
+            float l=(player_pos-player_pos_last).Length();
+            if(l>0.5)
+            {
+                body_player->GetPhysicsWorld()->SphereCast(result,ray,0.2,l,2);
+                if(result.distance_<=l)
+                    body_player->SetPosition(player_pos_last);
+                player_pos_last=body_player->GetPosition()+Vector3(0,1,0);
+            }
         }
     }
 
