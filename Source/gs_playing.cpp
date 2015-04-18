@@ -34,7 +34,7 @@ gs_playing::gs_playing() : game_state()
         boxNode_->SetPosition(Vector3(0,0,-10));
         StaticModel* boxObject=boxNode_->CreateComponent<StaticModel>();
         boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/level_1.mdl"));
-        boxObject->SetMaterial(globals::instance()->cache->GetResource<Material>("Textures/3D_pattern_57/pattern_288/material.xml"));
+        boxObject->SetMaterial(globals::instance()->cache->GetResource<Material>("Materials/level.xml"));
         boxObject->SetCastShadows(true);
 
         RigidBody* body=boxNode_->CreateComponent<RigidBody>();
@@ -79,7 +79,7 @@ gs_playing::gs_playing() : game_state()
         light->SetLightType(LIGHT_DIRECTIONAL);
         light->SetCastShadows(true);
         light->SetShadowBias(BiasParameters(0.0000025f,0.8f));
-        light->SetShadowCascade(CascadeParameters(20.0f,50.0f,200.0f,2000.0f,0.01f,0.5f));
+        light->SetShadowCascade(CascadeParameters(5.0f,10.0f,50.0f,100.0f,0.01f,0.5f));
         light->SetShadowResolution(10.0);
         light->SetBrightness(1.2);
         light->SetColor(Color(1,.8,.7,1));

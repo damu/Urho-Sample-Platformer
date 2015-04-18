@@ -1,0 +1,7 @@
+<material>
+    <technique name="Techniques/level.xml" quality="0" />
+    <parameter name="MatDiffColor" value="0.3 0.7 0.5 1" />
+    <parameter name="MatSpecColor" value="0.7 0.9 0.8 16" />
+    <texture unit="0" name="Textures/simplex_perm.png" />
+    <texture unit="1" name="Textures/simplex4.png" />
+</material>
