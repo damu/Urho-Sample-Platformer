@@ -212,7 +212,12 @@ void PS()
 
 //    vec3 P = vWorldPos.xyz;
 
-    f=0.5+snoise(vWorldPos.xyz*0.3)*0.4+snoise(vWorldPos.xyz)*0.2+snoise(vWorldPos.xyz*3)*0.1;
+    f=snoise(vWorldPos.xyz*0.2)*2+
+      snoise(vWorldPos.xyz*1.0)*1;
+    f=0.5+f*1.0;
+    f=clamp(f,0,1);
+    f-=0.5;
+    f=abs(f*2);
 
     vec4 diffColor = vec4(cMatDiffColor.rgb*f,1);
 //    vec4 diffColor = vec4(noise3(vWorldPos)*0.5+1,1);
