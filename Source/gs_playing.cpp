@@ -79,7 +79,7 @@ gs_playing::gs_playing() : game_state()
         light->SetLightType(LIGHT_DIRECTIONAL);
         light->SetCastShadows(true);
         light->SetShadowBias(BiasParameters(0.0000025f,0.8f));
-        light->SetShadowCascade(CascadeParameters(5.0f,10.0f,50.0f,100.0f,0.01f,0.5f));
+        light->SetShadowCascade(CascadeParameters(5.0f,10.0f,50.0f,1000.0f,0.01f,0.5f));
         light->SetShadowResolution(10.0);
         light->SetBrightness(1.2);
         light->SetColor(Color(1,.8,.7,1));
@@ -174,7 +174,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
     Node* node_camera=globals::instance()->camera->GetNode();
     {
         cam_distance-=input->GetMouseMoveWheel();
-        cam_distance=Clamp(cam_distance,2.0,20.0);
+        cam_distance=Clamp(cam_distance,2.0,50.0);
 
         node_camera->SetPosition(node_player->GetPosition());
         node_camera->SetDirection(Vector3::FORWARD);
