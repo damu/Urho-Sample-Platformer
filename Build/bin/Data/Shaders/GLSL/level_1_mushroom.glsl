@@ -221,12 +221,14 @@ void PS()
 //    vec3 P = vWorldPos.xyz;
 
     f=snoise(vWorldPos.xyz*0.2)*2+
-      snoise(vWorldPos.xyz*1.0)*1;
-    f=0.5+f*2.0;
+      snoise(vWorldPos.xyz*1.0)+
+      snoise(vWorldPos.xyz*4.0)*0.5+
+      snoise(vWorldPos.xyz*12.0)*0.25;
+    f=0.5+f*2;
     f=clamp(f,0,1);
-    f-=0.5;
-    f=abs(f*2);
-    f*=f;
+
+    vec4 spec_color=cMatSpecColor*f;
+    spec_color.a=cMatSpecColor.a;
 
     //vec4 diffColor = vec4(cMatDiffColor.rgb*f,1);
     vec4 diffColor = vec4(f,f,f,1);
@@ -256,7 +258,7 @@ void PS()
         #endif
 
         #ifdef SPECULAR
-            float spec = GetSpecular(normal, cCameraPosPS - vWorldPos.xyz, lightDir, cMatSpecColor.a);
+            float spec = GetSpecular(normal, cCameraPosPS - vWorldPos.xyz, lightDir, spec_color.a);
             finalColor = diff * lightColor * (diffColor.rgb + spec * specColor * cLightColor.a);
         #else
             finalColor = diff * lightColor * diffColor.rgb;
@@ -271,14 +273,14 @@ void PS()
         #endif
     #elif defined(PREPASS)
         // Fill light pre-pass G-Buffer
-        float specPower = cMatSpecColor.a / 255.0;
+        float specPower = spec_color.a / 255.0;
 
         gl_FragData[0] = vec4(normal * 0.5 + 0.5, specPower);
         gl_FragData[1] = vec4(EncodeDepth(vWorldPos.w), 0.0);
     #elif defined(DEFERRED)
         // Fill deferred G-buffer
         float specIntensity = specColor.g;
-        float specPower = cMatSpecColor.a / 255.0;
+        float specPower = spec_color.a / 255.0;
 
         gl_FragData[0] = vec4(GetFog(vVertexLight * diffColor.rgb, fogFactor), 1.0);
         gl_FragData[1] = fogFactor * vec4(diffColor.rgb, specIntensity);

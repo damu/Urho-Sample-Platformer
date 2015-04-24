@@ -34,7 +34,8 @@ gs_playing::gs_playing() : game_state()
         boxNode_->SetPosition(Vector3(0,0,-10));
         StaticModel* boxObject=boxNode_->CreateComponent<StaticModel>();
         boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/level_1.mdl"));
-        boxObject->SetMaterial(globals::instance()->cache->GetResource<Material>("Materials/level.xml"));
+        boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/level_1_mushroom.xml"));
+        boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/level_1_terrain.xml"));
         boxObject->SetCastShadows(true);
 
         RigidBody* body=boxNode_->CreateComponent<RigidBody>();
@@ -67,7 +68,7 @@ gs_playing::gs_playing() : game_state()
         body_player->SetLinearDamping(0.0f);
         body_player->SetAngularDamping(0.98f);
         body_player->SetAngularFactor(Vector3(0,1,0));
-        body_player->SetFriction(0.6);
+        body_player->SetFriction(0.8);
         CollisionShape* shape=node_player->CreateComponent<CollisionShape>();
         shape->SetCapsule(1,2,Vector3(0,1.05,0));
     }
@@ -78,9 +79,9 @@ gs_playing::gs_playing() : game_state()
         Light* light=lightNode->CreateComponent<Light>();
         light->SetLightType(LIGHT_DIRECTIONAL);
         light->SetCastShadows(true);
-        light->SetShadowBias(BiasParameters(0.0000025f,0.8f));
-        light->SetShadowCascade(CascadeParameters(5.0f,10.0f,50.0f,1000.0f,0.01f,0.5f));
-        light->SetShadowResolution(10.0);
+        light->SetShadowBias(BiasParameters(0.0000025f,1.0f));
+        light->SetShadowCascade(CascadeParameters(20.0f,60.0f,180.0f,560.0f,100.0f,100.0f));
+        light->SetShadowResolution(1.0);
         light->SetBrightness(1.2);
         light->SetColor(Color(1,.8,.7,1));
         lightNode->SetDirection(Vector3::FORWARD);
@@ -103,7 +104,7 @@ gs_playing::gs_playing() : game_state()
         flag_positions.emplace_back(20.1,14,-46.9);
         flag_positions.emplace_back(-10.1,14,-46.9);
         flag_positions.emplace_back(1.1,0.5,-180.4);
-        flag_positions.emplace_back(18.2,21.6,-8.1);
+        flag_positions.emplace_back(18.2,21.6,-5.1);
         flag_positions.emplace_back(28.7,33.9,82.6);
         flag_positions.emplace_back(110,38.7,57.1);
 
@@ -206,6 +207,11 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             moveDir+=Vector3::FORWARD*1;
         if(input->GetKeyDown('S'))
             moveDir-=Vector3::FORWARD*1;
+
+        if(moveDir.Length()>0.1)
+            body_player->SetFriction(0.4);
+        else
+            body_player->SetFriction(2.0);
 
         if(moveDir.Length()>0.5)
             moveDir.Normalize();
