@@ -36,6 +36,7 @@ gs_playing::gs_playing() : game_state()
         boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/level_1.mdl"));
         boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/level_1_mushroom.xml"));
         boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/level_1_terrain.xml"));
+        boxObject->SetMaterial(2,globals::instance()->cache->GetResource<Material>("Materials/level_1_white_walls.xml"));
         boxObject->SetCastShadows(true);
 
         RigidBody* body=boxNode_->CreateComponent<RigidBody>();
@@ -49,7 +50,6 @@ gs_playing::gs_playing() : game_state()
     {
         node_player=globals::instance()->scene->CreateChild("Player");
         nodes.push_back(node_player);
-        node_player->SetPosition(Vector3(4,10,-5));
         node_player_model=globals::instance()->scene->CreateChild();
         nodes.push_back(node_player_model);
         StaticModel* boxObject=node_player_model->CreateComponent<StaticModel>();
@@ -63,6 +63,7 @@ gs_playing::gs_playing() : game_state()
         boxObject->SetCastShadows(true);
 
         body_player=node_player->CreateComponent<RigidBody>();
+        body_player->SetPosition(Vector3(4,10,-5));
         body_player->SetCollisionLayer(1);
         body_player->SetMass(80.0);
         body_player->SetLinearDamping(0.0f);
@@ -79,7 +80,7 @@ gs_playing::gs_playing() : game_state()
         Light* light=lightNode->CreateComponent<Light>();
         light->SetLightType(LIGHT_DIRECTIONAL);
         light->SetCastShadows(true);
-        light->SetShadowBias(BiasParameters(0.0000025f,1.0f));
+        light->SetShadowBias(BiasParameters(0.00000025f,1.0f));
         light->SetShadowCascade(CascadeParameters(20.0f,60.0f,180.0f,560.0f,100.0f,100.0f));
         light->SetShadowResolution(1.0);
         light->SetBrightness(1.2);
@@ -101,12 +102,13 @@ gs_playing::gs_playing() : game_state()
     }
 
     {   // "load" flags
-        flag_positions.emplace_back(20.1,14,-46.9);
-        flag_positions.emplace_back(-10.1,14,-46.9);
-        flag_positions.emplace_back(1.1,0.5,-180.4);
+        flag_positions.emplace_back(20.35,14,-47.6);
+        flag_positions.emplace_back(-9.9,14,-47.7);
+        flag_positions.emplace_back(-0.25,-5.5,-195.6);
         flag_positions.emplace_back(18.2,21.6,-5.1);
         flag_positions.emplace_back(28.7,33.9,82.6);
         flag_positions.emplace_back(110,38.7,57.1);
+        flag_positions.emplace_back(-155,37,-125);
 
         for(auto p:flag_positions)
         {
@@ -121,6 +123,29 @@ gs_playing::gs_playing() : game_state()
             flag_nodes.push_back(n);
         }
     }
+
+    {   // spawn one stone before all other to fill the cache
+        auto node_stone=globals::instance()->scene->CreateChild("Stone");
+        nodes.push_back(node_stone);
+        StaticModel* boxObject=node_stone->CreateComponent<StaticModel>();
+        boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/rock.mdl"));
+        boxObject->SetMaterial(globals::instance()->cache->GetResource<Material>("Materials/rock.xml"));
+        boxObject->SetCastShadows(true);
+        float s=1.0+Random(3.0f);
+        node_stone->SetScale(s);
+
+        auto body_stone=node_stone->CreateComponent<RigidBody>();
+        body_stone->SetPosition(Vector3(-95-Random(30.0f),40+Random(50.0f),-77-Random(83.0f)));
+        body_stone->SetCollisionLayer(2);
+        body_stone->SetMass(50.0*s*s);
+        body_stone->SetLinearDamping(0.2f);
+        body_stone->SetAngularDamping(0.2f);
+        //body_stone->SetAngularFactor(Vector3(0,1,0));
+        body_stone->SetFriction(0.6);
+        CollisionShape* shape=node_stone->CreateComponent<CollisionShape>();
+        //shape->SetCapsule(1,1.2);
+        shape->SetConvexHull(globals::instance()->cache->GetResource<Model>("Models/rock.mdl"));
+    }
 }
 
 void gs_playing::update(StringHash eventType,VariantMap& eventData)
@@ -129,6 +154,35 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
     float timeStep=eventData[Update::P_TIMESTEP].GetFloat();
     framecount_++;
     time_+=timeStep;
+
+    if((node_player->GetPosition()-Vector3(-155,37,-125)).Length()<130)
+    {
+        static int stone_count=0;
+        if(stone_count<60)
+        {
+            stone_count++;
+            auto node_stone=globals::instance()->scene->CreateChild("Stone");
+            nodes.push_back(node_stone);
+            StaticModel* boxObject=node_stone->CreateComponent<StaticModel>();
+            boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/rock.mdl"));
+            boxObject->SetMaterial(globals::instance()->cache->GetResource<Material>("Materials/rock.xml"));
+            boxObject->SetCastShadows(true);
+            float s=1.0+Random(3.0f);
+            node_stone->SetScale(s);
+
+            auto body_stone=node_stone->CreateComponent<RigidBody>();
+            body_stone->SetPosition(Vector3(-95-Random(30.0f),40+Random(50.0f),-77-Random(83.0f)));
+            body_stone->SetCollisionLayer(2);
+            body_stone->SetMass(50.0*s*s);
+            body_stone->SetLinearDamping(0.2f);
+            body_stone->SetAngularDamping(0.2f);
+            //body_stone->SetAngularFactor(Vector3(0,1,0));
+            body_stone->SetFriction(0.6);
+            CollisionShape* shape=node_stone->CreateComponent<CollisionShape>();
+            //shape->SetCapsule(1,1.2);
+            shape->SetConvexHull(globals::instance()->cache->GetResource<Model>("Models/rock.mdl"));
+        }
+    }
 
     {
         static std::string str_inner;
@@ -157,7 +211,13 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
                 goal_time=timer_playing.until_now();
         }
 
-        str.append("s\nRemaining Flags: ");
+        str.append("s\nPosition: ");
+        str.append(std::to_string(node_player->GetPosition().x_));
+        str.append(", ");
+        str.append(std::to_string(node_player->GetPosition().y_));
+        str.append(", ");
+        str.append(std::to_string(node_player->GetPosition().z_));
+        str.append("\nRemaining Flags: ");
         str.append(std::to_string(flag_nodes.size()));
         str.append("/");
         str.append(std::to_string(flag_positions.size()));
@@ -241,13 +301,13 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             if(!on_floor)
                 moveDir*=0.35;
 
-            if(input->GetKeyDown(KEY_SPACE)&&jumping==false&&(on_floor||at_wall))
+            if(input->GetKeyDown(KEY_SPACE)&&jumping==false&&(on_floor||at_wall))   // walljump
             {
                 jumping=1;  // start jumping
                 if(at_wall)
                 {
-                    auto v=result.normal_*Vector3(1,0,1)*1.7+vel*Vector3(1,0,1)*0.2;
-                    v.Normalize();
+                    auto v=result.normal_*Vector3(1,0,1)*1.7+vel*Vector3(1,0,1)*0.2;    // the result.normal vector is sometimes very weird if
+                    v.Normalize();                                                      // there are multiple faces near
                     body_player->SetLinearVelocity(Vector3(v.x_*10,0,v.z_*10));
                     vel=body_player->GetLinearVelocity()*Vector3(1,0,1);
                 }
@@ -258,7 +318,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             static float jump_force_applied=0;
             static const float max_jump_force_applied=700;
             Vector3 moveDir_world=node_player->GetWorldRotation()*moveDir;
-            if(jumping==1&&jump_force_applied<max_jump_force_applied)   // jump higher if we are jumping and
+            if(jumping==1&&jump_force_applied<max_jump_force_applied)   // jump higher if we are jumping and the limit has not been reached
             {
                 if(jump_force_applied>max_jump_force_applied)
                 {
@@ -266,7 +326,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
                 }
                 else if(jump_force_applied+timeStep*4000>max_jump_force_applied)
                 {
-                    // I want to limit the jump more exactly height by limiting the force pumped into it and applieng the remaining rest here. Doesn't fully work yet.
+                    // I want to limit the jump height more exactly by limiting the force pumped into it and applieng the remaining rest here. Doesn't fully work yet.
                     float f=0;//(max_jump_force_applied-jump_force_applied)*timeStep*2000;
                     moveDir+=Vector3::UP*2*f;
                     moveDir_global=result.normal_*1*f;

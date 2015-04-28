@@ -56,6 +56,7 @@ public:
         engineParameters_["WindowWidth"]=1280;
         engineParameters_["WindowHeight"]=720;
         engineParameters_["WindowResizable"]=true;
+        engineParameters_["Multisample"]=16;
     }
 
     virtual void Start()
@@ -81,6 +82,8 @@ public:
         Renderer* renderer=GetSubsystem<Renderer>();
         SharedPtr<Viewport> viewport(new Viewport(context_,scene_,cameraNode_->GetComponent<Camera>()));
         renderer->SetViewport(0,viewport);
+        renderer->SetShadowMapSize(4096);
+        //renderer->SetShadowQuality(1);
 
         Node* zoneNode=scene_->CreateChild("Zone");
         Zone* zone=zoneNode->CreateComponent<Zone>();
