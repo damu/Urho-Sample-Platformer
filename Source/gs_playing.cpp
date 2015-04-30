@@ -108,7 +108,7 @@ gs_playing::gs_playing() : game_state()
         flag_positions.emplace_back(18.2,21.6,-5.1);
         flag_positions.emplace_back(28.7,33.9,82.6);
         flag_positions.emplace_back(110,38.7,57.1);
-        flag_positions.emplace_back(-155,37,-125);
+        flag_positions.emplace_back(-238,37,-125);
 
         for(auto p:flag_positions)
         {
@@ -124,9 +124,9 @@ gs_playing::gs_playing() : game_state()
         }
     }
 
-    {   // spawn one stone before all other to fill the cache
+    // spawn one rock and remove it to cache the collider mesh (to avoid a ~1 second lag when spawning the first rock during the game)
+    {
         auto node_stone=globals::instance()->scene->CreateChild("Stone");
-        nodes.push_back(node_stone);
         StaticModel* boxObject=node_stone->CreateComponent<StaticModel>();
         boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/rock.mdl"));
         boxObject->SetMaterial(globals::instance()->cache->GetResource<Material>("Materials/rock.xml"));
@@ -134,8 +134,15 @@ gs_playing::gs_playing() : game_state()
         float s=1.0+Random(3.0f);
         node_stone->SetScale(s);
 
+        PhysicsRaycastResult result;
+        Vector3 pos(-120-Random(100.0f),100,-70-Random(100.0f));
+        Ray ray(pos,Vector3(0,-1,0));
+        body_player->GetPhysicsWorld()->SphereCast(result,ray,2,100);
+        if(result.distance_<=1000)
+            pos=result.position_+Vector3(0,5,0);
+
         auto body_stone=node_stone->CreateComponent<RigidBody>();
-        body_stone->SetPosition(Vector3(-95-Random(30.0f),40+Random(50.0f),-77-Random(83.0f)));
+        body_stone->SetPosition(pos);
         body_stone->SetCollisionLayer(2);
         body_stone->SetMass(50.0*s*s);
         body_stone->SetLinearDamping(0.2f);
@@ -145,6 +152,7 @@ gs_playing::gs_playing() : game_state()
         CollisionShape* shape=node_stone->CreateComponent<CollisionShape>();
         //shape->SetCapsule(1,1.2);
         shape->SetConvexHull(globals::instance()->cache->GetResource<Model>("Models/rock.mdl"));
+        node_stone->Remove();
     }
 }
 
@@ -155,12 +163,11 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
     framecount_++;
     time_+=timeStep;
 
-    if((node_player->GetPosition()-Vector3(-155,37,-125)).Length()<130)
+    if(!rocks_spawned&&(node_player->GetPosition()-Vector3(-200,37,-125)).Length()<150)
     {
-        static int stone_count=0;
-        if(stone_count<60)
+        rocks_spawned=true;
+        for(int i=0;i<150;i++)
         {
-            stone_count++;
             auto node_stone=globals::instance()->scene->CreateChild("Stone");
             nodes.push_back(node_stone);
             StaticModel* boxObject=node_stone->CreateComponent<StaticModel>();
@@ -170,8 +177,15 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             float s=1.0+Random(3.0f);
             node_stone->SetScale(s);
 
+            PhysicsRaycastResult result;
+            Vector3 pos(-120-Random(100.0f),100,-70-Random(100.0f));
+            Ray ray(pos,Vector3(0,-1,0));
+            body_player->GetPhysicsWorld()->SphereCast(result,ray,2,100);
+            if(result.distance_<=1000)
+                pos=result.position_+Vector3(0,5,0);
+
             auto body_stone=node_stone->CreateComponent<RigidBody>();
-            body_stone->SetPosition(Vector3(-95-Random(30.0f),40+Random(50.0f),-77-Random(83.0f)));
+            body_stone->SetPosition(pos);
             body_stone->SetCollisionLayer(2);
             body_stone->SetMass(50.0*s*s);
             body_stone->SetLinearDamping(0.2f);
@@ -239,14 +253,12 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
 
         node_camera->SetPosition(node_player->GetPosition());
         node_camera->SetDirection(Vector3::FORWARD);
-        static float yaw=20;
-        yaw+=mouseMove.x_*0.1;
-        node_camera->Yaw(yaw);
-        static float pitch=20;
-        pitch+=mouseMove.y_*0.1;
-        pitch=Clamp(pitch,-85.0,85.0);
+        camera_yaw+=mouseMove.x_*0.1;
+        node_camera->Yaw(camera_yaw);
+        camera_pitch+=mouseMove.y_*0.1;
+        camera_pitch=Clamp(camera_pitch,-85.0,85.0);
         node_camera->Translate(Vector3(0,1,0));
-        node_camera->Pitch(pitch);
+        node_camera->Pitch(camera_pitch);
 
         PhysicsRaycastResult result;
         Ray ray(node_camera->GetPosition(),-node_camera->GetDirection());

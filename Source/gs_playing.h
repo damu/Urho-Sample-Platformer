@@ -41,6 +41,9 @@ public:
     float goal_time=0;
     std::vector<Urho3D::Vector3> flag_positions;
     std::vector<Urho3D::Node*> flag_nodes;
+    float camera_yaw=20;
+    float camera_pitch=20;
+    bool rocks_spawned=false;
 
     gs_playing();
     void update(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
