@@ -96,10 +96,8 @@ void VS()
 float noise_height(vec3 p)
 {
     float f;
-    f=snoise(p.xyz*0.2)*2+
-      snoise(p.xyz*1.0)+
-      snoise(p.xyz*4.0)*0.5+
-      snoise(p.xyz*12.0)*0.25;
+    f=snoise(p.xyz*0.5)*2+
+      snoise(p.xyz*4.0);
     f=0.5+f*2;
     f=clamp(f,0,1);
     return f;
@@ -126,7 +124,7 @@ void PS()
     vec4 spec_color=cMatSpecColor*f;
     spec_color.a=cMatSpecColor.a;
 
-    vec4 diffColor = vec4(f,f,f,1);
+    vec4 diffColor = mix(vColor,vColor*0.35,f);
     #ifdef VERTEXCOLOR
         diffColor *= vColor;
     #endif
@@ -141,8 +139,8 @@ void PS()
     float s10=noise_height(p);
     p=vWorldPos.xyz+vec3(0,-0.001,0);
     float s12=noise_height(p);
-    vec3 va=normalize(vec3(size.xy,(s21-s01)*64));
-    vec3 vb=normalize(vec3(size.yx,(s12-s10)*64));
+    vec3 va=normalize(vec3(size.xy,(s21-s01)*16));
+    vec3 vb=normalize(vec3(size.yx,(s12-s10)*16));
     normal+=normalize(cross(va,vb));
     normal=normalize(normal);
 
