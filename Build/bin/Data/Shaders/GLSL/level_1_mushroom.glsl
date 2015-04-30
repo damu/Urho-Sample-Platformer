@@ -129,18 +129,12 @@ void PS()
         diffColor *= vColor;
     #endif
 
-    // normal
+    // normal, based on http://stackoverflow.com/questions/5281261/generating-a-normal-map-from-a-height-map
     const vec2 size=vec2(2.0,0.0);
-    vec3 p=vWorldPos.xyz+vec3(-0.001,0,0);
-    float s01=noise_height(p);
-    p=vWorldPos.xyz+vec3(0.001,0,0);
-    float s21=noise_height(p);
-    p=vWorldPos.xyz+vec3(0,0.001,0);
-    float s10=noise_height(p);
-    p=vWorldPos.xyz+vec3(0,-0.001,0);
-    float s12=noise_height(p);
-    vec3 va=normalize(vec3(size.xy,(s21-s01)*16));
-    vec3 vb=normalize(vec3(size.yx,(s12-s10)*16));
+    float f2=noise_height(vWorldPos.xyz+vec3(0.01,0,0));
+    float f3=noise_height(vWorldPos.xyz+vec3(0,0.01,0));
+    vec3 va=normalize(vec3(size.xy,(f2-f)*4));
+    vec3 vb=normalize(vec3(size.yx,(f3-f)*4));
     normal+=normalize(cross(va,vb));
     normal=normalize(normal);
 

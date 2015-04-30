@@ -1,5 +1,12 @@
 #include "gs_playing.h"
 
+#include <Urho3D/Audio/Sound.h>
+#include <Urho3D/Audio/SoundSource3D.h>
+#include <Urho3D/Audio/SoundListener.h>
+#include <Urho3D/Audio/Audio.h>
+#include <Urho3D/Graphics/ParticleEmitter.h>
+#include <Urho3D/Graphics/ParticleEffect.h>
+
 #include "gs_main_menu.h"
 
 using namespace Urho3D;
@@ -38,6 +45,8 @@ gs_playing::gs_playing() : game_state()
         boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/level_1_terrain.xml"));
         boxObject->SetMaterial(2,globals::instance()->cache->GetResource<Material>("Materials/level_1_white_walls.xml"));
         boxObject->SetCastShadows(true);
+        boxObject->SetOccludee(true);
+        boxObject->SetOccluder(true);
 
         RigidBody* body=boxNode_->CreateComponent<RigidBody>();
         body->SetCollisionLayer(2); // Use layer bitmask 2 for static geometry
@@ -89,16 +98,6 @@ gs_playing::gs_playing() : game_state()
         lightNode->Yaw(45);
         lightNode->Roll(30);
         lightNode->Pitch(60);
-    }
-    {
-        Node* lightNode=globals::instance()->camera->GetNode()->CreateChild("Light");
-        nodes.push_back(lightNode);
-        lightNode->SetPosition(Vector3(0,15,10));
-        Light* light=lightNode->CreateComponent<Light>();
-        light->SetLightType(LIGHT_POINT);
-        light->SetRange(10);
-        light->SetBrightness(2.0);
-        light->SetColor(Color(.8,1,.8,1.0));
     }
 
     {   // "load" flags
@@ -176,6 +175,9 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             boxObject->SetCastShadows(true);
             float s=1.0+Random(3.0f);
             node_stone->SetScale(s);
+            boxObject->SetOccludee(true);
+            boxObject->SetDrawDistance(200);
+            boxObject->SetShadowDistance(200);
 
             PhysicsRaycastResult result;
             Vector3 pos(-120-Random(100.0f),100,-70-Random(100.0f));
@@ -436,4 +438,63 @@ void gs_playing::HandleKeyDown(StringHash eventType,VariantMap& eventData)
     int key=eventData[P_KEY].GetInt();
     if(key==KEY_ESC)
         globals::instance()->game_state_.reset(new gs_main_menu);
+
+    if(key==KEY_L)
+    {
+        Node* node=globals::instance()->scene->CreateChild("Light");
+        nodes.push_back(node);
+        Vector3 pos(node_player->GetPosition()+Vector3(2,1.9,0));
+
+        PhysicsRaycastResult result;
+        Ray ray(pos,Vector3(0,-1,0));
+        body_player->GetPhysicsWorld()->SphereCast(result,ray,0.4,10);
+        if(result.distance_<=10)
+            pos=result.position_+Vector3(0,0.2,0);
+        node->SetPosition(pos);
+
+        StaticModel* boxObject=node->CreateComponent<StaticModel>();
+        boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/torch.mdl"));
+        boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/torch_metal.xml"));
+        boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/torch_wood.xml"));
+        boxObject->SetCastShadows(true);
+        boxObject->SetOccludee(true);
+        boxObject->SetShadowDistance(200);
+        boxObject->SetDrawDistance(200);
+
+        auto lightNode=node->CreateChild();
+        lightNode->Translate(Vector3(0,2,0));
+        Light* light=lightNode->CreateComponent<Light>();
+        light->SetLightType(LIGHT_POINT);
+        light->SetRange(50);
+        light->SetBrightness(1.2);
+        light->SetColor(Color(1.0,.6,.4,1.0));
+        light->SetCastShadows(true);
+        light->SetShadowDistance(200);
+        light->SetDrawDistance(200);
+
+        auto body_stone=node->CreateComponent<RigidBody>();
+        body_stone->SetCollisionLayer(2);
+        body_stone->SetMass(50.0);
+        body_stone->SetLinearDamping(0.2f);
+        body_stone->SetAngularDamping(0.2f);
+        body_stone->SetFriction(0.6);
+        CollisionShape* shape=node->CreateComponent<CollisionShape>();
+        //shape->SetCapsule(1,1.2);
+        shape->SetBox(Vector3(0.8,2,0.8),Vector3(0,1,0));
+
+        auto n_particle=node->CreateChild();
+        n_particle->Translate(Vector3(0,1.7,0));
+        ParticleEmitter* emitter=n_particle->CreateComponent<ParticleEmitter>();
+        emitter->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/torch_fire.xml"));
+        emitter=n_particle->CreateComponent<ParticleEmitter>();
+        emitter->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/torch_smoke.xml"));
+
+        auto sound_torch=globals::instance()->cache->GetResource<Sound>("Sounds/torch.ogg");
+        sound_torch->SetLooped(true);
+        auto sound_torch_source=n_particle->CreateComponent<SoundSource3D>();
+        sound_torch_source->SetNearDistance(1);
+        sound_torch_source->SetFarDistance(50);
+        sound_torch_source->SetSoundType(SOUND_EFFECT);
+        sound_torch_source->Play(sound_torch);
+    }
 }

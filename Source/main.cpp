@@ -34,6 +34,10 @@
 #include <Urho3D/Graphics/Material.h>
 #include <Urho3D/Graphics/Skybox.h>
 #include <Urho3D/Graphics/Zone.h>
+#include <Urho3D/Audio/Sound.h>
+#include <Urho3D/Audio/SoundSource3D.h>
+#include <Urho3D/Audio/SoundListener.h>
+#include <Urho3D/Audio/Audio.h>
 
 #include "gs_main_menu.h"
 #include "gs_playing.h"
@@ -78,6 +82,8 @@ public:
         cameraNode_=scene_->CreateChild("Camera");
         Camera* camera=cameraNode_->CreateComponent<Camera>();
         camera->SetFarClip(10000);
+        SoundListener* listener=cameraNode_->CreateComponent<SoundListener>();
+        GetSubsystem<Audio>()->SetListener(listener);
 
         Renderer* renderer=GetSubsystem<Renderer>();
         SharedPtr<Viewport> viewport(new Viewport(context_,scene_,cameraNode_->GetComponent<Camera>()));

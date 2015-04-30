@@ -1,0 +1,8 @@
+<material>
+	<technique name="Techniques/DiffNormalSpec.xml"/>
+	<texture name="Textures/torch_metal_diff.png" unit="diffuse"/>
+	<texture name="Textures/torch_metal_norm.png" unit="normal"/>
+	<texture name="Textures/torch_metal_spec.png" unit="specular"/>
+	<parameter name="MatDiffColor" value="1.0 1 1 1"/>
+	<parameter name="MatSpecColor" value="4 4 4 100"/>
+</material>
