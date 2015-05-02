@@ -36,11 +36,11 @@ public:
     Urho3D::Node* node_player;
     Urho3D::Node* node_player_model;
     Urho3D::RigidBody* body_player;
-    float cam_distance=8;
     timer timer_playing;
     float goal_time=0;
     std::vector<Urho3D::Vector3> flag_positions;
     std::vector<Urho3D::Node*> flag_nodes;
+    float cam_distance=14;
     float camera_yaw=20;
     float camera_pitch=20;
     bool rocks_spawned=false;

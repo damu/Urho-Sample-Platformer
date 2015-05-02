@@ -135,8 +135,8 @@ void PS()
     // normal, based on http://stackoverflow.com/questions/5281261/generating-a-normal-map-from-a-height-map
     float f2=noise_height(vWorldPos.xyz+vec3(0.01,0,0));
     float f3=noise_height(vWorldPos.xyz+vec3(0,0.01,0));
-    vec3 va=normalize(vec3(0,(f2-f)*8,2));
-    vec3 vb=normalize(vec3(2,(f3-f)*8,0));
+    vec3 va=vec3(0,(f2-f)*8,2);
+    vec3 vb=vec3(2,(f3-f)*8,0);
     normal+=normalize(cross(va,vb));
     normal=normalize(normal);
 #endif

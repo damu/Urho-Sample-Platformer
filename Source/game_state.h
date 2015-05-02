@@ -28,8 +28,8 @@ public:
     Urho3D::UIElement* ui_root=0;
     Urho3D::Engine* engine=0;
 
-    std::unique_ptr<game_state> game_state_;    ///< The current game state so that game states can switch to another game state.
-                                                ///< Watch out that changing a game state will immedietly delete the current one.
+    std::vector<std::unique_ptr<game_state>> game_state_;   ///< The current game state so that game states can switch to another game state.
+                                                            ///< Watch out that changing a game state will immedietly delete the current one.
 
     /// Meyer Singleton
     static globals* instance()

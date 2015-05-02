@@ -148,8 +148,8 @@ void PS()
     f=-noise_height_normal(vWorldPos.xyz);
     float f2=-noise_height_normal(vWorldPos.xyz+vec3(0.01,0,0));
     float f3=-noise_height_normal(vWorldPos.xyz+vec3(0,0.01,0));
-    vec3 va=normalize(vec3(0,(f2-f)*64,2));
-    vec3 vb=normalize(vec3(2,(f3-f)*64,0));
+    vec3 va=vec3(0,(f2-f)*64,2);
+    vec3 vb=vec3(2,(f3-f)*64,0);
     normal+=normalize(cross(va,vb));
     normal=normalize(normal);
 #endif

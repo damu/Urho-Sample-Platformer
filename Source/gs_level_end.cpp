@@ -1,9 +1,9 @@
+#include "gs_level_end.h"
 #include "gs_main_menu.h"
-#include "gs_playing.h"
 
 using namespace Urho3D;
 
-gs_main_menu::gs_main_menu() : game_state()
+gs_level_end::gs_level_end() : game_state()
 {
     Node* node_camera=globals::instance()->camera->GetNode();
     node_camera->SetPosition(Vector3(0,0,0));
@@ -111,7 +111,7 @@ gs_main_menu::gs_main_menu() : game_state()
 
         }
         window_->AddChild(button);
-        SubscribeToEvent(button,E_RELEASED,HANDLER(gs_main_menu,HandlePlayPressed));
+        SubscribeToEvent(button,E_RELEASED,HANDLER(gs_level_end,HandlePlayPressed));
     }
     {
         Button* button = new Button(globals::instance()->context);
@@ -131,31 +131,32 @@ gs_main_menu::gs_main_menu() : game_state()
             button->AddChild(t);
         }
         window_->AddChild(button);
-        SubscribeToEvent(button,E_RELEASED,HANDLER(gs_main_menu,HandleClosePressed));
+        SubscribeToEvent(button,E_RELEASED,HANDLER(gs_level_end,HandleClosePressed));
 
     }
+
 
     GetSubsystem<Input>()->SetMouseVisible(true);
     GetSubsystem<Input>()->SetMouseGrabbed(false);
 
-    SubscribeToEvent(E_UPDATE,HANDLER(gs_main_menu,update));
-    SubscribeToEvent(E_KEYDOWN,HANDLER(gs_main_menu,HandleKeyDown));
-    SubscribeToEvent(buttonClose,E_RELEASED,HANDLER(gs_main_menu,HandleClosePressed));
+    SubscribeToEvent(E_UPDATE,HANDLER(gs_level_end,update));
+    SubscribeToEvent(E_KEYDOWN,HANDLER(gs_level_end,HandleKeyDown));
+    SubscribeToEvent(buttonClose,E_RELEASED,HANDLER(gs_level_end,HandleClosePressed));
 }
 
-void gs_main_menu::update(StringHash eventType,VariantMap& eventData)
+void gs_level_end::update(StringHash eventType,VariantMap& eventData)
 {
     float timeStep=eventData[Update::P_TIMESTEP].GetFloat();
 
     boxNode_->Rotate(Quaternion(0,64*timeStep,0));
 }
 
-void gs_main_menu::HandlePlayPressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData)
+void gs_level_end::HandlePlayPressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData)
 {
-    globals::instance()->game_state_[0].reset(new gs_playing);
+    globals::instance()->game_state_[0].reset(new gs_main_menu);
 }
 
-void gs_main_menu::HandleKeyDown(StringHash eventType,VariantMap& eventData)
+void gs_level_end::HandleKeyDown(StringHash eventType,VariantMap& eventData)
 {
     using namespace KeyDown;
     int key=eventData[P_KEY].GetInt();

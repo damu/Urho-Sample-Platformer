@@ -7,7 +7,7 @@
 #include <Urho3D/Graphics/ParticleEmitter.h>
 #include <Urho3D/Graphics/ParticleEffect.h>
 
-#include "gs_main_menu.h"
+#include "gs_pause.h"
 
 using namespace Urho3D;
 
@@ -157,6 +157,9 @@ gs_playing::gs_playing() : game_state()
 
 void gs_playing::update(StringHash eventType,VariantMap& eventData)
 {
+    if(globals::instance()->game_state_.size()>1)
+        return;
+
     Input* input=GetSubsystem<Input>();
     float timeStep=eventData[Update::P_TIMESTEP].GetFloat();
     framecount_++;
@@ -434,10 +437,12 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
 
 void gs_playing::HandleKeyDown(StringHash eventType,VariantMap& eventData)
 {
+    if(globals::instance()->game_state_.size()>1)
+        return;
     using namespace KeyDown;
     int key=eventData[P_KEY].GetInt();
     if(key==KEY_ESC)
-        globals::instance()->game_state_.reset(new gs_main_menu);
+        globals::instance()->game_state_.emplace_back(new gs_pause);
 
     if(key==KEY_L)
     {

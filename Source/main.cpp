@@ -89,7 +89,6 @@ public:
         SharedPtr<Viewport> viewport(new Viewport(context_,scene_,cameraNode_->GetComponent<Camera>()));
         renderer->SetViewport(0,viewport);
         renderer->SetShadowMapSize(4096);
-        //renderer->SetShadowQuality(1);
 
         Node* zoneNode=scene_->CreateChild("Zone");
         Zone* zone=zoneNode->CreateComponent<Zone>();
@@ -107,11 +106,11 @@ public:
         globals::instance()->context=context_;
         globals::instance()->ui_root=GetSubsystem<UI>()->GetRoot();
         globals::instance()->engine=engine_;
-        globals::instance()->game_state_.reset(new gs_main_menu);
+        globals::instance()->game_state_.emplace_back(new gs_main_menu);
     }
     virtual void Stop()
     {
-        globals::instance()->game_state_.reset();
+        globals::instance()->game_state_.resize(0);
     }
 
     void HandleKeyDown(StringHash eventType,VariantMap& eventData)
