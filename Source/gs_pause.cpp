@@ -6,6 +6,8 @@ using namespace Urho3D;
 
 gs_pause::gs_pause() : game_state()
 {
+    globals::instance()->scene->SetUpdateEnabled(false);
+
     Window* window_=new Window(globals::instance()->context);
     gui_elements.push_back(window_);
     globals::instance()->ui_root->AddChild(window_);
@@ -123,6 +125,11 @@ gs_pause::gs_pause() : game_state()
     SubscribeToEvent(buttonClose,E_RELEASED,HANDLER(gs_pause,HandleResumePressed));
 }
 
+gs_pause::~gs_pause()
+{
+    globals::instance()->scene->SetUpdateEnabled(true);
+}
+
 void gs_pause::update(StringHash eventType,VariantMap& eventData)
 {
 }
@@ -145,5 +152,9 @@ void gs_pause::HandleKeyDown(StringHash eventType,VariantMap& eventData)
     using namespace KeyDown;
     int key=eventData[P_KEY].GetInt();
     if(key==KEY_ESC)
+    {
+        GetSubsystem<Input>()->SetMouseVisible(false);
+        GetSubsystem<Input>()->SetMouseGrabbed(true);
         globals::instance()->game_state_.resize(1);
+    }
 }

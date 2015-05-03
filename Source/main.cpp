@@ -127,40 +127,7 @@ public:
 
     void HandleUpdate(StringHash eventType,VariantMap& eventData)
     {
-        float timeStep=eventData[Update::P_TIMESTEP].GetFloat();
-        // Movement speed as world units per second
-        float MOVE_SPEED=10.0f;
-        // Mouse sensitivity as degrees per pixel
-        const float MOUSE_SENSITIVITY=0.1f;
 
-        Input* input=GetSubsystem<Input>();
-        if(input->GetQualifierDown(1))  // 1 is shift, 2 is ctrl, 4 is alt
-            MOVE_SPEED*=10;
-        if(input->GetKeyDown('W'))
-            cameraNode_->Translate(Vector3(0,0, 1)*MOVE_SPEED*timeStep);
-        if(input->GetKeyDown('S'))
-            cameraNode_->Translate(Vector3(0,0,-1)*MOVE_SPEED*timeStep);
-        if(input->GetKeyDown('A'))
-            cameraNode_->Translate(Vector3(-1,0,0)*MOVE_SPEED*timeStep);
-        if(input->GetKeyDown('D'))
-            cameraNode_->Translate(Vector3( 1,0,0)*MOVE_SPEED*timeStep);
-
-        if(!GetSubsystem<Input>()->IsMouseVisible())
-        {
-            IntVector2 mouseMove=input->GetMouseMove();
-            if(mouseMove.x_>-2000000000&&mouseMove.y_>-2000000000)
-            {
-                static float yaw_=0;
-                static float pitch_=0;
-                yaw_+=MOUSE_SENSITIVITY*mouseMove.x_;
-                pitch_+=MOUSE_SENSITIVITY*mouseMove.y_;
-                pitch_=Clamp(pitch_,-90.0f,90.0f);
-                // Reset rotation and set yaw and pitch again
-                cameraNode_->SetDirection(Vector3::FORWARD);
-                cameraNode_->Yaw(yaw_);
-                cameraNode_->Pitch(pitch_);
-            }
-        }
     }
 };
 
