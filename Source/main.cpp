@@ -8,6 +8,7 @@
 
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Core/CoreEvents.h>
+#include <Urho3D/Graphics/RenderPath.h>
 #include <Urho3D/Engine/Application.h>
 #include <Urho3D/Engine/Engine.h>
 #include <Urho3D/Input/Input.h>
@@ -60,6 +61,7 @@ public:
         engineParameters_["WindowWidth"]=1280;
         engineParameters_["WindowHeight"]=720;
         engineParameters_["WindowResizable"]=true;
+        engineParameters_["Multisample"]=4;
     }
 
     virtual void Start()
@@ -88,13 +90,21 @@ public:
         SharedPtr<Viewport> viewport(new Viewport(context_,scene_,cameraNode_->GetComponent<Camera>()));
         renderer->SetViewport(0,viewport);
         renderer->SetShadowMapSize(4096);
+        renderer->SetHDRRendering(true);
+
+        RenderPath* effectRenderPath=viewport->GetRenderPath();
+        effectRenderPath->Append(cache->GetResource<XMLFile>("PostProcess/AutoExposure.xml"));
+        effectRenderPath->Append(cache->GetResource<XMLFile>("PostProcess/BloomHDR.xml"));
+        effectRenderPath->Append(cache->GetResource<XMLFile>("PostProcess/FXAA2.xml"));
+        //effectRenderPath.SetEnabled("GammaCorrection",false);
+        viewport->SetRenderPath(effectRenderPath);
 
         Node* zoneNode=scene_->CreateChild("Zone");
         Zone* zone=zoneNode->CreateComponent<Zone>();
         zone->SetBoundingBox(BoundingBox(-20000.0f,20000.0f));
         zone->SetFogStart(100.0f);
         zone->SetFogEnd(5000.0f);
-        zone->SetAmbientColor(Color(0.3,0.3,0.3));
+        zone->SetAmbientColor(Color(0.1,0.1,0.1));
 
         SubscribeToEvent(E_KEYDOWN,HANDLER(MyApp,HandleKeyDown));
         SubscribeToEvent(E_UPDATE,HANDLER(MyApp,HandleUpdate));

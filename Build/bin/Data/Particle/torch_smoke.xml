@@ -7,7 +7,7 @@
     <activetime value="0" />
     <animlodbias value="0" />
     <inactivetime value="0" />
-    <emissionrate min="40" max="50" />
+    <emissionrate min="20" max="25" />
     <sorted enable="false" />
     <rotationspeed min="-30" max="30" />
     <emittertype value="box" />
@@ -17,10 +17,10 @@
     <velocity min="0" max="0.5" />
     <particlesize min="0.1 0.1" max="0.2 0.2" />
     <sizedelta add="0" mul="1.5" />
-    <timetolive value="6" />
+    <timetolive value="4" />
     <constantforce value="0 2 0" />
     <colorfade color="0.2 0.2 0.2 0" time="0.0" />
     <colorfade color="0.2 0.2 0.2 0" time="1.5" />
     <colorfade color="0.2 0.2 0.2 0.1" time="2.0" />
-    <colorfade color="0.6 0.6 0.6 0" time="6.0" />
+    <colorfade color="0.6 0.6 0.6 0" time="4.0" />
 </particleemitter>

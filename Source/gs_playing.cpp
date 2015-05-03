@@ -94,7 +94,7 @@ gs_playing::gs_playing() : game_state()
         light->SetShadowCascade(CascadeParameters(20.0f,60.0f,180.0f,560.0f,100.0f,100.0f));
         light->SetShadowResolution(1.0);
         light->SetBrightness(1.2);
-        light->SetColor(Color(1,.8,.7,1));
+        light->SetColor(Color(1.5,1.2,1,1));
         lightNode->SetDirection(Vector3::FORWARD);
         lightNode->Yaw(45);
         lightNode->Roll(30);
@@ -474,7 +474,7 @@ void gs_playing::HandleKeyDown(StringHash eventType,VariantMap& eventData)
         light->SetLightType(LIGHT_POINT);
         light->SetRange(50);
         light->SetBrightness(1.2);
-        light->SetColor(Color(1.0,.6,.4,1.0));
+        light->SetColor(Color(2.0,1.2,.8,1.0));
         light->SetCastShadows(true);
         light->SetShadowDistance(200);
         light->SetDrawDistance(200);
