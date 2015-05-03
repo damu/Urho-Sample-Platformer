@@ -153,6 +153,8 @@ gs_playing::gs_playing() : game_state()
         shape->SetConvexHull(globals::instance()->cache->GetResource<Model>("Models/rock.mdl"));
         node_stone->Remove();
     }
+
+    timer_playing=0;
 }
 
 void gs_playing::update(StringHash eventType,VariantMap& eventData)
@@ -164,6 +166,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
     float timeStep=eventData[Update::P_TIMESTEP].GetFloat();
     framecount_++;
     time_+=timeStep;
+    timer_playing+=timeStep;
 
     if(!rocks_spawned&&(node_player->GetPosition()-Vector3(-200,37,-125)).Length()<150)
     {
@@ -225,9 +228,9 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             str.append(std::to_string(goal_time));
         else
         {
-            str.append(std::to_string(timer_playing.until_now()));
+            str.append(std::to_string(timer_playing));
             if(!flag_nodes.size())
-                goal_time=timer_playing.until_now();
+                goal_time=timer_playing;
         }
 
         str.append("s\nPosition: ");

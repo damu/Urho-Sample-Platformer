@@ -36,7 +36,7 @@ public:
     Urho3D::Node* node_player;
     Urho3D::Node* node_player_model;
     Urho3D::RigidBody* body_player;
-    timer timer_playing;
+    double timer_playing=0;
     float goal_time=0;
     std::vector<Urho3D::Vector3> flag_positions;
     std::vector<Urho3D::Node*> flag_nodes;
