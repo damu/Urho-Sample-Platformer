@@ -28,8 +28,10 @@ public:
     Urho3D::UIElement* ui_root=0;
     Urho3D::Engine* engine=0;
 
-    std::vector<std::unique_ptr<game_state>> game_state_;   ///< The current game state so that game states can switch to another game state.
-                                                            ///< Watch out that changing a game state will immedietly delete the current one.
+    /// The current game states so that game states can switch to another game state.
+    /// Watch out that changing a game state will immedietly delete the current one.
+    /// Also game states can be stacked on top of each other so they run paralell. This is used for the pause mode.
+    std::vector<std::unique_ptr<game_state>> game_states;
 
     /// Meyer Singleton
     static globals* instance()
@@ -64,14 +66,13 @@ public:
     virtual const Urho3D::String& GetTypeName() const {static Urho3D::String name("game_state");return name;}   // this could be correct
 };
 
-
 // copied from my source collection. Maybe this should be moved elsewhere.
 /**
  * @brief The timer class can be used to measure times and optionaly output them automatically on destruction.
  * Example:
  * \code
  * {
- *   stk::timer _("test");
+ *   timer _("test");
  *   sleep(0.1);
  * }                        // the timer is destructed here as it goes out of scope and prints something like "0.100132 <- test"
  * \endcode

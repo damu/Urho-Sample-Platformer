@@ -60,7 +60,6 @@ public:
         engineParameters_["WindowWidth"]=1280;
         engineParameters_["WindowHeight"]=720;
         engineParameters_["WindowResizable"]=true;
-        engineParameters_["Multisample"]=16;
     }
 
     virtual void Start()
@@ -100,17 +99,18 @@ public:
         SubscribeToEvent(E_KEYDOWN,HANDLER(MyApp,HandleKeyDown));
         SubscribeToEvent(E_UPDATE,HANDLER(MyApp,HandleUpdate));
 
+        // fill our game state shared variables
         globals::instance()->cache=cache;
         globals::instance()->camera=camera;
         globals::instance()->scene=scene_;
         globals::instance()->context=context_;
         globals::instance()->ui_root=GetSubsystem<UI>()->GetRoot();
         globals::instance()->engine=engine_;
-        globals::instance()->game_state_.emplace_back(new gs_main_menu);
+        globals::instance()->game_states.emplace_back(new gs_main_menu);
     }
     virtual void Stop()
     {
-        globals::instance()->game_state_.resize(0);
+        globals::instance()->game_states.resize(0);
     }
 
     void HandleKeyDown(StringHash eventType,VariantMap& eventData)

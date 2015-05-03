@@ -9,15 +9,62 @@ gs_main_menu::gs_main_menu() : game_state()
     node_camera->SetPosition(Vector3(0,0,0));
     node_camera->SetDirection(Vector3::FORWARD);
 
-    boxNode_=globals::instance()->scene->CreateChild("Flag");
-    nodes.push_back(boxNode_);
-    boxNode_->SetPosition(Vector3(0,-0.5,6));
-    StaticModel* boxObject=boxNode_->CreateComponent<StaticModel>();
-    boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/flag.mdl"));
-    boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/flag_pole.xml"));
-    boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/flag_cloth.xml"));
-    boxObject->SetCastShadows(true);
+    // a rotating flag
+    {
+        node_rotating_flag=globals::instance()->scene->CreateChild("Flag");
+        nodes.push_back(node_rotating_flag);
+        node_rotating_flag->SetPosition(Vector3(0,-0.5,6));
+        StaticModel* boxObject=node_rotating_flag->CreateComponent<StaticModel>();
+        boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/flag.mdl"));
+        boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/flag_pole.xml"));
+        boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/flag_cloth.xml"));
+        boxObject->SetCastShadows(true);
+    }
 
+    // a torch with a light, sound and particle effects
+    {
+        Node* node=globals::instance()->scene->CreateChild("Light");
+        nodes.push_back(node);
+        Vector3 pos(Vector3(3,-0.5,6));
+        node->SetPosition(pos);
+
+        StaticModel* boxObject=node->CreateComponent<StaticModel>();
+        boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/torch.mdl"));
+        boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/torch_metal.xml"));
+        boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/torch_wood.xml"));
+        boxObject->SetCastShadows(true);
+        boxObject->SetOccludee(true);
+        boxObject->SetShadowDistance(200);
+        boxObject->SetDrawDistance(200);
+
+        auto lightNode=node->CreateChild();
+        lightNode->Translate(Vector3(0,2,0));
+        Light* light=lightNode->CreateComponent<Light>();
+        light->SetLightType(LIGHT_POINT);
+        light->SetRange(50);
+        light->SetBrightness(1.2);
+        light->SetColor(Color(1.0,.6,.4,1.0));
+        light->SetCastShadows(true);
+        light->SetShadowDistance(200);
+        light->SetDrawDistance(200);
+
+        auto n_particle=node->CreateChild();
+        n_particle->Translate(Vector3(0,1.7,0));
+        ParticleEmitter* emitter=n_particle->CreateComponent<ParticleEmitter>();
+        emitter->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/torch_fire.xml"));
+        emitter=n_particle->CreateComponent<ParticleEmitter>();
+        emitter->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/torch_smoke.xml"));
+
+        auto sound_torch=globals::instance()->cache->GetResource<Sound>("Sounds/torch.ogg");
+        sound_torch->SetLooped(true);
+        auto sound_torch_source=n_particle->CreateComponent<SoundSource3D>();
+        sound_torch_source->SetNearDistance(1);
+        sound_torch_source->SetFarDistance(50);
+        sound_torch_source->SetSoundType(SOUND_EFFECT);
+        sound_torch_source->Play(sound_torch);
+    }
+
+    // grid of 400 cubes, know from the
     for(int x=-30;x<30;x+=3)
         for(int y=-30;y<30;y+=3)
         {
@@ -29,28 +76,7 @@ gs_main_menu::gs_main_menu() : game_state()
             boxObject->SetMaterial(globals::instance()->cache->GetResource<Material>("Materials/Stone.xml"));
             boxObject->SetCastShadows(true);
         }
-    {
-        Node* lightNode=globals::instance()->scene->CreateChild("Light");
-        nodes.push_back(lightNode);
-        lightNode->SetPosition(Vector3(-5,10,5));
-        Light* light=lightNode->CreateComponent<Light>();
-        light->SetLightType(LIGHT_POINT);
-        light->SetRange(50);
-        light->SetBrightness(1.2);
-        light->SetColor(Color(1,.5,.8,1));
-        light->SetCastShadows(true);
-    }
-    {
-        Node* lightNode=globals::instance()->scene->CreateChild("Light");
-        nodes.push_back(lightNode);
-        lightNode->SetPosition(Vector3(5,2,5));
-        Light* light=lightNode->CreateComponent<Light>();
-        light->SetLightType(LIGHT_POINT);
-        light->SetRange(50);
-        light->SetBrightness(1.2);
-        light->SetColor(Color(.5,.8,1,1));
-        light->SetCastShadows(true);
-    }
+
     {
         Node* lightNode=globals::instance()->camera->GetNode()->CreateChild("Light");
         nodes.push_back(lightNode);
@@ -108,7 +134,6 @@ gs_main_menu::gs_main_menu() : game_state()
             t->SetStyle("Text");
             t->SetMinHeight(VA_CENTER);
             button->AddChild(t);
-
         }
         window_->AddChild(button);
         SubscribeToEvent(button,E_RELEASED,HANDLER(gs_main_menu,HandlePlayPressed));
@@ -147,13 +172,14 @@ void gs_main_menu::update(StringHash eventType,VariantMap& eventData)
 {
     float timeStep=eventData[Update::P_TIMESTEP].GetFloat();
 
-    boxNode_->Rotate(Quaternion(0,64*timeStep,0));
+    node_rotating_flag->Rotate(Quaternion(0,64*timeStep,0));
 
     // Movement speed as world units per second
     float MOVE_SPEED=10.0f;
     // Mouse sensitivity as degrees per pixel
     const float MOUSE_SENSITIVITY=0.1f;
 
+    // camera movement
     Input* input=GetSubsystem<Input>();
     Node* cameraNode_=globals::instance()->camera->GetNode();
     if(input->GetQualifierDown(1))  // 1 is shift, 2 is ctrl, 4 is alt
@@ -187,7 +213,7 @@ void gs_main_menu::update(StringHash eventType,VariantMap& eventData)
 
 void gs_main_menu::HandlePlayPressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData)
 {
-    globals::instance()->game_state_[0].reset(new gs_playing);
+    globals::instance()->game_states[0].reset(new gs_playing);
 }
 
 void gs_main_menu::HandleKeyDown(StringHash eventType,VariantMap& eventData)

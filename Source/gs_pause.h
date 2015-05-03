@@ -21,6 +21,7 @@
 #include <Urho3D/Input/Input.h>
 #include <Urho3D/Input/InputEvents.h>
 
+/// Pauses Urho and is stacked on top of the playing game state and called by that when pressing the escape key.
 class gs_pause : public game_state
 {
 public:

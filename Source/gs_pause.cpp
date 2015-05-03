@@ -138,13 +138,13 @@ void gs_pause::HandleResumePressed(Urho3D::StringHash eventType,Urho3D::VariantM
 {
     GetSubsystem<Input>()->SetMouseVisible(false);
     GetSubsystem<Input>()->SetMouseGrabbed(true);
-    globals::instance()->game_state_.resize(1);
+    globals::instance()->game_states.resize(1);
 }
 
 void gs_pause::HandleMainMenuPressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData)
 {
-    globals::instance()->game_state_[0].reset(new gs_main_menu);
-    globals::instance()->game_state_.resize(1);
+    globals::instance()->game_states[0].reset(new gs_main_menu);
+    globals::instance()->game_states.resize(1);
 }
 
 void gs_pause::HandleKeyDown(StringHash eventType,VariantMap& eventData)
@@ -155,6 +155,6 @@ void gs_pause::HandleKeyDown(StringHash eventType,VariantMap& eventData)
     {
         GetSubsystem<Input>()->SetMouseVisible(false);
         GetSubsystem<Input>()->SetMouseGrabbed(true);
-        globals::instance()->game_state_.resize(1);
+        globals::instance()->game_states.resize(1);
     }
 }

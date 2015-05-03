@@ -13,21 +13,22 @@ using namespace Urho3D;
 
 gs_playing::gs_playing() : game_state()
 {
-    text_=new Text(context_);
-    gui_elements.push_back(text_);
-    text_->SetText("Keys: tab = toggle mouse, AWSD = move camera, Shift = fast mode, Esc = quit.\nWait a bit to see FPS.");
-    text_->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),20);
-    text_->SetColor(Color(.6,.3,.3));
-    text_->SetHorizontalAlignment(HA_CENTER);
-    text_->SetVerticalAlignment(VA_TOP);
-    GetSubsystem<UI>()->GetRoot()->AddChild(text_);
-    Button* button=new Button(context_);
-    gui_elements.push_back(button);
-    GetSubsystem<UI>()->GetRoot()->AddChild(button);
-    button->SetName("Button Quit");
-    button->SetStyle("Button");
-    button->SetSize(32,32);
-    button->SetPosition(16,16);
+    // create a transparent window with some text to display things like level time, remaining flags and FPS
+    {
+        Window* window=new Window(context_);
+        gui_elements.push_back(window);
+        GetSubsystem<UI>()->GetRoot()->AddChild(window);
+        window->SetStyle("Window");
+        window->SetSize(700,90);
+        window->SetColor(Color(.0,.15,.3,.5));
+        window->SetAlignment(HA_CENTER,VA_TOP);
+
+        text_=new Text(context_);
+        text_->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),20);
+        text_->SetColor(Color(.8,.85,.9));
+        text_->SetAlignment(HA_CENTER,VA_CENTER);
+        window->AddChild(text_);
+    }
 
     GetSubsystem<Input>()->SetMouseVisible(false);
     GetSubsystem<Input>()->SetMouseGrabbed(true);
@@ -159,7 +160,7 @@ gs_playing::gs_playing() : game_state()
 
 void gs_playing::update(StringHash eventType,VariantMap& eventData)
 {
-    if(globals::instance()->game_state_.size()>1)
+    if(globals::instance()->game_states.size()>1)
         return;
 
     Input* input=GetSubsystem<Input>();
@@ -219,18 +220,13 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         }
         std::string str;
         if(last_second!=0)
-        {
-            //if(last_second_frames/last_second>11)                           // the FPS can't be measured exactly if below 10 FPS
-                str.append(std::to_string(last_second_frames/last_second));
-            //else
-            //    str.append("<10");
-        }
+            str.append(std::to_string(last_second_frames/last_second).substr(0,6));
         str.append(" FPS   Position: ");
-        str.append(std::to_string(node_player->GetPosition().x_));
+        str.append(std::to_string(node_player->GetPosition().x_).substr(0,6));
         str.append(", ");
-        str.append(std::to_string(node_player->GetPosition().y_));
+        str.append(std::to_string(node_player->GetPosition().y_).substr(0,6));
         str.append(", ");
-        str.append(std::to_string(node_player->GetPosition().z_));
+        str.append(std::to_string(node_player->GetPosition().z_).substr(0,6));
         str.append("\nLevel Time: ");
 
         if(goal_time>0)
@@ -443,12 +439,12 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
 
 void gs_playing::HandleKeyDown(StringHash eventType,VariantMap& eventData)
 {
-    if(globals::instance()->game_state_.size()>1)
+    if(globals::instance()->game_states.size()>1)
         return;
     using namespace KeyDown;
     int key=eventData[P_KEY].GetInt();
     if(key==KEY_ESC)
-        globals::instance()->game_state_.emplace_back(new gs_pause);
+        globals::instance()->game_states.emplace_back(new gs_pause);
 
     if(key==KEY_L)
     {

@@ -93,12 +93,12 @@ gs_level_end::gs_level_end() : game_state()
     window_->SetStyleAuto();
 
     {
-        Button* button = new Button(globals::instance()->context);
+        Button* button=new Button(globals::instance()->context);
         button->SetName("Button");
         button->SetMinHeight(100);
         button->SetStyleAuto();
         {
-            Text* t = new Text(globals::instance()->context);
+            Text* t=new Text(globals::instance()->context);
             t->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),20);
             t->SetHorizontalAlignment(HA_CENTER);
             t->SetVerticalAlignment(VA_CENTER);
@@ -153,7 +153,7 @@ void gs_level_end::update(StringHash eventType,VariantMap& eventData)
 
 void gs_level_end::HandlePlayPressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData)
 {
-    globals::instance()->game_state_[0].reset(new gs_main_menu);
+    globals::instance()->game_states[0].reset(new gs_main_menu);
 }
 
 void gs_level_end::HandleKeyDown(StringHash eventType,VariantMap& eventData)

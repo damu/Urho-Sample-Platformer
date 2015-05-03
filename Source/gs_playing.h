@@ -27,6 +27,7 @@
 #include <Urho3D/Physics/PhysicsWorld.h>
 #include <Urho3D/IO/Log.h>
 
+/// The game state handling playing a level.
 class gs_playing : public game_state
 {
 public:

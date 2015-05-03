@@ -20,11 +20,18 @@
 #include <Urho3D/Core/CoreEvents.h>
 #include <Urho3D/Input/Input.h>
 #include <Urho3D/Input/InputEvents.h>
+#include <Urho3D/Audio/Sound.h>
+#include <Urho3D/Audio/SoundSource3D.h>
+#include <Urho3D/Audio/SoundListener.h>
+#include <Urho3D/Audio/Audio.h>
+#include <Urho3D/Graphics/ParticleEmitter.h>
+#include <Urho3D/Graphics/ParticleEffect.h>
 
+/// The main menu displayed when starting the game.
 class gs_main_menu : public game_state
 {
 public:
-    Urho3D::Node* boxNode_;
+    Urho3D::Node* node_rotating_flag;
     Urho3D::Window* window_;
 
     gs_main_menu();

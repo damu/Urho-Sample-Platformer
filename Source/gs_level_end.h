@@ -22,6 +22,7 @@
 #include <Urho3D/Input/Input.h>
 #include <Urho3D/Input/InputEvents.h>
 
+/// This one is stacked on top of the playing game mode after finishing a level to display statistics.
 class gs_level_end : public game_state
 {
 public:
