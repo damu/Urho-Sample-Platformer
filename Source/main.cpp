@@ -89,7 +89,7 @@ public:
         Renderer* renderer=GetSubsystem<Renderer>();
         SharedPtr<Viewport> viewport(new Viewport(context_,scene_,cameraNode_->GetComponent<Camera>()));
         renderer->SetViewport(0,viewport);
-        renderer->SetShadowMapSize(4096);
+        renderer->SetShadowMapSize(1024);
         renderer->SetHDRRendering(true);
 
         RenderPath* effectRenderPath=viewport->GetRenderPath();
