@@ -164,8 +164,6 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
 
     Input* input=GetSubsystem<Input>();
     float timeStep=eventData[Update::P_TIMESTEP].GetFloat();
-    framecount_++;
-    time_+=timeStep;
     timer_playing+=timeStep;
 
     if(!rocks_spawned&&(node_player->GetPosition()-Vector3(-200,37,-125)).Length()<150)
@@ -207,22 +205,33 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
     }
 
     {
-        static std::string str_inner;
-        if(time_ >=1)
+        static double last_second=0;
+        static double last_second_frames=1;
+        static timer this_second;
+        static double this_second_frames=0;
+        this_second_frames++;
+        if(this_second.until_now()>=1)
         {
-            str_inner="";
-            str_inner.append("Keys: tab = toggle mouse, AWSD = move camera, Shift = fast mode, Esc = quit.\n");
-            str_inner.append(std::to_string(framecount_));
-            str_inner.append(" frames in ");
-            str_inner.append(std::to_string(time_));
-            str_inner.append(" seconds = ");
-            str_inner.append(std::to_string((float)framecount_ / time_));
-            str_inner.append(" fps\nLevel Time: ");
-            framecount_=0;
-            time_=0;
+            last_second=this_second.until_now();
+            last_second_frames=this_second_frames;
+            this_second.reset();
+            this_second_frames=0;
         }
         std::string str;
-        str.append(str_inner);
+        if(last_second!=0)
+        {
+            //if(last_second_frames/last_second>11)                           // the FPS can't be measured exactly if below 10 FPS
+                str.append(std::to_string(last_second_frames/last_second));
+            //else
+            //    str.append("<10");
+        }
+        str.append(" FPS   Position: ");
+        str.append(std::to_string(node_player->GetPosition().x_));
+        str.append(", ");
+        str.append(std::to_string(node_player->GetPosition().y_));
+        str.append(", ");
+        str.append(std::to_string(node_player->GetPosition().z_));
+        str.append("\nLevel Time: ");
 
         if(goal_time>0)
             str.append(std::to_string(goal_time));
@@ -233,13 +242,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
                 goal_time=timer_playing;
         }
 
-        str.append("s\nPosition: ");
-        str.append(std::to_string(node_player->GetPosition().x_));
-        str.append(", ");
-        str.append(std::to_string(node_player->GetPosition().y_));
-        str.append(", ");
-        str.append(std::to_string(node_player->GetPosition().z_));
-        str.append("\nRemaining Flags: ");
+        str.append("s\nRemaining Flags: ");
         str.append(std::to_string(flag_nodes.size()));
         str.append("/");
         str.append(std::to_string(flag_positions.size()));
