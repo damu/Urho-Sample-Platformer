@@ -30,8 +30,9 @@ gs_main_menu::gs_main_menu() : game_state()
 
         StaticModel* boxObject=node->CreateComponent<StaticModel>();
         boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/torch.mdl"));
-        boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/torch_metal.xml"));
-        boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/torch_wood.xml"));
+        boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/torch_coal.xml"));
+        boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/torch_metal.xml"));
+        boxObject->SetMaterial(2,globals::instance()->cache->GetResource<Material>("Materials/torch_wood.xml"));
         boxObject->SetCastShadows(true);
         boxObject->SetOccludee(true);
         boxObject->SetShadowDistance(200);
@@ -49,7 +50,7 @@ gs_main_menu::gs_main_menu() : game_state()
         light->SetDrawDistance(200);
 
         auto n_particle=node->CreateChild();
-        n_particle->Translate(Vector3(0,1.7,0));
+        n_particle->Translate(Vector3(0,1.6,0));
         ParticleEmitter* emitter=n_particle->CreateComponent<ParticleEmitter>();
         emitter->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/torch_fire.xml"));
         emitter=n_particle->CreateComponent<ParticleEmitter>();

@@ -461,8 +461,9 @@ void gs_playing::HandleKeyDown(StringHash eventType,VariantMap& eventData)
 
         StaticModel* boxObject=node->CreateComponent<StaticModel>();
         boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/torch.mdl"));
-        boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/torch_metal.xml"));
-        boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/torch_wood.xml"));
+        boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/torch_coal.xml"));
+        boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/torch_metal.xml"));
+        boxObject->SetMaterial(2,globals::instance()->cache->GetResource<Material>("Materials/torch_wood.xml"));
         boxObject->SetCastShadows(true);
         boxObject->SetOccludee(true);
         boxObject->SetShadowDistance(200);
@@ -487,10 +488,10 @@ void gs_playing::HandleKeyDown(StringHash eventType,VariantMap& eventData)
         body_stone->SetFriction(0.6);
         CollisionShape* shape=node->CreateComponent<CollisionShape>();
         //shape->SetCapsule(1,1.2);
-        shape->SetBox(Vector3(0.8,2,0.8),Vector3(0,1,0));
+        shape->SetBox(Vector3(0.7,1.47,0.7),Vector3(0,1.47/2,0));
 
         auto n_particle=node->CreateChild();
-        n_particle->Translate(Vector3(0,1.7,0));
+        n_particle->Translate(Vector3(0,1.6,0));
         ParticleEmitter* emitter=n_particle->CreateComponent<ParticleEmitter>();
         emitter->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/torch_fire.xml"));
         emitter=n_particle->CreateComponent<ParticleEmitter>();
