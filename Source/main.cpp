@@ -61,7 +61,7 @@ public:
         engineParameters_["WindowWidth"]=1280;
         engineParameters_["WindowHeight"]=720;
         engineParameters_["WindowResizable"]=true;
-        engineParameters_["Multisample"]=4;
+        //engineParameters_["Multisample"]=16;
     }
 
     virtual void Start()
@@ -97,7 +97,6 @@ public:
         effectRenderPath->Append(cache->GetResource<XMLFile>("PostProcess/BloomHDR.xml"));
         effectRenderPath->Append(cache->GetResource<XMLFile>("PostProcess/FXAA2.xml"));
         //effectRenderPath.SetEnabled("GammaCorrection",false);
-        viewport->SetRenderPath(effectRenderPath);
 
         Node* zoneNode=scene_->CreateChild("Zone");
         Zone* zone=zoneNode->CreateComponent<Zone>();

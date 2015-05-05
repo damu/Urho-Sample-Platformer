@@ -19,7 +19,7 @@ gs_playing::gs_playing() : game_state()
         gui_elements.push_back(window);
         GetSubsystem<UI>()->GetRoot()->AddChild(window);
         window->SetStyle("Window");
-        window->SetSize(700,90);
+        window->SetSize(700,100);
         window->SetColor(Color(.0,.15,.3,.5));
         window->SetAlignment(HA_CENTER,VA_TOP);
 
@@ -74,6 +74,7 @@ gs_playing::gs_playing() : game_state()
 
         body_player=node_player->CreateComponent<RigidBody>();
         body_player->SetPosition(Vector3(4,10,-5));
+        player_pos_last=body_player->GetPosition();
         body_player->SetCollisionLayer(1);
         body_player->SetMass(80.0);
         body_player->SetLinearDamping(0.0f);
@@ -298,8 +299,8 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         Vector3 vel=body_player->GetLinearVelocity()*Vector3(1,0,1);
         Quaternion rot=node_player->GetRotation();
 
+        static bool on_floor;
         {
-            static bool on_floor;
             static bool at_wall;
             static int jumping=0; // 0 = not jumping, 1 = jumping, 2 =
             on_floor=false;
@@ -375,6 +376,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         float speed_old=vel.Length();
         vel+=rot*moveDir*timeStep*4000/body_player->GetMass();
         float speed_new=vel.Length();
+        if(on_floor)
         if(speed_new>20&&speed_new>speed_old)   // over limit. Don't increase speed further but make direction change possible.
         {
             vel=vel.Normalized()*speed_old;
@@ -402,7 +404,6 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
 
         {   // physic raycast to avoid the player glitching through stuff when moving very fast
             Vector3 player_pos=body_player->GetPosition()+Vector3(0,1,0);
-            static Vector3 player_pos_last=player_pos;
             PhysicsRaycastResult result;
             Ray ray(player_pos_last,player_pos-player_pos_last);
             float l=(player_pos-player_pos_last).Length();
@@ -474,7 +475,7 @@ void gs_playing::HandleKeyDown(StringHash eventType,VariantMap& eventData)
         Light* light=lightNode->CreateComponent<Light>();
         light->SetLightType(LIGHT_POINT);
         light->SetRange(50);
-        light->SetBrightness(1.2);
+        light->SetBrightness(2.0);
         light->SetColor(Color(2.0,1.2,.8,1.0));
         light->SetCastShadows(true);
         light->SetShadowDistance(200);
@@ -504,5 +505,6 @@ void gs_playing::HandleKeyDown(StringHash eventType,VariantMap& eventData)
         sound_torch_source->SetFarDistance(50);
         sound_torch_source->SetSoundType(SOUND_EFFECT);
         sound_torch_source->Play(sound_torch);
+        sound_torch_source->SetFrequency(sound_torch->GetFrequency()*Random(0.7f,1.3f));
     }
 }

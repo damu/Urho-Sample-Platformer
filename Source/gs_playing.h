@@ -43,6 +43,7 @@ public:
     float camera_yaw=20;
     float camera_pitch=20;
     bool rocks_spawned=false;
+    Urho3D::Vector3 player_pos_last;
 
     gs_playing();
     void update(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
