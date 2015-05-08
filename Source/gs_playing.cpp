@@ -41,10 +41,7 @@ gs_playing::gs_playing() : game_state()
         nodes.push_back(boxNode_);
         boxNode_->SetPosition(Vector3(0,0,-10));
         StaticModel* boxObject=boxNode_->CreateComponent<StaticModel>();
-        boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/level_1.mdl"));
-        boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/level_1_mushroom.xml"));
-        boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/level_1_terrain.xml"));
-        boxObject->SetMaterial(2,globals::instance()->cache->GetResource<Material>("Materials/level_1_white_walls.xml"));
+        set_model(boxObject,globals::instance()->cache,"Data/Models/level_1");
         boxObject->SetCastShadows(true);
         boxObject->SetOccludee(true);
         boxObject->SetOccluder(true);
@@ -63,13 +60,7 @@ gs_playing::gs_playing() : game_state()
         node_player_model=globals::instance()->scene->CreateChild();
         nodes.push_back(node_player_model);
         StaticModel* boxObject=node_player_model->CreateComponent<StaticModel>();
-        boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/robot.mdl"));
-        boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/robot_dark_grey.xml"));
-        boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/robot_white.xml"));
-        boxObject->SetMaterial(2,globals::instance()->cache->GetResource<Material>("Materials/robot_dark.xml"));
-        boxObject->SetMaterial(3,globals::instance()->cache->GetResource<Material>("Materials/robot_light.xml"));
-        boxObject->SetMaterial(4,globals::instance()->cache->GetResource<Material>("Materials/robot_black.xml"));
-        boxObject->SetMaterial(5,globals::instance()->cache->GetResource<Material>("Materials/robot_eyes.xml"));
+        set_model(boxObject,globals::instance()->cache,"Data/Models/robot");
         boxObject->SetCastShadows(true);
 
         body_player=node_player->CreateComponent<RigidBody>();
@@ -461,10 +452,7 @@ void gs_playing::HandleKeyDown(StringHash eventType,VariantMap& eventData)
         node->SetPosition(pos);
 
         StaticModel* boxObject=node->CreateComponent<StaticModel>();
-        boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/torch.mdl"));
-        boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/torch_coal.xml"));
-        boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/torch_metal.xml"));
-        boxObject->SetMaterial(2,globals::instance()->cache->GetResource<Material>("Materials/torch_wood.xml"));
+        set_model(boxObject,globals::instance()->cache,"Data/Models/torch");
         boxObject->SetCastShadows(true);
         boxObject->SetOccludee(true);
         boxObject->SetShadowDistance(200);

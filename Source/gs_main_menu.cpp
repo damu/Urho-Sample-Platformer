@@ -29,10 +29,7 @@ gs_main_menu::gs_main_menu() : game_state()
         node->SetPosition(pos);
 
         StaticModel* boxObject=node->CreateComponent<StaticModel>();
-        boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/torch.mdl"));
-        boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/torch_coal.xml"));
-        boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/torch_metal.xml"));
-        boxObject->SetMaterial(2,globals::instance()->cache->GetResource<Material>("Materials/torch_wood.xml"));
+        set_model(boxObject,globals::instance()->cache,"Data/Models/torch");
         boxObject->SetCastShadows(true);
         boxObject->SetOccludee(true);
         boxObject->SetShadowDistance(200);
