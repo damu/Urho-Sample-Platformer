@@ -6,6 +6,7 @@
 #include <vector>
 #include <sys/time.h>
 #include <iostream>
+#include <fstream>
 
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Engine/Application.h>
@@ -62,6 +63,24 @@ public:
 
 /// \brief Calls SetModel on the given model and tries to load the model file and all texture files mentioned in a model_name+".txt".
 /// model_name is supposed to have no file extension. Example: "Data/Models/Box", loads the model "Data/Models/Box.mdl".
-void set_model(Urho3D::StaticModel* model,Urho3D::ResourceCache* cache,std::string model_name);
+template<typename T>
+void set_model(T* model,Urho3D::ResourceCache* cache,std::string model_name)
+{
+    std::string filename_model=model_name;
+    model->SetModel(cache->GetResource<Urho3D::Model>(Urho3D::String(filename_model.append(".mdl").c_str())));
+    std::string filename_txt=model_name;
+    filename_txt.append(".txt");
+    std::ifstream file(filename_txt);
+    std::string line;
+    if(file.is_open())
+    {
+        int i=0;
+        while(getline(file,line))
+        {
+            model->SetMaterial(i,cache->GetResource<Urho3D::Material>(Urho3D::String(line.c_str())));
+            i++;
+        }
+    }
+}
 
 #endif // MISC_H

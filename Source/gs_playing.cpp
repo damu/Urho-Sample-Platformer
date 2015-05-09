@@ -59,7 +59,7 @@ gs_playing::gs_playing() : game_state()
         nodes.push_back(node_player);
         node_player_model=globals::instance()->scene->CreateChild();
         nodes.push_back(node_player_model);
-        StaticModel* boxObject=node_player_model->CreateComponent<StaticModel>();
+        AnimatedModel* boxObject=node_player_model->CreateComponent<AnimatedModel>();
         set_model(boxObject,globals::instance()->cache,"Data/Models/robot");
         boxObject->SetCastShadows(true);
 
@@ -74,6 +74,25 @@ gs_playing::gs_playing() : game_state()
         body_player->SetFriction(0.8);
         CollisionShape* shape=node_player->CreateComponent<CollisionShape>();
         shape->SetCapsule(1,2,Vector3(0,1.05,0));
+
+        {
+            Animation* ani=globals::instance()->cache->GetResource<Animation>("Models/robot_stand.ani");
+            player_stand=boxObject->AddAnimationState(ani);
+            player_stand->SetWeight(1.0f);
+            player_stand->SetLooped(true);
+        }
+        {
+            Animation* ani=globals::instance()->cache->GetResource<Animation>("Models/robot_walk.ani");
+            player_walk=boxObject->AddAnimationState(ani);
+            player_walk->SetWeight(0.0f);
+            player_walk->SetLooped(true);
+        }
+        {
+            Animation* ani=globals::instance()->cache->GetResource<Animation>("Models/robot_jump.ani");
+            player_jump=boxObject->AddAnimationState(ani);
+            player_jump->SetWeight(0.0f);
+            player_jump->SetLooped(true);
+        }
     }
 
     {
@@ -311,6 +330,16 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             }
             if(!on_floor)
                 moveDir*=0.35;
+
+            player_stand->AddTime(timeStep/2);
+            player_walk->AddTime(timeStep*vel.Length()/1.5);
+            player_jump->AddTime(timeStep);
+            player_stand->SetWeight(1.0-Clamp(vel.Length()/2,0.0,1.0));
+            player_walk->SetWeight(Clamp(vel.Length()/2,0.0,1.0));
+            if(!on_floor)
+                player_jump->SetWeight(player_jump->GetWeight()+timeStep*3);
+            else
+                player_jump->SetWeight(0.0);
 
             if(input->GetKeyDown(KEY_SPACE)&&jumping==false&&(on_floor||at_wall))   // walljump
             {

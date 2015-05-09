@@ -6,6 +6,9 @@
 #include <Urho3D/Graphics/Light.h>
 #include <Urho3D/Graphics/Model.h>
 #include <Urho3D/Graphics/StaticModel.h>
+#include <Urho3D/Graphics/Animation.h>
+#include <Urho3D/Graphics/AnimatedModel.h>
+#include <Urho3D/Graphics/AnimationState.h>
 #include <Urho3D/Graphics/Material.h>
 #include <Urho3D/Graphics/Skybox.h>
 #include <Urho3D/UI/Button.h>
@@ -44,6 +47,9 @@ public:
     float camera_pitch=20;
     bool rocks_spawned=false;
     Urho3D::Vector3 player_pos_last;
+    Urho3D::AnimationState* player_stand;
+    Urho3D::AnimationState* player_walk;
+    Urho3D::AnimationState* player_jump;
 
     gs_playing();
     void update(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
