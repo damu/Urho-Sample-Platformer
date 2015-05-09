@@ -48,8 +48,10 @@ public:
     bool rocks_spawned=false;
     Urho3D::Vector3 player_pos_last;
     Urho3D::AnimationState* player_stand;
-    Urho3D::AnimationState* player_walk;
+    //Urho3D::AnimationState* player_walk;
+    Urho3D::AnimationState* player_run;
     Urho3D::AnimationState* player_jump;
+    Urho3D::AnimationState* player_reversing;
 
     gs_playing();
     void update(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);

@@ -81,17 +81,29 @@ gs_playing::gs_playing() : game_state()
             player_stand->SetWeight(1.0f);
             player_stand->SetLooped(true);
         }
-        {
+        /*{
             Animation* ani=globals::instance()->cache->GetResource<Animation>("Models/robot_walk.ani");
             player_walk=boxObject->AddAnimationState(ani);
             player_walk->SetWeight(0.0f);
             player_walk->SetLooped(true);
+        }*/
+        {
+            Animation* ani=globals::instance()->cache->GetResource<Animation>("Models/robot_run.ani");
+            player_run=boxObject->AddAnimationState(ani);
+            player_run->SetWeight(0.0f);
+            player_run->SetLooped(true);
         }
         {
             Animation* ani=globals::instance()->cache->GetResource<Animation>("Models/robot_jump.ani");
             player_jump=boxObject->AddAnimationState(ani);
             player_jump->SetWeight(0.0f);
             player_jump->SetLooped(true);
+        }
+        {
+            Animation* ani=globals::instance()->cache->GetResource<Animation>("Models/robot_reversing.ani");
+            player_reversing=boxObject->AddAnimationState(ani);
+            player_reversing->SetWeight(0.0f);
+            player_reversing->SetLooped(true);
         }
     }
 
@@ -332,12 +344,16 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
                 moveDir*=0.35;
 
             player_stand->AddTime(timeStep/2);
-            player_walk->AddTime(timeStep*vel.Length()/1.5);
+            //player_walk->AddTime(timeStep*vel.Length()/1.5);
+            player_run->AddTime(timeStep*vel.Length()/3);
             player_jump->AddTime(timeStep);
-            player_stand->SetWeight(1.0-Clamp(vel.Length()/2,0.0,1.0));
-            player_walk->SetWeight(Clamp(vel.Length()/2,0.0,1.0));
+            player_reversing->AddTime(timeStep);
+            //player_stand->SetWeight(1.0-Clamp(vel.Length()/2,0.0,1.0));
+            player_stand->SetWeight(1.0);
+            //player_walk->SetWeight(Clamp(vel.Length()/2,0.0,1.0));
+            player_run->SetWeight(Clamp((vel.Length()-2)/2,0.0,1.0));   // maybe this should be done differently, but works for this game
             if(!on_floor)
-                player_jump->SetWeight(player_jump->GetWeight()+timeStep*3);
+                player_jump->SetWeight(player_jump->GetWeight()+timeStep*5);
             else
                 player_jump->SetWeight(0.0);
 
@@ -358,6 +374,12 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             static float jump_force_applied=0;
             static const float max_jump_force_applied=700;
             Vector3 moveDir_world=node_player->GetWorldRotation()*moveDir;
+
+            if(moveDir_world.Angle(vel)>90&&vel.Length()>3&&on_floor)   // indicate if direction change jump / side sommersault possible
+                player_reversing->SetWeight(player_reversing->GetWeight()+timeStep*10);
+            else
+                player_reversing->SetWeight(0.0);
+
             if(jumping==1&&jump_force_applied<max_jump_force_applied)   // jump higher if we are jumping and the limit has not been reached
             {
                 if(jump_force_applied>max_jump_force_applied)

@@ -119,7 +119,6 @@ void PS()
     #endif
 
     // material generation with noise /////////////////////////////////////////
-#if defined(PERPIXEL)
     float f=noise_height(vWorldPos.xyz);
     vec4 spec_color=cMatSpecColor*f;
     spec_color.a=cMatSpecColor.a;
@@ -136,7 +135,6 @@ void PS()
     vec3 vb=vec3(2,(f3-f)*4,0);
     normal+=normalize(cross(va,vb));
     normal=normalize(normal);
-#endif
     // ////////////////////////////////////////////////////////////////////////
 
     #if defined(PERPIXEL)

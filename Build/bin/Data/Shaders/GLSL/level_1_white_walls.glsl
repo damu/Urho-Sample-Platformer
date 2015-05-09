@@ -139,9 +139,9 @@ void PS()
     #endif
 
     // material generation with noise /////////////////////////////////////////
-#if defined(PERPIXEL)
     float f=noise_height(vWorldPos.xyz);
     vec4 spec_color=cMatSpecColor*f;
+    spec_color.a=cMatSpecColor.a;
     vec4 diffColor=cMatDiffColor*f;
 
     // normal, based on http://stackoverflow.com/questions/5281261/generating-a-normal-map-from-a-height-map
@@ -152,8 +152,6 @@ void PS()
     vec3 vb=vec3(2,(f3-f)*64,0);
     normal+=normalize(cross(va,vb));
     normal=normalize(normal);
-#endif
-    spec_color.a=cMatSpecColor.a;
     // ////////////////////////////////////////////////////////////////////////
 
     #if defined(PERPIXEL)
