@@ -92,12 +92,13 @@ gs_main_menu::gs_main_menu() : game_state()
     gui_elements.push_back(window_);
     globals::instance()->ui_root->AddChild(window_);
 
-    window_->SetMinSize(384,192);
+    window_->SetMinSize(200,100);
     window_->SetLayout(LM_VERTICAL,6,IntRect(6,6,6,6));
     window_->SetAlignment(HA_CENTER,VA_CENTER);
     window_->SetName("Window");
+    window_->SetColor(Color(.0,.15,.3,.5));
 
-    UIElement* titleBar=new UIElement(globals::instance()->context);
+    /*UIElement* titleBar=new UIElement(globals::instance()->context);
     titleBar->SetMinSize(0,24);
     titleBar->SetVerticalAlignment(VA_TOP);
     titleBar->SetLayoutMode(LM_HORIZONTAL);
@@ -114,13 +115,15 @@ gs_main_menu::gs_main_menu() : game_state()
     titleBar->AddChild(buttonClose);
 
     window_->AddChild(titleBar);
+*/
     window_->SetStyleAuto();
 
     {
         Button* button = new Button(globals::instance()->context);
         button->SetName("Button");
-        button->SetMinHeight(100);
+        button->SetMinHeight(50);
         button->SetStyleAuto();
+        button->SetOpacity(0.75);
         {
             Text* t = new Text(globals::instance()->context);
             t->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),20);
@@ -139,8 +142,9 @@ gs_main_menu::gs_main_menu() : game_state()
     {
         Button* button = new Button(globals::instance()->context);
         button->SetName("Button");
-        button->SetMinHeight(100);
+        button->SetMinHeight(50);
         button->SetStyleAuto();
+        button->SetOpacity(0.75);
         {
             Text* t = new Text(globals::instance()->context);
             t->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),20);
@@ -163,7 +167,7 @@ gs_main_menu::gs_main_menu() : game_state()
 
     SubscribeToEvent(E_UPDATE,HANDLER(gs_main_menu,update));
     SubscribeToEvent(E_KEYDOWN,HANDLER(gs_main_menu,HandleKeyDown));
-    SubscribeToEvent(buttonClose,E_RELEASED,HANDLER(gs_main_menu,HandleClosePressed));
+    //SubscribeToEvent(buttonClose,E_RELEASED,HANDLER(gs_main_menu,HandleClosePressed));
 }
 
 void gs_main_menu::update(StringHash eventType,VariantMap& eventData)

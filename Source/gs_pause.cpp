@@ -16,7 +16,8 @@ gs_pause::gs_pause() : game_state()
     window_->SetLayout(LM_VERTICAL,6,IntRect(6,6,6,6));
     window_->SetAlignment(HA_CENTER,VA_CENTER);
     window_->SetName("Window");
-
+    window_->SetColor(Color(.0,.15,.3,.5));
+/*
     UIElement* titleBar=new UIElement(globals::instance()->context);
     titleBar->SetMinSize(0,24);
     titleBar->SetVerticalAlignment(VA_TOP);
@@ -33,7 +34,7 @@ gs_pause::gs_pause() : game_state()
     buttonClose->SetStyle("CloseButton");
     titleBar->AddChild(buttonClose);
 
-    window_->AddChild(titleBar);
+    window_->AddChild(titleBar);*/
     window_->SetStyleAuto();
 
     {
@@ -41,6 +42,7 @@ gs_pause::gs_pause() : game_state()
         button->SetName("Button");
         button->SetMinHeight(50);
         button->SetStyle("Window");
+        button->SetOpacity(0.75);
         {
             Text* t = new Text(globals::instance()->context);
             t->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),20);
@@ -60,6 +62,7 @@ gs_pause::gs_pause() : game_state()
         button->SetName("Button");
         button->SetMinHeight(50);
         button->SetStyleAuto();
+        button->SetOpacity(0.75);
         {
             Text* t = new Text(globals::instance()->context);
             t->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),16);
@@ -81,6 +84,7 @@ gs_pause::gs_pause() : game_state()
         button->SetName("Button");
         button->SetMinHeight(50);
         button->SetStyleAuto();
+        button->SetOpacity(0.75);
         {
             Text* t = new Text(globals::instance()->context);
             t->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),16);
@@ -101,6 +105,7 @@ gs_pause::gs_pause() : game_state()
         button->SetName("Button");
         button->SetMinHeight(50);
         button->SetStyleAuto();
+        button->SetOpacity(0.75);
         {
             Text* t = new Text(globals::instance()->context);
             t->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),16);
@@ -122,7 +127,7 @@ gs_pause::gs_pause() : game_state()
 
     SubscribeToEvent(E_UPDATE,HANDLER(gs_pause,update));
     SubscribeToEvent(E_KEYDOWN,HANDLER(gs_pause,HandleKeyDown));
-    SubscribeToEvent(buttonClose,E_RELEASED,HANDLER(gs_pause,HandleResumePressed));
+//    SubscribeToEvent(buttonClose,E_RELEASED,HANDLER(gs_pause,HandleResumePressed));
 }
 
 gs_pause::~gs_pause()

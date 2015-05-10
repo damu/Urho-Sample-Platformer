@@ -40,6 +40,7 @@ public:
     Urho3D::RigidBody* body_player;
     double timer_playing=0;
     float goal_time=0;
+    std::vector<Urho3D::Vector3> torch_positions;
     std::vector<Urho3D::Vector3> flag_positions;
     std::vector<Urho3D::Node*> flag_nodes;
     float cam_distance=14;
@@ -56,6 +57,7 @@ public:
     gs_playing();
     void update(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
     void HandleKeyDown(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
+    void spawn_torch(Urho3D::Vector3 pos);
 
     virtual const Urho3D::String& GetTypeName() const {static Urho3D::String name("gs_playing");return name;}   // this could be correct
 };

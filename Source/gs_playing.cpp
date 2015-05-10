@@ -131,13 +131,16 @@ gs_playing::gs_playing() : game_state()
         flag_positions.emplace_back(18.2,21.6,-5.1);
         flag_positions.emplace_back(28.7,33.9,82.6);
         flag_positions.emplace_back(110,38.7,57.1);
-        flag_positions.emplace_back(-238,37,-125);
+        flag_positions.emplace_back(-242,36,-107);
+
+        torch_positions.emplace_back(-244,36.2,-104);
+        torch_positions.emplace_back(-199,28,-138);
 
         for(auto p:flag_positions)
         {
             Node* n=globals::instance()->scene->CreateChild("Flag");
             nodes.push_back(n);
-            n->SetPosition(Vector3(p.x_,p.y_,p.z_));
+            n->SetPosition(p);
             StaticModel* boxObject=n->CreateComponent<StaticModel>();
             boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/flag.mdl"));
             boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/flag_pole.xml"));
@@ -145,6 +148,9 @@ gs_playing::gs_playing() : game_state()
             boxObject->SetCastShadows(true);
             flag_nodes.push_back(n);
         }
+
+        for(auto p:torch_positions)
+            spawn_torch(p);
     }
 
     // spawn one rock and remove it to cache the collider mesh (to avoid a ~1 second lag when spawning the first rock during the game)
@@ -193,7 +199,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
     if(!rocks_spawned&&(node_player->GetPosition()-Vector3(-200,37,-125)).Length()<150)
     {
         rocks_spawned=true;
-        for(int i=0;i<150;i++)
+        for(int i=0;i<100;i++)
         {
             auto node_stone=globals::instance()->scene->CreateChild("Stone");
             nodes.push_back(node_stone);
@@ -208,7 +214,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             boxObject->SetShadowDistance(200);
 
             PhysicsRaycastResult result;
-            Vector3 pos(-120-Random(100.0f),100,-70-Random(100.0f));
+            Vector3 pos(-140-Random(80.0f),40,-80-Random(70.0f));
             Ray ray(pos,Vector3(0,-1,0));
             body_player->GetPhysicsWorld()->SphereCast(result,ray,2,100);
             if(result.distance_<=1000)
@@ -490,60 +496,61 @@ void gs_playing::HandleKeyDown(StringHash eventType,VariantMap& eventData)
         globals::instance()->game_states.emplace_back(new gs_pause);
 
     if(key==KEY_L)
-    {
-        Node* node=globals::instance()->scene->CreateChild("Light");
-        nodes.push_back(node);
-        Vector3 pos(node_player->GetPosition()+Vector3(2,1.9,0));
+        spawn_torch(node_player->GetPosition()+Vector3(2,1.9,0));
+}
 
-        PhysicsRaycastResult result;
-        Ray ray(pos,Vector3(0,-1,0));
-        body_player->GetPhysicsWorld()->SphereCast(result,ray,0.4,10);
-        if(result.distance_<=10)
-            pos=result.position_+Vector3(0,0.2,0);
-        node->SetPosition(pos);
+void gs_playing::spawn_torch(Vector3 pos)
+{
+    Node* node=globals::instance()->scene->CreateChild("Light");
+    nodes.push_back(node);
 
-        StaticModel* boxObject=node->CreateComponent<StaticModel>();
-        set_model(boxObject,globals::instance()->cache,"Data/Models/torch");
-        boxObject->SetCastShadows(true);
-        boxObject->SetOccludee(true);
-        boxObject->SetShadowDistance(200);
-        boxObject->SetDrawDistance(200);
+    PhysicsRaycastResult result;
+    Ray ray(pos,Vector3(0,-1,0));
+    body_player->GetPhysicsWorld()->SphereCast(result,ray,0.4,10);
+    if(result.distance_<=10)
+        pos=result.position_+Vector3(0,0.2,0);
+    node->SetPosition(pos);
 
-        auto lightNode=node->CreateChild();
-        lightNode->Translate(Vector3(0,2,0));
-        Light* light=lightNode->CreateComponent<Light>();
-        light->SetLightType(LIGHT_POINT);
-        light->SetRange(50);
-        light->SetBrightness(2.0);
-        light->SetColor(Color(2.0,1.2,.8,1.0));
-        light->SetCastShadows(true);
-        light->SetShadowDistance(200);
-        light->SetDrawDistance(200);
+    StaticModel* boxObject=node->CreateComponent<StaticModel>();
+    set_model(boxObject,globals::instance()->cache,"Data/Models/torch");
+    boxObject->SetCastShadows(true);
+    boxObject->SetOccludee(true);
+    boxObject->SetShadowDistance(200);
+    boxObject->SetDrawDistance(200);
 
-        auto body_stone=node->CreateComponent<RigidBody>();
-        body_stone->SetCollisionLayer(2);
-        body_stone->SetMass(50.0);
-        body_stone->SetLinearDamping(0.2f);
-        body_stone->SetAngularDamping(0.2f);
-        body_stone->SetFriction(0.6);
-        CollisionShape* shape=node->CreateComponent<CollisionShape>();
-        //shape->SetCapsule(1,1.2);
-        shape->SetBox(Vector3(0.7,1.47,0.7),Vector3(0,1.47/2,0));
+    auto lightNode=node->CreateChild();
+    lightNode->Translate(Vector3(0,2,0));
+    Light* light=lightNode->CreateComponent<Light>();
+    light->SetLightType(LIGHT_POINT);
+    light->SetRange(50);
+    light->SetBrightness(2.0);
+    light->SetColor(Color(2.0,1.2,.8,1.0));
+    light->SetCastShadows(true);
+    light->SetShadowDistance(300);
+    light->SetDrawDistance(300);
 
-        auto n_particle=node->CreateChild();
-        n_particle->Translate(Vector3(0,1.6,0));
-        ParticleEmitter* emitter=n_particle->CreateComponent<ParticleEmitter>();
-        emitter->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/torch_fire.xml"));
-        emitter=n_particle->CreateComponent<ParticleEmitter>();
-        emitter->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/torch_smoke.xml"));
+    auto body_stone=node->CreateComponent<RigidBody>();
+    body_stone->SetCollisionLayer(2);
+    body_stone->SetMass(50.0);
+    body_stone->SetLinearDamping(0.2f);
+    body_stone->SetAngularDamping(0.2f);
+    body_stone->SetFriction(0.6);
+    CollisionShape* shape=node->CreateComponent<CollisionShape>();
+    shape->SetBox(Vector3(0.7,1.47,0.7),Vector3(0,1.47/2,0));
 
-        auto sound_torch=globals::instance()->cache->GetResource<Sound>("Sounds/torch.ogg");
-        sound_torch->SetLooped(true);
-        auto sound_torch_source=n_particle->CreateComponent<SoundSource3D>();
-        sound_torch_source->SetNearDistance(1);
-        sound_torch_source->SetFarDistance(50);
-        sound_torch_source->SetSoundType(SOUND_EFFECT);
-        sound_torch_source->Play(sound_torch);
-        sound_torch_source->SetFrequency(sound_torch->GetFrequency()*Random(0.7f,1.3f));
-    }
+    auto n_particle=node->CreateChild();
+    n_particle->Translate(Vector3(0,1.6,0));
+    ParticleEmitter* emitter=n_particle->CreateComponent<ParticleEmitter>();
+    emitter->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/torch_fire.xml"));
+    emitter=n_particle->CreateComponent<ParticleEmitter>();
+    emitter->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/torch_smoke.xml"));
+
+    auto sound_torch=globals::instance()->cache->GetResource<Sound>("Sounds/torch.ogg");
+    sound_torch->SetLooped(true);
+    auto sound_torch_source=n_particle->CreateComponent<SoundSource3D>();
+    sound_torch_source->SetNearDistance(1);
+    sound_torch_source->SetFarDistance(50);
+    sound_torch_source->SetSoundType(SOUND_EFFECT);
+    sound_torch_source->Play(sound_torch);
+    sound_torch_source->SetFrequency(sound_torch->GetFrequency()*Random(0.7f,1.3f));
 }
