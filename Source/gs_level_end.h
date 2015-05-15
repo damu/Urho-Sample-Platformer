@@ -28,12 +28,11 @@ class gs_level_end : public game_state
 public:
     Urho3D::Node* boxNode_;
     Urho3D::Window* window_;
+    Urho3D::Text* text_finished;
 
     gs_level_end();
-    void update(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
-    void HandlePlayPressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
-    void HandleKeyDown(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
-    void HandleClosePressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData){globals::instance()->engine->Exit();}
+    void HandleRestartPressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
+    void HandleMainMenuPressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
 
     virtual const Urho3D::String& GetTypeName() const {static Urho3D::String name("gs_level_end");return name;}   // this could be correct
 };

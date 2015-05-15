@@ -4,10 +4,10 @@
 #include <Urho3D/Audio/SoundSource3D.h>
 #include <Urho3D/Audio/SoundListener.h>
 #include <Urho3D/Audio/Audio.h>
-#include <Urho3D/Graphics/ParticleEmitter.h>
-#include <Urho3D/Graphics/ParticleEffect.h>
+#include <Urho3D/Graphics/Terrain.h>
 
 #include "gs_pause.h"
+#include "gs_level_end.h"
 
 using namespace Urho3D;
 
@@ -105,6 +105,55 @@ gs_playing::gs_playing() : game_state()
             player_reversing->SetWeight(0.0f);
             player_reversing->SetLooped(true);
         }
+
+        {
+            auto n_particle=node_player_model->GetChild("torso",true)->CreateChild();
+            n_particle->Translate(Vector3(0,0.224,-0.224));
+            n_particle->Pitch(90);
+            player_emitter_back=n_particle->CreateComponent<ParticleEmitter>();
+            player_emitter_back->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/thruster.xml"));
+            player_emitter_back->SetEmitting(false);
+        }
+        {
+            auto n_particle=node_player_model->GetChild("torso",true)->CreateChild();
+            n_particle->Translate(Vector3(0,0.224,0.10085));
+            n_particle->Pitch(90);
+            n_particle->Roll(180);
+            player_emitter_front=n_particle->CreateComponent<ParticleEmitter>();
+            player_emitter_front->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/thruster.xml"));
+            player_emitter_front->SetEmitting(false);
+        }
+        {
+            auto n_particle=node_player_model->GetChild("torso",true)->CreateChild();
+            n_particle->Translate(Vector3(0.14778,0.224,-0.06949));
+            n_particle->Pitch(90);
+            n_particle->Roll(270);
+            player_emitter_left=n_particle->CreateComponent<ParticleEmitter>();
+            player_emitter_left->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/thruster.xml"));
+            player_emitter_left->SetEmitting(false);
+        }
+        {
+            auto n_particle=node_player_model->GetChild("torso",true)->CreateChild();
+            n_particle->Translate(Vector3(-0.14778,0.224,-0.06949));
+            n_particle->Pitch(90);
+            n_particle->Roll(90);
+            player_emitter_right=n_particle->CreateComponent<ParticleEmitter>();
+            player_emitter_right->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/thruster.xml"));
+            player_emitter_right->SetEmitting(false);
+        }
+
+        {
+            auto lightNode=node_player_model->GetChild("head",true)->CreateChild();
+            lightNode->Translate(Vector3(0,0.35,-0.35));
+            lightNode->Pitch(180);
+            Light* light=lightNode->CreateComponent<Light>();
+            light->SetLightType(LIGHT_SPOT);
+            light->SetRange(50);
+            light->SetBrightness(2.0);
+            light->SetColor(Color(0.5,0.7,1.0,1.0)*3);
+            light->SetCastShadows(true);
+            light->SetFov(100);
+        }
     }
 
     {
@@ -128,9 +177,9 @@ gs_playing::gs_playing() : game_state()
         flag_positions.emplace_back(20.35,14,-47.6);
         flag_positions.emplace_back(-9.9,14,-47.7);
         flag_positions.emplace_back(-0.25,-5.5,-195.6);
-        flag_positions.emplace_back(18.2,21.6,-5.1);
+        flag_positions.emplace_back(18.2,21,-4);
         flag_positions.emplace_back(28.7,33.9,82.6);
-        flag_positions.emplace_back(110,38.7,57.1);
+        flag_positions.emplace_back(118,43,51);
         flag_positions.emplace_back(-242,36,-107);
 
         torch_positions.emplace_back(-244,36.2,-104);
@@ -140,6 +189,13 @@ gs_playing::gs_playing() : game_state()
         {
             Node* n=globals::instance()->scene->CreateChild("Flag");
             nodes.push_back(n);
+
+            PhysicsRaycastResult result;
+            Ray ray(p+Vector3(0,5,0),Vector3(0,-1,0));
+            body_player->GetPhysicsWorld()->SphereCast(result,ray,2,10);
+            if(result.distance_<=10)
+                p=result.position_;
+
             n->SetPosition(p);
             StaticModel* boxObject=n->CreateComponent<StaticModel>();
             boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/flag.mdl"));
@@ -263,8 +319,6 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         else
         {
             str.append(std::to_string(timer_playing));
-            if(!flag_nodes.size())
-                goal_time=timer_playing;
         }
 
         str.append("s\nRemaining Flags: ");
@@ -307,6 +361,11 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
     {
         Vector3 moveDir=Vector3::ZERO;
         Vector3 moveDir_global=Vector3::ZERO;
+        player_emitter_right->SetEmitting(false);
+        player_emitter_left->SetEmitting(false);
+        player_emitter_front->SetEmitting(false);
+        player_emitter_back->SetEmitting(false);
+
         if(input->GetKeyDown('D'))
             moveDir+=Vector3::RIGHT*1;
         if(input->GetKeyDown('A'))
@@ -380,6 +439,18 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             static float jump_force_applied=0;
             static const float max_jump_force_applied=700;
             Vector3 moveDir_world=node_player->GetWorldRotation()*moveDir;
+
+            /*{ // doesn't work yet correctly
+                Vector3 v=node_player_model->GetWorldRotation()*(-moveDir_world);
+                if(v.x_>0)
+                    player_emitter_right->SetEmitting(true);
+                else if(v.x_<0)
+                    player_emitter_left->SetEmitting(true);
+                if(v.y_>0)
+                    player_emitter_back->SetEmitting(true);
+                else if(v.y_<0)
+                    player_emitter_front->SetEmitting(true);
+            }*/
 
             if(moveDir_world.Angle(vel)>90&&vel.Length()>3&&on_floor)   // indicate if direction change jump / side sommersault possible
                 player_reversing->SetWeight(player_reversing->GetWeight()+timeStep*10);
@@ -474,13 +545,21 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         {
             flag_nodes.erase(flag_nodes.begin()+i);
             n->Remove();
-            for(int j=0;j<nodes.size();j++) // theoretically it should be better to use a set instead of a vector when
-                if(nodes[j]==n)             // needing to search for stuff, but benchmarks show otherwise and this is not done that often
+            for(int j=0;j<nodes.size();j++)
+                if(nodes[j]==n)
                 {
                     nodes.erase(nodes.begin()+j);
                     break;
                 }
 
+            if(flag_nodes.size()==0)
+            {
+                goal_time=timer_playing;
+                auto e=new gs_level_end;
+                std::string str="You collected all flags!\nNeeded time: "+std::to_string(goal_time)+"s";
+                e->text_finished->SetText(str.c_str());
+                globals::instance()->game_states.emplace_back(e);
+            }
             break;
         }
     }

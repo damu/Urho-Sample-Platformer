@@ -29,6 +29,8 @@
 #include <Urho3D/Physics/CollisionShape.h>
 #include <Urho3D/Physics/PhysicsWorld.h>
 #include <Urho3D/IO/Log.h>
+#include <Urho3D/Graphics/ParticleEmitter.h>
+#include <Urho3D/Graphics/ParticleEffect.h>
 
 /// The game state handling playing a level.
 class gs_playing : public game_state
@@ -53,6 +55,10 @@ public:
     Urho3D::AnimationState* player_run;
     Urho3D::AnimationState* player_jump;
     Urho3D::AnimationState* player_reversing;
+    Urho3D::ParticleEmitter* player_emitter_back;
+    Urho3D::ParticleEmitter* player_emitter_front;
+    Urho3D::ParticleEmitter* player_emitter_left;
+    Urho3D::ParticleEmitter* player_emitter_right;
 
     gs_playing();
     void update(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
