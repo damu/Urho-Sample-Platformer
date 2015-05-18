@@ -39,6 +39,7 @@ public:
     Urho3D::Text* text_;
     Urho3D::Node* node_player;
     Urho3D::Node* node_player_model;
+    Urho3D::Node* node_player_light;
     Urho3D::RigidBody* body_player;
     double timer_playing=0;
     float goal_time=0;
@@ -59,6 +60,7 @@ public:
     Urho3D::ParticleEmitter* player_emitter_front;
     Urho3D::ParticleEmitter* player_emitter_left;
     Urho3D::ParticleEmitter* player_emitter_right;
+    bool camera_first_person=false;
 
     gs_playing();
     void update(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);

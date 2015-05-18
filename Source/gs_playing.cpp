@@ -73,7 +73,7 @@ gs_playing::gs_playing() : game_state()
         body_player->SetAngularFactor(Vector3(0,1,0));
         body_player->SetFriction(0.8);
         CollisionShape* shape=node_player->CreateComponent<CollisionShape>();
-        shape->SetCapsule(1,2,Vector3(0,1.05,0));
+        shape->SetCapsule(1.3,2,Vector3(0,1.05,0));
 
         {
             Animation* ani=globals::instance()->cache->GetResource<Animation>("Models/robot_stand.ani");
@@ -143,10 +143,10 @@ gs_playing::gs_playing() : game_state()
         }
 
         {
-            auto lightNode=node_player_model->GetChild("head",true)->CreateChild();
-            lightNode->Translate(Vector3(0,0.35,-0.35));
-            lightNode->Pitch(180);
-            Light* light=lightNode->CreateComponent<Light>();
+            node_player_light=node_player_model->GetChild("head",true)->CreateChild();
+            node_player_light->Translate(Vector3(0,0.35,-0.35));
+            node_player_light->Pitch(180);
+            Light* light=node_player_light->CreateComponent<Light>();
             light->SetLightType(LIGHT_SPOT);
             light->SetRange(50);
             light->SetBrightness(1.5);
@@ -337,31 +337,7 @@ std::string str;
         mouseMove=input->GetMouseMove();
 
     Node* node_camera=globals::instance()->camera->GetNode();
-    {
-        cam_distance-=input->GetMouseMoveWheel();
-        cam_distance=Clamp(cam_distance,2.0,50.0);
 
-        node_camera->SetPosition(node_player->GetPosition());
-        node_camera->SetDirection(Vector3::FORWARD);
-        camera_yaw+=mouseMove.x_*0.1;
-        if(camera_yaw<0)
-            camera_yaw+=360;
-        if(camera_yaw>=360)
-            camera_yaw-=360;
-        node_camera->Yaw(camera_yaw);
-        camera_pitch+=mouseMove.y_*0.1;
-        camera_pitch=Clamp(camera_pitch,-85.0,85.0);
-        node_camera->Translate(Vector3(0,1,0));
-        node_camera->Pitch(camera_pitch);
-
-        PhysicsRaycastResult result;
-        Ray ray(node_camera->GetPosition(),-node_camera->GetDirection());
-        body_player->GetPhysicsWorld()->SphereCast(result,ray,0.2,cam_distance,2);
-        if(result.distance_<=cam_distance)
-            node_camera->Translate(Vector3(0,0,-result.distance_+0.1));
-        else
-            node_camera->Translate(Vector3(0,0,-cam_distance));
-    }
     {
         Vector3 moveDir=Vector3::ZERO;
         Vector3 moveDir_global=Vector3::ZERO;
@@ -509,7 +485,7 @@ std::string str;
             if(vec_rot.z_<0)
                 yaw=180-yaw;
             node_player_model->SetPosition(node_player->GetPosition());
-            if(s>1)
+            if(s>1&&!camera_first_person)
             {
                 node_player_model->SetDirection(Vector3::FORWARD);
                 node_player_model->Yaw(yaw);
@@ -580,6 +556,43 @@ text_->SetText(s);
             break;
         }
     }
+
+    camera_yaw+=mouseMove.x_*0.1;
+    if(camera_yaw<0)
+        camera_yaw+=360;
+    if(camera_yaw>=360)
+        camera_yaw-=360;
+    camera_pitch+=mouseMove.y_*0.1;
+    camera_pitch=Clamp(camera_pitch,-85.0,85.0);
+    if(!camera_first_person)
+    {
+        cam_distance-=input->GetMouseMoveWheel();
+        cam_distance=Clamp(cam_distance,2.0,50.0);
+
+        node_camera->SetPosition(node_player->GetPosition());
+        node_camera->SetDirection(Vector3::FORWARD);
+        node_camera->Yaw(camera_yaw);
+        node_camera->Translate(Vector3(0,1,0));
+        node_camera->Pitch(camera_pitch);
+
+        PhysicsRaycastResult result;
+        Ray ray(node_camera->GetPosition(),-node_camera->GetDirection());
+        body_player->GetPhysicsWorld()->SphereCast(result,ray,0.2,cam_distance,2);
+        if(result.distance_<=cam_distance)
+            node_camera->Translate(Vector3(0,0,-result.distance_+0.1));
+        else
+            node_camera->Translate(Vector3(0,0,-cam_distance));
+    }
+    else
+    {
+        node_camera->SetPosition(node_player_light->GetWorldPosition());
+        node_camera->SetDirection(Vector3::FORWARD);
+        node_camera->Yaw(camera_yaw);
+        node_camera->Pitch(camera_pitch);
+        node_camera->Translate(Vector3(0,0,0.1));
+        node_player_model->SetDirection(Vector3::FORWARD);
+        node_player_model->Yaw(camera_yaw);
+    }
 }
 
 void gs_playing::HandleKeyDown(StringHash eventType,VariantMap& eventData)
@@ -593,6 +606,8 @@ void gs_playing::HandleKeyDown(StringHash eventType,VariantMap& eventData)
 
     if(key==KEY_L)
         spawn_torch(node_player->GetPosition()+Vector3(2,1.9,0));
+    if(key==KEY_V)
+        camera_first_person=!camera_first_person;
 }
 
 void gs_playing::spawn_torch(Vector3 pos)
