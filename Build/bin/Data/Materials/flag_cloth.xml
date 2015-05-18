@@ -3,6 +3,4 @@
     <texture name="Textures/flag.png" unit="diffuse"/>
     <parameter name="MatDiffColor" value="1 1 1 1"/>
     <parameter name="MatSpecColor" value="1 1 1 50"/>
-    <cull value="none" />
-    <shadowcull value="none" />
 </material>

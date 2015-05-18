@@ -103,6 +103,7 @@ float noise_height(vec3 p)
     f-=0.5;
     f=abs(f*2);
     f*=f;
+
     return f;
 }
 
@@ -125,20 +126,20 @@ void PS()
 
     float f=noise_height(vWorldPos.xyz);
 
+    // normal, based on http://stackoverflow.com/questions/5281261/generating-a-normal-map-from-a-height-map
+    float f2=noise_height(vWorldPos.xyz+vec3(-0.05,0,0));
+    float f3=noise_height(vWorldPos.xyz+vec3(0,-0.05,0));
+    vec3 va=vec3(0,(f2-f)*2,1);
+    vec3 vb=vec3(1,(f3-f)*2,0);
+    normal+=normalize(cross(va,vb));
+    normal=normalize(normal);
+
     vec4 spec_color=cMatSpecColor*f;
     spec_color.a=cMatSpecColor.a;
     vec4 diffColor = vec4(f,f,f,1);
     #ifdef VERTEXCOLOR
         diffColor *= vColor;
     #endif
-
-    // normal, based on http://stackoverflow.com/questions/5281261/generating-a-normal-map-from-a-height-map
-    float f2=noise_height(vWorldPos.xyz+vec3(0.01,0,0));
-    float f3=noise_height(vWorldPos.xyz+vec3(0,0.01,0));
-    vec3 va=vec3(0,(f2-f)*8,2);
-    vec3 vb=vec3(2,(f3-f)*8,0);
-    normal+=normalize(cross(va,vb));
-    normal=normalize(normal);
 
     // ////////////////////////////////////////////////////////////////////////
 

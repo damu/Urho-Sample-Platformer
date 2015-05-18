@@ -110,6 +110,7 @@ gs_playing::gs_playing() : game_state()
             auto n_particle=node_player_model->GetChild("torso",true)->CreateChild();
             n_particle->Translate(Vector3(0,0.224,-0.224));
             n_particle->Pitch(90);
+            n_particle->Roll(180);
             player_emitter_back=n_particle->CreateComponent<ParticleEmitter>();
             player_emitter_back->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/thruster.xml"));
             player_emitter_back->SetEmitting(false);
@@ -118,7 +119,6 @@ gs_playing::gs_playing() : game_state()
             auto n_particle=node_player_model->GetChild("torso",true)->CreateChild();
             n_particle->Translate(Vector3(0,0.224,0.10085));
             n_particle->Pitch(90);
-            n_particle->Roll(180);
             player_emitter_front=n_particle->CreateComponent<ParticleEmitter>();
             player_emitter_front->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/thruster.xml"));
             player_emitter_front->SetEmitting(false);
@@ -149,7 +149,7 @@ gs_playing::gs_playing() : game_state()
             Light* light=lightNode->CreateComponent<Light>();
             light->SetLightType(LIGHT_SPOT);
             light->SetRange(50);
-            light->SetBrightness(2.0);
+            light->SetBrightness(1.5);
             light->SetColor(Color(0.5,0.7,1.0,1.0)*3);
             light->SetCastShadows(true);
             light->SetFov(100);
@@ -289,7 +289,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             shape->SetConvexHull(globals::instance()->cache->GetResource<Model>("Models/rock.mdl"));
         }
     }
-
+std::string str;
     {
         static double last_second=0;
         static double last_second_frames=1;
@@ -303,7 +303,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
             this_second.reset();
             this_second_frames=0;
         }
-        std::string str;
+
         if(last_second!=0)
             str.append(std::to_string(last_second_frames/last_second).substr(0,6));
         str.append(" FPS   Position: ");
@@ -344,6 +344,10 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         node_camera->SetPosition(node_player->GetPosition());
         node_camera->SetDirection(Vector3::FORWARD);
         camera_yaw+=mouseMove.x_*0.1;
+        if(camera_yaw<0)
+            camera_yaw+=360;
+        if(camera_yaw>=360)
+            camera_yaw-=360;
         node_camera->Yaw(camera_yaw);
         camera_pitch+=mouseMove.y_*0.1;
         camera_pitch=Clamp(camera_pitch,-85.0,85.0);
@@ -387,6 +391,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         Quaternion rot=node_player->GetRotation();
 
         static bool on_floor;
+        Vector3 moveDir_world;
         {
             static bool at_wall;
             static int jumping=0; // 0 = not jumping, 1 = jumping, 2 =
@@ -438,19 +443,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
 
             static float jump_force_applied=0;
             static const float max_jump_force_applied=700;
-            Vector3 moveDir_world=node_player->GetWorldRotation()*moveDir;
-
-            /*{ // doesn't work yet correctly
-                Vector3 v=node_player_model->GetWorldRotation()*(-moveDir_world);
-                if(v.x_>0)
-                    player_emitter_right->SetEmitting(true);
-                else if(v.x_<0)
-                    player_emitter_left->SetEmitting(true);
-                if(v.y_>0)
-                    player_emitter_back->SetEmitting(true);
-                else if(v.y_<0)
-                    player_emitter_front->SetEmitting(true);
-            }*/
+            moveDir_world=node_player->GetWorldRotation()*moveDir;
 
             if(moveDir_world.Angle(vel)>90&&vel.Length()>3&&on_floor)   // indicate if direction change jump / side sommersault possible
                 player_reversing->SetWeight(player_reversing->GetWeight()+timeStep*10);
@@ -508,17 +501,41 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
         body_player->SetLinearVelocity(Vector3(vel.x_,body_player->GetLinearVelocity().y_+(rot*moveDir*timeStep*6000/body_player->GetMass()).y_,vel.z_));
         body_player->ApplyImpulse(moveDir_global*timeStep*5000);
 
-        auto vec_rot=body_player->GetLinearVelocity()*Vector3(1,0,1);
-        float s=vec_rot.Length();
-        vec_rot.Normalize();
-        float yaw=asin(vec_rot.x_)*180/M_PI;
-        if(vec_rot.z_<0)
-            yaw=-yaw-180;
-        node_player_model->SetPosition(node_player->GetPosition());
-        if(s>1)
         {
-            node_player_model->SetDirection(Vector3::FORWARD);
-            node_player_model->Yaw(yaw);
+            auto vec_rot=body_player->GetLinearVelocity()*Vector3(1,0,1);
+            float s=vec_rot.Length();
+            vec_rot.Normalize();
+            float yaw=asin(vec_rot.x_)*180/M_PI;
+            if(vec_rot.z_<0)
+                yaw=180-yaw;
+            node_player_model->SetPosition(node_player->GetPosition());
+            if(s>1)
+            {
+                node_player_model->SetDirection(Vector3::FORWARD);
+                node_player_model->Yaw(yaw);
+            }
+
+            //if(!on_floor)
+            {
+                yaw+=90;
+                yaw-=camera_yaw;
+                if(yaw<0)
+                    yaw+=360;
+
+                Vector3 v(moveDir_world.Length()*-Sin(yaw),0,moveDir_world.Length()*Cos(yaw));
+                if(yaw>280&&yaw<80)         // around 0
+                    player_emitter_right->SetEmitting(true);
+                else if(yaw>100&&yaw<260)   // around 180
+                    player_emitter_left->SetEmitting(true);
+                if(yaw>10&&yaw<170)         // around 90
+                    player_emitter_back->SetEmitting(true);
+                else if(yaw>190&&yaw<350)   // around 270
+                    player_emitter_front->SetEmitting(true);
+str.append(std::to_string(yaw));
+str.append(std::to_string(camera_yaw));
+String s(str.c_str(),str.size());
+text_->SetText(s);
+            }
         }
 
         {   // physic raycast to avoid the player glitching through stuff when moving very fast
@@ -602,7 +619,7 @@ void gs_playing::spawn_torch(Vector3 pos)
     Light* light=lightNode->CreateComponent<Light>();
     light->SetLightType(LIGHT_POINT);
     light->SetRange(50);
-    light->SetBrightness(2.0);
+    light->SetBrightness(1.5);
     light->SetColor(Color(2.0,1.2,.8,1.0));
     light->SetCastShadows(true);
     light->SetShadowDistance(300);
