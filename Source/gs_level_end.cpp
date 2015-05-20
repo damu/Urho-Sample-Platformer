@@ -89,7 +89,7 @@ void gs_level_end::HandleRestartPressed(Urho3D::StringHash eventType,Urho3D::Var
 {
     GetSubsystem<Input>()->SetMouseVisible(false);
     GetSubsystem<Input>()->SetMouseGrabbed(true);
-    globals::instance()->game_states[0].reset(new gs_playing);
+    globals::instance()->game_states[0].reset(new gs_playing(gs_playing::last_level_filename));
     globals::instance()->game_states.resize(1);
 }
 

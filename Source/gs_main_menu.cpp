@@ -19,6 +19,8 @@ gs_main_menu::gs_main_menu() : game_state()
         boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/flag_pole.xml"));
         boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/flag_cloth.xml"));
         boxObject->SetCastShadows(true);
+
+        globals::instance()->physical_world=node_rotating_flag->CreateComponent<RigidBody>()->GetPhysicsWorld();    // there may be better ways to get the physical world object
     }
 
     // a torch with a light, sound and particle effects
@@ -215,7 +217,7 @@ void gs_main_menu::update(StringHash eventType,VariantMap& eventData)
 
 void gs_main_menu::HandlePlayPressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData)
 {
-    globals::instance()->game_states[0].reset(new gs_playing);
+    globals::instance()->game_states[0].reset(new gs_playing("maps/level_1.xml"));
 }
 
 void gs_main_menu::HandleKeyDown(StringHash eventType,VariantMap& eventData)

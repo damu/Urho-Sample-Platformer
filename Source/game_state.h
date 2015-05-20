@@ -9,6 +9,7 @@
 #include <Urho3D/Scene/Scene.h>
 #include <Urho3D/Resource/ResourceCache.h>
 #include <Urho3D/UI/UIElement.h>
+#include <Urho3D/Physics/PhysicsWorld.h>
 
 #include "misc.h"
 
@@ -24,9 +25,10 @@ public:
     Urho3D::Context* context=0;
     Urho3D::UIElement* ui_root=0;
     Urho3D::Engine* engine=0;
+    Urho3D::PhysicsWorld* physical_world=0;
 
-    /// The current game states so that game states can switch to another game state.
-    /// Watch out that changing a game state will immedietly delete the current one.
+    /// The current game states, so that game states can switch to another game state.
+    /// Watch out that changing a game state will delete the current one.
     /// Also game states can be stacked on top of each other so they run paralell. This is used for the pause mode.
     std::vector<std::unique_ptr<game_state>> game_states;
 
