@@ -15,9 +15,11 @@
 #include <Urho3D/UI/UIEvents.h>
 #include <Urho3D/UI/Window.h>
 #include <Urho3D/UI/LineEdit.h>
+#include <Urho3D/UI/ListView.h>
 #include <Urho3D/UI/Text.h>
 #include <Urho3D/Engine/Application.h>
 #include <Urho3D/Core/CoreEvents.h>
+#include <Urho3D/IO/FileSystem.h>
 #include <Urho3D/Input/Input.h>
 #include <Urho3D/Input/InputEvents.h>
 #include <Urho3D/Audio/Sound.h>
@@ -32,7 +34,8 @@ class gs_main_menu : public game_state
 {
 public:
     Urho3D::Node* node_rotating_flag;
-    Urho3D::Window* window_;
+    Urho3D::Window* window_menu;
+    Urho3D::ListView* lv_levels;
 
     gs_main_menu();
     void update(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);

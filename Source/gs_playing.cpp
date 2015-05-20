@@ -249,9 +249,7 @@ void gs_playing::load_level(std::string level_filename)
 
             n->SetPosition(p);
             StaticModel* boxObject=n->CreateComponent<StaticModel>();
-            boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/flag.mdl"));
-            boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/flag_pole.xml"));
-            boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/flag_cloth.xml"));
+            set_model(boxObject,globals::instance()->cache,"Data/Models/flag");
             boxObject->SetCastShadows(true);
             flag_nodes.push_back(n);
         }

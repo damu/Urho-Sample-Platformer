@@ -1,10 +1,10 @@
 <xml>
-  <static_model name="Data/Models/level_1" pos_x="0" pos_y="0" pos_z="-10" />
+  <static_model name="Data/Models/level_1" pos_x="70" pos_y="70" pos_z="-100" />
   <player pos_x="4" pos_y="10" pos_z="-5" />
   <flag pos_x="20.35" pos_y="14" pos_z="-47.6" />
   <flag pos_x="-9.9" pos_y="14" pos_z="-47.7" />
   <flag pos_x="-0.25" pos_y="-5.5" pos_z="-195.6" />
-  <flag pos_x="18.2" pos_y="22" pos_z="-4" />
+  <flag pos_x="18.2" pos_y="21" pos_z="-4" />
   <flag pos_x="28.7" pos_y="33.9" pos_z="82.6" />
   <flag pos_x="118" pos_y="43" pos_z="51" />
   <flag pos_x="-242" pos_y="36" pos_z="-107" />

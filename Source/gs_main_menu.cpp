@@ -2,6 +2,7 @@
 #include "gs_playing.h"
 
 using namespace Urho3D;
+using namespace std;
 
 gs_main_menu::gs_main_menu() : game_state()
 {
@@ -64,7 +65,7 @@ gs_main_menu::gs_main_menu() : game_state()
         sound_torch_source->Play(sound_torch);
     }
 
-    // grid of 400 cubes, know from the
+    // grid of 400 cubes, known from the basic sample application at the Urho Wiki
     for(int x=-30;x<30;x+=3)
         for(int y=-30;y<30;y+=3)
         {
@@ -89,45 +90,53 @@ gs_main_menu::gs_main_menu() : game_state()
         light->SetCastShadows(true);
     }
 
+    Window* window_menu=new Window(globals::instance()->context);
+    gui_elements.push_back(window_menu);
+    globals::instance()->ui_root->AddChild(window_menu);
 
-    Window* window_=new Window(globals::instance()->context);
-    gui_elements.push_back(window_);
-    globals::instance()->ui_root->AddChild(window_);
-
-    window_->SetMinSize(200,100);
-    window_->SetLayout(LM_VERTICAL,6,IntRect(6,6,6,6));
-    window_->SetAlignment(HA_CENTER,VA_CENTER);
-    window_->SetName("Window");
-    window_->SetColor(Color(.0,.15,.3,.5));
-
-    /*UIElement* titleBar=new UIElement(globals::instance()->context);
-    titleBar->SetMinSize(0,24);
-    titleBar->SetVerticalAlignment(VA_TOP);
-    titleBar->SetLayoutMode(LM_HORIZONTAL);
-
-    Text* windowTitle=new Text(globals::instance()->context);
-    windowTitle->SetName("WindowTitle");
-    windowTitle->SetText("Hello GUI!");
-    windowTitle->SetStyleAuto();
-    titleBar->AddChild(windowTitle);
-
-    Button* buttonClose=new Button(globals::instance()->context);
-    buttonClose->SetName("CloseButton");
-    buttonClose->SetStyle("CloseButton");
-    titleBar->AddChild(buttonClose);
-
-    window_->AddChild(titleBar);
-*/
-    window_->SetStyleAuto();
+    window_menu->SetSize(300,400);
+    window_menu->SetLayout(LM_FREE,0,IntRect(10,10,10,10));
+    window_menu->SetAlignment(HA_CENTER,VA_CENTER);
+    window_menu->SetName("Window");
+    window_menu->SetColor(Color(.0,.15,.3,.5));
+    window_menu->SetStyleAuto();
 
     {
-        Button* button = new Button(globals::instance()->context);
+        lv_levels=new ListView(globals::instance()->context);
+        lv_levels->SetPosition(10,10);
+        lv_levels->SetFixedSize(280,330);
+        lv_levels->SetStyleAuto();
+        lv_levels->SetOpacity(0.75);
+        window_menu->AddChild(lv_levels);
+
+        FileSystem fs(globals::instance()->context);
+        Vector<String> result;
+        fs.ScanDir(result,"Data/maps/","*",SCAN_FILES,true);
+
+        for(int i=0;i<result.Size();i++)
+        {
+            String s=result[i].Substring(0,result[i].FindLast('.'));
+            Text* t=new Text(globals::instance()->context);
+            t->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),20);
+            t->SetText("   "+s);
+            t->SetStyle("Text");
+            t->SetVar("filename",s);
+            t->SetMinHeight(30);
+            lv_levels->AddItem(t);
+            if(i==0)
+                lv_levels->SetSelection(0);
+        }
+    }
+
+    {
+        Button* button=new Button(globals::instance()->context);
+        button->SetPosition(10,350);
+        button->SetFixedSize(135,40);
         button->SetName("Button");
-        button->SetMinHeight(50);
         button->SetStyleAuto();
         button->SetOpacity(0.75);
         {
-            Text* t = new Text(globals::instance()->context);
+            Text* t=new Text(globals::instance()->context);
             t->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),20);
             t->SetHorizontalAlignment(HA_CENTER);
             t->SetVerticalAlignment(VA_CENTER);
@@ -138,13 +147,14 @@ gs_main_menu::gs_main_menu() : game_state()
             t->SetMinHeight(VA_CENTER);
             button->AddChild(t);
         }
-        window_->AddChild(button);
+        window_menu->AddChild(button);
         SubscribeToEvent(button,E_RELEASED,HANDLER(gs_main_menu,HandlePlayPressed));
     }
     {
         Button* button = new Button(globals::instance()->context);
+        button->SetPosition(155,350);
+        button->SetFixedSize(135,40);
         button->SetName("Button");
-        button->SetMinHeight(50);
         button->SetStyleAuto();
         button->SetOpacity(0.75);
         {
@@ -159,9 +169,8 @@ gs_main_menu::gs_main_menu() : game_state()
             t->SetMinHeight(VA_CENTER);
             button->AddChild(t);
         }
-        window_->AddChild(button);
+        window_menu->AddChild(button);
         SubscribeToEvent(button,E_RELEASED,HANDLER(gs_main_menu,HandleClosePressed));
-
     }
 
     GetSubsystem<Input>()->SetMouseVisible(true);
@@ -169,7 +178,6 @@ gs_main_menu::gs_main_menu() : game_state()
 
     SubscribeToEvent(E_UPDATE,HANDLER(gs_main_menu,update));
     SubscribeToEvent(E_KEYDOWN,HANDLER(gs_main_menu,HandleKeyDown));
-    //SubscribeToEvent(buttonClose,E_RELEASED,HANDLER(gs_main_menu,HandleClosePressed));
 }
 
 void gs_main_menu::update(StringHash eventType,VariantMap& eventData)
@@ -213,11 +221,26 @@ void gs_main_menu::update(StringHash eventType,VariantMap& eventData)
             cameraNode_->Pitch(pitch_);
         }
     }
+
+    // the selected item in the list view is not highlighted at all for some reason, so I'm writing a "->" in front of the selected one.
+    // Tried doing this with an event (like OnChange or something) but couldn't get that to work.
+    for(int i=0;i<lv_levels->GetNumItems();i++)
+    {
+        Text* t=(Text*)lv_levels->GetItem(i);
+        if(lv_levels->IsSelected(i))
+            t->SetText("-> "+t->GetVar("filename").GetString());
+        else
+            t->SetText("   "+t->GetVar("filename").GetString());
+    }
 }
 
 void gs_main_menu::HandlePlayPressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData)
 {
-    globals::instance()->game_states[0].reset(new gs_playing("maps/level_1.xml"));
+    Text* t=(Text*)lv_levels->GetSelectedItem();
+    if(!t)
+        return;
+
+    globals::instance()->game_states[0].reset(new gs_playing(("maps/"+t->GetVar("filename").GetString()+".xml").CString()));
 }
 
 void gs_main_menu::HandleKeyDown(StringHash eventType,VariantMap& eventData)
@@ -227,3 +250,4 @@ void gs_main_menu::HandleKeyDown(StringHash eventType,VariantMap& eventData)
     if(key==KEY_ESC)
         globals::instance()->engine->Exit();
 }
+
