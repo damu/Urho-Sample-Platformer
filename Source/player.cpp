@@ -155,7 +155,7 @@ void player::update(Input* input,float timeStep)
                 on_floor=true;
             else
             {
-                globals::instance()->physical_world->SphereCast(result,ray,1.5,2,2);
+                globals::instance()->physical_world->SphereCast(result,ray,1.7,2,2);
                 if(result.distance_<=2)
                     at_wall=true;
             }

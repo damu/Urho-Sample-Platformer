@@ -1,0 +1,5 @@
+<material>
+     <technique name="Techniques/level_2_sand.xml" quality="0" />
+	<parameter name="MatDiffColor" value="0.64 0.390713 0.187013 1"/>
+	<parameter name="MatSpecColor" value="0.5 0.242751 0.141879 50"/>
+</material>
