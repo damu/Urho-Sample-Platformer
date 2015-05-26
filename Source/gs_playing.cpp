@@ -9,6 +9,7 @@
 
 #include "gs_pause.h"
 #include "gs_level_end.h"
+#include "gs_death.h"
 #include "player.h"
 
 using namespace Urho3D;
@@ -55,7 +56,7 @@ gs_playing::gs_playing(std::string level_filename) : game_state()
         light->SetBrightness(1.2);
         light->SetColor(Color(1.5,1.2,1,1));
         lightNode->SetDirection(Vector3::FORWARD);
-        lightNode->Yaw(-60);     // horizontal
+        lightNode->Yaw(-150);     // horizontal
         lightNode->Pitch(60);   // vertical
     }
 
@@ -151,6 +152,10 @@ void gs_playing::load_level(std::string level_filename)
                     boxObject->SetCastShadows(true);
                     boxObject->SetOccludee(true);
                     boxObject->SetOccluder(true);
+
+                    float min_y=boxObject->GetWorldBoundingBox().min_.y_;
+                    if(level_min_height>min_y)
+                        level_min_height=min_y;
 
                     RigidBody* body=boxNode_->CreateComponent<RigidBody>();
                     body->SetCollisionLayer(2); // Use layer bitmask 2 for static geometry
@@ -334,9 +339,7 @@ std::string str;
         if(goal_time>0)
             str.append(std::to_string(goal_time));
         else
-        {
             str.append(std::to_string(timer_playing));
-        }
 
         str.append("s\nRemaining Flags: ");
         str.append(std::to_string(flag_nodes.size()));
@@ -378,6 +381,9 @@ std::string str;
             break;
         }
     }
+
+    if(player_->node->GetWorldPosition().y_<level_min_height-10)    // die if below level geometry
+        globals::instance()->game_states.emplace_back(new gs_death);
 }
 
 void gs_playing::HandleKeyDown(StringHash eventType,VariantMap& eventData)

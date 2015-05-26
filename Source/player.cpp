@@ -321,7 +321,7 @@ text_->SetText(s);
         node_camera->SetPosition(node->GetPosition());
         node_camera->SetDirection(Vector3::FORWARD);
         node_camera->Yaw(gs->camera_yaw);
-        node_camera->Translate(Vector3(0,1,0));
+        node_camera->Translate(Vector3(0,1.6,0));
         node_camera->Pitch(gs->camera_pitch);
 
         PhysicsRaycastResult result;

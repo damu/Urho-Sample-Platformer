@@ -31,7 +31,7 @@
         <texture unit="normal" name="lum1" />
     </command>
     <command type="quad" tag="AutoExposure" vs="AutoExposure" ps="AutoExposure" vsdefines="EXPOSE" psdefines="EXPOSE" output="viewport">
-        <parameter name="AutoExposureMiddleGrey" value="0.6" />
+        <parameter name="AutoExposureMiddleGrey" value="0.65" />
         <texture unit="diffuse" name="viewport" />
         <texture unit="normal" name="adaptedLum" />
     </command>

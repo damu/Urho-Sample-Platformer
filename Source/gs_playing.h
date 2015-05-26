@@ -59,6 +59,7 @@ public:
     bool camera_first_person=false;
     static std::string last_level_filename;
     std::unique_ptr<player> player_;
+    float level_min_height=999999;
 
     gs_playing(std::string level_filename);
     void update(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
