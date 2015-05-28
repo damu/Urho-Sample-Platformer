@@ -39,6 +39,10 @@
 #include <Urho3D/Physics/CollisionShape.h>
 #include <Urho3D/Physics/PhysicsWorld.h>
 #include <Urho3D/IO/Log.h>
+#include <Urho3D/Audio/Sound.h>
+#include <Urho3D/Audio/SoundSource3D.h>
+#include <Urho3D/Audio/SoundListener.h>
+#include <Urho3D/Audio/Audio.h>
 
 class player;
 

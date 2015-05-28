@@ -1,9 +1,5 @@
 #include "gs_playing.h"
 
-#include <Urho3D/Audio/Sound.h>
-#include <Urho3D/Audio/SoundSource3D.h>
-#include <Urho3D/Audio/SoundListener.h>
-#include <Urho3D/Audio/Audio.h>
 #include <Urho3D/Graphics/Terrain.h>
 #include <Urho3D/ThirdParty/PugiXml/pugixml.hpp>
 

@@ -16,10 +16,18 @@ public:
     Urho3D::ParticleEmitter* emitter_front;
     Urho3D::ParticleEmitter* emitter_left;
     Urho3D::ParticleEmitter* emitter_right;
+    Urho3D::ParticleEmitter* emitter_foot_left;
+    Urho3D::ParticleEmitter* emitter_foot_right;
     Urho3D::Node* node;
     Urho3D::Node* node_model;
     Urho3D::Node* node_light;
     Urho3D::RigidBody* body;
+    Urho3D::SoundSource3D* sound_source1;
+    Urho3D::SoundSource3D* sound_source2;
+    Urho3D::Sound* sound_step1;
+    Urho3D::Sound* sound_step2;
+    Urho3D::SoundSource3D* sound_source_steam;
+    Urho3D::Sound* sound_steam;
     gs_playing* gs;
 
     player(Urho3D::Vector3 pos,gs_playing* gs);

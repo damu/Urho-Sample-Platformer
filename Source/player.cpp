@@ -91,6 +91,27 @@ player::player(Vector3 pos,gs_playing* gs) : gs(gs)
         emitter_right->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/thruster.xml"));
         emitter_right->SetEmitting(false);
     }
+    // feet thruster (for jumping)
+    {
+        auto n_particle=node_model->GetChild("foot.L",true)->CreateChild();
+        n_particle->SetDirection(Vector3::DOWN);  // the effect is kinda reversed
+        //n_particle->Translate(Vector3(-0.14778,0.224,-0.06949));
+        //n_particle->Pitch(90);
+        //n_particle->Roll(90);
+        emitter_foot_left=n_particle->CreateComponent<ParticleEmitter>();
+        emitter_foot_left->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/thruster_feet.xml"));
+        emitter_foot_left->SetEmitting(false);
+    }
+    {
+        auto n_particle=node_model->GetChild("foot.R",true)->CreateChild();
+        n_particle->SetDirection(Vector3::DOWN);
+        //n_particle->Translate(Vector3(-0.14778,0.224,-0.06949));
+        //n_particle->Pitch(90);
+        //n_particle->Roll(90);
+        emitter_foot_right=n_particle->CreateComponent<ParticleEmitter>();
+        emitter_foot_right->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/thruster_feet.xml"));
+        emitter_foot_right->SetEmitting(false);
+    }
 
     {
         node_light=node_model->GetChild("head",true)->CreateChild();
@@ -104,6 +125,26 @@ player::player(Vector3 pos,gs_playing* gs) : gs(gs)
         light->SetCastShadows(true);
         light->SetFov(100);
     }
+
+    {
+        sound_step1=globals::instance()->cache->GetResource<Sound>("Sounds/step1.ogg");
+        sound_step2=globals::instance()->cache->GetResource<Sound>("Sounds/step2.ogg");
+        sound_source1=node_model->CreateComponent<SoundSource3D>();
+        sound_source1->SetNearDistance(1);
+        sound_source1->SetFarDistance(50);
+        sound_source1->SetSoundType(SOUND_EFFECT);
+        sound_source2=node_model->CreateComponent<SoundSource3D>();
+        sound_source2->SetNearDistance(1);
+        sound_source2->SetFarDistance(50);
+        sound_source2->SetSoundType(SOUND_EFFECT);
+
+        sound_steam=globals::instance()->cache->GetResource<Sound>("Sounds/steam.ogg");
+        sound_steam->SetLooped(true);
+        sound_source_steam=node_model->CreateComponent<SoundSource3D>();
+        sound_source_steam->SetNearDistance(1);
+        sound_source_steam->SetFarDistance(50);
+        sound_source_steam->SetSoundType(SOUND_EFFECT);
+    }
 }
 
 void player::update(Input* input,float timeStep)
@@ -112,6 +153,8 @@ void player::update(Input* input,float timeStep)
     emitter_left->SetEmitting(false);
     emitter_front->SetEmitting(false);
     emitter_back->SetEmitting(false);
+    emitter_foot_left->SetEmitting(false);
+    emitter_foot_right->SetEmitting(false);
 
     Node* node_camera=globals::instance()->camera->GetNode();
 
@@ -174,7 +217,27 @@ void player::update(Input* input,float timeStep)
             if(!on_floor)
                 as_jump->SetWeight(as_jump->GetWeight()+timeStep*5);
             else
+            {
                 as_jump->SetWeight(0.0);
+
+                static bool sound_step1_not_played=true;    // not player this animation cycle
+                static bool sound_step2_not_played=true;
+                if(as_run->GetTime()>0.1&&sound_step1_not_played)
+                {
+                    sound_source1->Play(sound_step1);
+                    sound_step1_not_played=false;
+                }
+                if(as_run->GetTime()>0.6&&sound_step2_not_played)
+                {
+                    sound_source2->Play(sound_step2);
+                    sound_step2_not_played=false;
+                }
+                if(as_run->GetTime()<0.1)
+                {
+                    sound_step1_not_played=true;
+                    sound_step2_not_played=true;
+                }
+            }
 
             if(input->GetKeyDown(KEY_SPACE)&&jumping==false&&(on_floor||at_wall))   // walljump
             {
@@ -182,7 +245,7 @@ void player::update(Input* input,float timeStep)
                 if(at_wall)
                 {
                     auto v=result.normal_*Vector3(1,0,1)*1.7+vel*Vector3(1,0,1)*0.2;    // the result.normal vector is sometimes very weird if
-                    v.Normalize();                                                      // there are multiple faces near
+                    v.Normalize();                                                      // there are multiple faces nearby
                     body->SetLinearVelocity(Vector3(v.x_*10,0,v.z_*10));
                     vel=body->GetLinearVelocity()*Vector3(1,0,1);
                 }
@@ -208,9 +271,9 @@ void player::update(Input* input,float timeStep)
                 else if(jump_force_applied+timeStep*4000>max_jump_force_applied)
                 {
                     // I want to limit the jump height more exactly by limiting the force pumped into it and applieng the remaining rest here. Doesn't fully work yet.
-                    float f=0;//(max_jump_force_applied-jump_force_applied)*timeStep*2000;
-                    moveDir+=Vector3::UP*2*f;
-                    moveDir_global=result.normal_*1*f;
+                    //float f=0;//(max_jump_force_applied-jump_force_applied)*timeStep*2000;
+                    //moveDir+=Vector3::UP*2*f;
+                    //moveDir_global=result.normal_*1*f;
                     jump_force_applied+=timeStep*5000;
                 }
                 else
@@ -225,10 +288,17 @@ void player::update(Input* input,float timeStep)
                     moveDir+=Vector3::UP*2*f;
                     moveDir_global=result.normal_*1*f;
                     jump_force_applied+=timeStep*5000;
+                    emitter_foot_left->SetEmitting(true);
+                    emitter_foot_right->SetEmitting(true);
+                    if(!sound_source_steam->IsPlaying())
+                        sound_source_steam->Play(sound_steam);
                 }
             }
             if(jumping!=1)
                 jump_force_applied=0;
+
+            if(!emitter_foot_left->IsEmitting()&&sound_source_steam->IsPlaying())
+                sound_source_steam->Stop();
         }
 
         Quaternion quat;
