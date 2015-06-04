@@ -131,19 +131,25 @@ player::player(Vector3 pos,gs_playing* gs) : gs(gs)
         sound_step2=globals::instance()->cache->GetResource<Sound>("Sounds/step2.ogg");
         sound_source1=node_model->CreateComponent<SoundSource3D>();
         sound_source1->SetNearDistance(1);
-        sound_source1->SetFarDistance(50);
+        sound_source1->SetFarDistance(55);
         sound_source1->SetSoundType(SOUND_EFFECT);
         sound_source2=node_model->CreateComponent<SoundSource3D>();
         sound_source2->SetNearDistance(1);
-        sound_source2->SetFarDistance(50);
+        sound_source2->SetFarDistance(55);
         sound_source2->SetSoundType(SOUND_EFFECT);
 
         sound_steam=globals::instance()->cache->GetResource<Sound>("Sounds/steam.ogg");
         sound_steam->SetLooped(true);
         sound_source_steam=node_model->CreateComponent<SoundSource3D>();
         sound_source_steam->SetNearDistance(1);
-        sound_source_steam->SetFarDistance(50);
+        sound_source_steam->SetFarDistance(55);
         sound_source_steam->SetSoundType(SOUND_EFFECT);
+
+        sound_flag=globals::instance()->cache->GetResource<Sound>("Sounds/littlerobotsoundfactory__jingle-win-synth-04.ogg");
+        sound_source_flag=node_model->CreateComponent<SoundSource3D>();
+        sound_source_flag->SetNearDistance(1);
+        sound_source_flag->SetFarDistance(55);
+        sound_source_flag->SetSoundType(SOUND_EFFECT);
     }
 }
 

@@ -11,4 +11,5 @@
   <flag pos_x="74.4" pos_y="20.1" pos_z="249.4" />
   <flag pos_x="1.8" pos_y="-5.2" pos_z="410" />
   <torch pos_x="74.4" pos_y="-43.6" pos_z="249.4" />
+  <sound name="Sounds/Lord of the Land.ogg" />
 </xml>

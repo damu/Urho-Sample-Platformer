@@ -85,6 +85,7 @@ public:
         camera->SetFarClip(10000);
         SoundListener* listener=cameraNode_->CreateComponent<SoundListener>();
         GetSubsystem<Audio>()->SetListener(listener);
+        GetSubsystem<Audio>()->SetMasterGain(SOUND_MUSIC,0.3);
 
         Renderer* renderer=GetSubsystem<Renderer>();
         SharedPtr<Viewport> viewport(new Viewport(context_,scene_,cameraNode_->GetComponent<Camera>()));

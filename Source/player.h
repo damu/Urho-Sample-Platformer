@@ -24,10 +24,12 @@ public:
     Urho3D::RigidBody* body;
     Urho3D::SoundSource3D* sound_source1;
     Urho3D::SoundSource3D* sound_source2;
+    Urho3D::SoundSource3D* sound_source_steam;
+    Urho3D::SoundSource3D* sound_source_flag;
     Urho3D::Sound* sound_step1;
     Urho3D::Sound* sound_step2;
-    Urho3D::SoundSource3D* sound_source_steam;
     Urho3D::Sound* sound_steam;
+    Urho3D::Sound* sound_flag;
     gs_playing* gs;
 
     player(Urho3D::Vector3 pos,gs_playing* gs);

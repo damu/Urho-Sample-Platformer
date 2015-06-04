@@ -46,6 +46,15 @@
 
 class player;
 
+class rock_spawn
+{
+public:
+    Urho3D::BoundingBox trigger_area;
+    Urho3D::BoundingBox spawn_area;
+    int rock_count=100;
+    bool rocks_spawned=false;
+};
+
 /// The game state handling playing a level.
 class gs_playing : public game_state
 {
@@ -56,6 +65,7 @@ public:
     std::vector<Urho3D::Vector3> torch_positions;
     std::vector<Urho3D::Vector3> flag_positions;
     std::vector<Urho3D::Node*> flag_nodes;
+    std::vector<rock_spawn> rock_spawns;
     float cam_distance=14;
     float camera_yaw=20;
     float camera_pitch=20;
@@ -64,6 +74,8 @@ public:
     static std::string last_level_filename;
     std::unique_ptr<player> player_;
     float level_min_height=999999;
+    Urho3D::SoundSource* sound_source_wind;
+    Urho3D::Sound* sound_wind;
 
     gs_playing(std::string level_filename);
     void update(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
