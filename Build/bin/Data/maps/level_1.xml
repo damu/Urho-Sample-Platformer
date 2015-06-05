@@ -12,7 +12,7 @@
   <torch pos_x="-199" pos_y="28" pos_z="-138" />
   <rock_spawner rocks_pos_min_x="-220" rocks_pos_min_y="40" rocks_pos_min_z="-150"
 			rocks_pos_max_x="-140" rocks_pos_max_y="45" rocks_pos_max_z="-80"
-                trigger_pos_min_x="-350" trigger_pos_min_y="0" trigger_pos_min_z="-275"
+                trigger_pos_min_x="-350" trigger_pos_min_y="-30" trigger_pos_min_z="-275"
                 trigger_pos_max_x="-50" trigger_pos_max_y="100" trigger_pos_max_z="0" />
-  <sound name="Sounds/Drums of the Deep.ogg" />
+  <sound name="Music/Drums of the Deep.ogg" />
 </xml>
