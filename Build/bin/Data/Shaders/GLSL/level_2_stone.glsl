@@ -107,6 +107,20 @@ float noise_height(vec3 p)
     return f;
 }
 
+float noise(vec3 p)
+{
+    float f;
+    f=snoise(p.xyz*0.2)*2+
+      snoise(p.xyz*1.0)*1;
+    f=0.75+f*0.5;
+    f=clamp(f,0.5,1);
+    f-=0.5;
+    f=abs(f*2);
+    f-=0.5;
+    f=abs(f*2);
+    return f;
+}
+
 void PS()
 {
     // Get material specular albedo
@@ -122,11 +136,8 @@ void PS()
         float fogFactor = GetFogFactor(vWorldPos.w);
     #endif
 
-    // material generation with noise /////////////////////////////////////////
-
-    float f=noise_height(vWorldPos.xyz);
-
     // normal, based on http://stackoverflow.com/questions/5281261/generating-a-normal-map-from-a-height-map
+    float f=noise_height(vWorldPos.xyz);
     float f2=noise_height(vWorldPos.xyz+vec3(-0.05,0,0));
     float f3=noise_height(vWorldPos.xyz+vec3(0,-0.05,0));
     vec3 va=vec3(0,(f2-f)*2,1);
@@ -134,12 +145,10 @@ void PS()
     normal+=normalize(cross(va,vb));
     normal=normalize(normal);
 
+    f=noise(vWorldPos.xyz);
     vec4 spec_color=cMatSpecColor*f;
     spec_color.a=cMatSpecColor.a;
-    vec4 diffColor = vec4(f,f,f,1);
-    #ifdef VERTEXCOLOR
-        diffColor *= vColor;
-    #endif
+    vec4 diffColor=vec4(f,f,f,1);
 
     // ////////////////////////////////////////////////////////////////////////
 

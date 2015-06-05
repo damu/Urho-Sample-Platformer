@@ -129,18 +129,20 @@ void PS()
     // material generation with noise /////////////////////////////////////////
 
     // normal, based on http://stackoverflow.com/questions/5281261/generating-a-normal-map-from-a-height-map
-    float f=noise_height_normal(vWorldPos.xyz*(-vScreenPos.w)*0.01);
-    float f2=noise_height_normal(vWorldPos.xyz*(-vScreenPos.w)*0.01+vec3(-0.05,0,0));
-    float f3=noise_height_normal(vWorldPos.xyz*(-vScreenPos.w)*0.01+vec3(0,-0.05,0));
+    float dist_fix=100-vScreenPos.w;    // make the bumps weaker depending on distance to avoid flickering
+    dist_fix=clamp(dist_fix/100.0,0.0,1.0);
+    float f=noise_height_normal(vWorldPos.xyz);
+    float f2=noise_height_normal(vWorldPos.xyz+vec3(-0.05,0,0));
+    float f3=noise_height_normal(vWorldPos.xyz+vec3(0,-0.05,0));
     vec3 va=vec3(0,(f2-f),1);
     vec3 vb=vec3(1,(f3-f),0);
-    normal+=normalize(cross(va,vb));
+    normal+=normalize(cross(va,vb))*dist_fix;
     normal=normalize(normal);
 
     f=noise_height(vWorldPos.xyz);
     vec4 spec_color=cMatSpecColor*f;
     spec_color.a=cMatSpecColor.a;
-    vec4 diffColor = cMatDiffColor*f;
+    vec4 diffColor=cMatDiffColor*f;
 
     // ////////////////////////////////////////////////////////////////////////
 
