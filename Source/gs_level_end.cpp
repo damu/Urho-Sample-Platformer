@@ -6,7 +6,7 @@ using namespace Urho3D;
 
 gs_level_end::gs_level_end() : game_state()
 {
-        Window* window_=new Window(globals::instance()->context);
+    Window* window_=new Window(globals::instance()->context);
     gui_elements.push_back(window_);
     globals::instance()->ui_root->AddChild(window_);
 

@@ -63,6 +63,7 @@ public:
 
 /// \brief Calls SetModel on the given model and tries to load the model file and all texture files mentioned in a model_name+".txt".
 /// model_name is supposed to have no file extension. Example: "Data/Models/Box", loads the model "Data/Models/Box.mdl".
+/// It's a template to support all model classes like AnimatedModel and StaticModel.
 template<typename T>
 void set_model(T* model,Urho3D::ResourceCache* cache,std::string model_name)
 {
@@ -73,14 +74,8 @@ void set_model(T* model,Urho3D::ResourceCache* cache,std::string model_name)
     std::ifstream file(filename_txt);
     std::string line;
     if(file.is_open())
-    {
-        int i=0;
-        while(getline(file,line))
-        {
+        for(int i=0;getline(file,line);i++)
             model->SetMaterial(i,cache->GetResource<Urho3D::Material>(Urho3D::String(line.c_str())));
-            i++;
-        }
-    }
 }
 
 #endif // MISC_H

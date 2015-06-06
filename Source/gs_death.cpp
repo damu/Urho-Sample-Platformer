@@ -6,7 +6,7 @@ using namespace Urho3D;
 
 gs_death::gs_death() : game_state()
 {
-        Window* window_=new Window(globals::instance()->context);
+    Window* window_=new Window(globals::instance()->context);
     gui_elements.push_back(window_);
     globals::instance()->ui_root->AddChild(window_);
 
@@ -19,7 +19,7 @@ gs_death::gs_death() : game_state()
     window_->SetStyleAuto();
 
     {
-        BorderImage* button = new BorderImage(globals::instance()->context);
+        BorderImage* button=new BorderImage(globals::instance()->context);
         button->SetName("Button");
         button->SetMinHeight(100);
         button->SetStyle("Window");
@@ -30,7 +30,7 @@ gs_death::gs_death() : game_state()
             t->SetHorizontalAlignment(HA_CENTER);
             t->SetVerticalAlignment(VA_CENTER);
             t->SetName("Text");
-            t->SetText("You died! Oh what a drama!");
+            t->SetText("You died.");
             //button->AddChild(t);
             t->SetStyle("Text");
             t->SetMinHeight(VA_CENTER);

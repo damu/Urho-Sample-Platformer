@@ -222,7 +222,7 @@ void gs_main_menu::update(StringHash eventType,VariantMap& eventData)
         }
     }
 
-    // the selected item in the list view is not highlighted at all for some reason, so I'm writing a "->" in front of the selected one.
+    // The selected item in the list view is not highlighted at all for some reason, so I'm writing a "->" in front of the selected one.
     // Tried doing this with an event (like OnChange or something) but couldn't get that to work.
     for(int i=0;i<lv_levels->GetNumItems();i++)
     {

@@ -3,6 +3,7 @@
 
 #include "gs_playing.h"
 
+/// \brief Creates and manages the player and the camera.
 class player
 {
 public:
@@ -30,9 +31,14 @@ public:
     Urho3D::Sound* sound_step2;
     Urho3D::Sound* sound_steam;
     Urho3D::Sound* sound_flag;
-    gs_playing* gs;
+    float camera_distance=14;
+    float camera_yaw=20;
+    float camera_pitch=20;
+    bool camera_first_person=false;
 
-    player(Urho3D::Vector3 pos,gs_playing* gs);
+    /// \brief The game state is given to add the player nodes to the node clean-up list of the game state.
+    player(Urho3D::Vector3 pos,game_state* gs);
+    /// \brief Called each frame.
     void update(Urho3D::Input* input,float timeStep);
 };
 

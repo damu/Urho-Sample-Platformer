@@ -125,18 +125,12 @@ gs_pause::gs_pause() : game_state()
     GetSubsystem<Input>()->SetMouseVisible(true);
     GetSubsystem<Input>()->SetMouseGrabbed(false);
 
-    SubscribeToEvent(E_UPDATE,HANDLER(gs_pause,update));
     SubscribeToEvent(E_KEYDOWN,HANDLER(gs_pause,HandleKeyDown));
-//    SubscribeToEvent(buttonClose,E_RELEASED,HANDLER(gs_pause,HandleResumePressed));
 }
 
 gs_pause::~gs_pause()
 {
     globals::instance()->scene->SetUpdateEnabled(true);
-}
-
-void gs_pause::update(StringHash eventType,VariantMap& eventData)
-{
 }
 
 void gs_pause::HandleResumePressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData)

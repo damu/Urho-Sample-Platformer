@@ -40,6 +40,7 @@ public:
     }
 };
 
+/// For a game state system that can run multiple game states at the same time.
 class game_state : public Urho3D::Object
 {
 public:
@@ -48,7 +49,7 @@ public:
     // there could be other vectors here with stuff that will be automatically removed in the destructor
 
     game_state() : Urho3D::Object(globals::instance()->context) {}
-    /// Removes all GUI elements amd all nodes in the ´nodes´ vector.
+    /// Removes all GUI elements amd all nodes in the 'nodes' vector.
     virtual ~game_state()
     {
         for(auto e:gui_elements)

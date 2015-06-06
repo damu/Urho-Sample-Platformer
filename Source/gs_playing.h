@@ -45,6 +45,7 @@
 #include <Urho3D/Audio/Audio.h>
 
 class player;
+class gs_playing;
 
 /// A BoundingBox shaped trigger (trigger_area) that spawns rocks inside the spawn_area BoundingBox.
 struct level_rock_spawn
@@ -55,6 +56,7 @@ struct level_rock_spawn
     bool rocks_spawned=false;           ///< if the trigger has already been activated
 };
 
+/// Used to load static models from the level XML file.
 struct level_static_model
 {
     Urho3D::String name;
@@ -63,8 +65,6 @@ struct level_static_model
     level_static_model(){}
     level_static_model(Urho3D::String name,Urho3D::Vector3 pos) : name(name),pos(pos) {}
 };
-
-class gs_playing;
 
 /// Level class used to store all map related data that are read from the XML map files.
 class level
@@ -87,20 +87,13 @@ public:
 class gs_playing : public game_state
 {
 public:
-    Urho3D::Text* text_;
-    double timer_playing=0;
-    float goal_time=0;
+    Urho3D::Text* window_text;              ///< The GUI text element in the window at the top that displays the level time, coordinates and FPS.
+    double timer_playing=0;                 ///< The time the level is already played. Increased each frame with the frameStep.
+    double goal_time=0;                     ///< The time the player needed to complete the level.
     std::vector<Urho3D::Node*> flag_nodes;
-    float cam_distance=14;
-    float camera_yaw=20;
-    float camera_pitch=20;
-    bool rocks_spawned=false;
-    bool camera_first_person=false;
-    static std::string last_level_filename;
+    static std::string last_level_filename; ///< Used to restart the last played level (like from gs_level_end).
     std::unique_ptr<player> player_;
-    float level_min_height=999999;
-    Urho3D::SoundSource* sound_source_wind;
-    Urho3D::Sound* sound_wind;
+    float level_min_height=999999;          ///< When the player gets below this height, he dies.
     level current_level;
 
     gs_playing(std::string level_filename);

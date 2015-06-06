@@ -30,7 +30,6 @@ public:
 
     gs_pause();
     ~gs_pause();
-    void update(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
     void HandleKeyDown(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
     void HandleResumePressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
     void HandleMainMenuPressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);

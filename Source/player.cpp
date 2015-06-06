@@ -2,7 +2,7 @@
 
 using namespace Urho3D;
 
-player::player(Vector3 pos,gs_playing* gs) : gs(gs)
+player::player(Vector3 pos,game_state* gs)
 {
     node=globals::instance()->scene->CreateChild("Player");
     gs->nodes.push_back(node);
@@ -334,7 +334,7 @@ void player::update(Input* input,float timeStep)
             if(vec_rot.z_<0)
                 yaw=180-yaw;
             node_model->SetPosition(node->GetPosition());
-            if(s>1&&!gs->camera_first_person)
+            if(s>1&&!camera_first_person)
             {
                 node_model->SetDirection(Vector3::FORWARD);
                 node_model->Yaw(yaw);
@@ -382,40 +382,40 @@ text_->SetText(s);
     if(!input->IsMouseVisible())
         mouseMove=input->GetMouseMove();
 
-    gs->camera_yaw+=mouseMove.x_*0.1;
-    if(gs->camera_yaw<0)
-        gs->camera_yaw+=360;
-    if(gs->camera_yaw>=360)
-        gs->camera_yaw-=360;
-    gs->camera_pitch+=mouseMove.y_*0.1;
-    gs->camera_pitch=Clamp(gs->camera_pitch,-85.0,85.0);
-    if(!gs->camera_first_person)
+    camera_yaw+=mouseMove.x_*0.1;
+    if(camera_yaw<0)
+        camera_yaw+=360;
+    if(camera_yaw>=360)
+        camera_yaw-=360;
+    camera_pitch+=mouseMove.y_*0.1;
+    camera_pitch=Clamp(camera_pitch,-85.0,85.0);
+    if(!camera_first_person)
     {
-        gs->cam_distance-=input->GetMouseMoveWheel();
-        gs->cam_distance=Clamp(gs->cam_distance,2.0,50.0);
+        camera_distance-=input->GetMouseMoveWheel();
+        camera_distance=Clamp(camera_distance,2.0,50.0);
 
         node_camera->SetPosition(node->GetPosition());
         node_camera->SetDirection(Vector3::FORWARD);
-        node_camera->Yaw(gs->camera_yaw);
+        node_camera->Yaw(camera_yaw);
         node_camera->Translate(Vector3(0,1.6,0));
-        node_camera->Pitch(gs->camera_pitch);
+        node_camera->Pitch(camera_pitch);
 
         PhysicsRaycastResult result;
         Ray ray(node_camera->GetPosition(),-node_camera->GetDirection());
-        globals::instance()->physical_world->SphereCast(result,ray,0.2,gs->cam_distance,2);
-        if(result.distance_<=gs->cam_distance)
+        globals::instance()->physical_world->SphereCast(result,ray,0.2,camera_distance,2);
+        if(result.distance_<=camera_distance)
             node_camera->Translate(Vector3(0,0,-result.distance_+0.1));
         else
-            node_camera->Translate(Vector3(0,0,-gs->cam_distance));
+            node_camera->Translate(Vector3(0,0,-camera_distance));
     }
     else
     {
         node_camera->SetPosition(node_light->GetWorldPosition());
         node_camera->SetDirection(Vector3::FORWARD);
-        node_camera->Yaw(gs->camera_yaw);
-        node_camera->Pitch(gs->camera_pitch);
+        node_camera->Yaw(camera_yaw);
+        node_camera->Pitch(camera_pitch);
         node_camera->Translate(Vector3(0,0,0.1));
         node_model->SetDirection(Vector3::FORWARD);
-        node_model->Yaw(gs->camera_yaw);
+        node_model->Yaw(camera_yaw);
     }
 }

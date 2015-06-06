@@ -156,11 +156,11 @@ gs_playing::gs_playing(std::string level_filename) : game_state()
         window->SetColor(Color(.0,.15,.3,.5));
         window->SetAlignment(HA_CENTER,VA_TOP);
 
-        text_=new Text(context_);
-        text_->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),20);
-        text_->SetColor(Color(.8,.85,.9));
-        text_->SetAlignment(HA_CENTER,VA_CENTER);
-        window->AddChild(text_);
+        window_text=new Text(context_);
+        window_text->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),20);
+        window_text->SetColor(Color(.8,.85,.9));
+        window_text->SetAlignment(HA_CENTER,VA_CENTER);
+        window->AddChild(window_text);
     }
 
     GetSubsystem<Input>()->SetMouseVisible(false);
@@ -359,7 +359,7 @@ std::string str;
             str.append("\nFinished!");
 
         String s(str.c_str(),str.size());
-        text_->SetText(s);
+        window_text->SetText(s);
     }
 
     player_->update(input,timeStep);
@@ -409,7 +409,7 @@ void gs_playing::HandleKeyDown(StringHash eventType,VariantMap& eventData)
     if(key==KEY_L)
         spawn_torch(player_->node->GetPosition()+Vector3(2,1.9,0));
     if(key==KEY_V)
-        camera_first_person=!camera_first_person;
+        player_->camera_first_person=!player_->camera_first_person;
 }
 
 void gs_playing::spawn_torch(Vector3 pos)

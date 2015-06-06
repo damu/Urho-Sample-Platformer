@@ -45,15 +45,14 @@
 
 using namespace Urho3D;
 
-class MyApp : public Application
+/// USP main class mainly used for setup. The control is then given to the game states (starting with gs_main_menu).
+class USP : public Application
 {
 public:
     SharedPtr<Scene> scene_;
     Node* cameraNode_;
 
-    MyApp(Context * context) : Application(context)
-    {
-    }
+    USP(Context * context) : Application(context) {}
 
     virtual void Setup()
     {
@@ -108,7 +107,6 @@ public:
         zone->SetAmbientColor(Color(0.1,0.1,0.1));
 
         SubscribeToEvent(E_KEYDOWN,HANDLER(MyApp,HandleKeyDown));
-        SubscribeToEvent(E_UPDATE,HANDLER(MyApp,HandleUpdate));
 
         // fill our game state shared variables
         globals::instance()->cache=cache;
@@ -119,9 +117,10 @@ public:
         globals::instance()->engine=engine_;
         globals::instance()->game_states.emplace_back(new gs_main_menu);
     }
+
     virtual void Stop()
     {
-        globals::instance()->game_states.resize(0);
+        globals::instance()->game_states.clear();
     }
 
     void HandleKeyDown(StringHash eventType,VariantMap& eventData)
@@ -134,11 +133,6 @@ public:
             GetSubsystem<Input>()->SetMouseVisible(!GetSubsystem<Input>()->IsMouseVisible());
             GetSubsystem<Input>()->SetMouseGrabbed(!GetSubsystem<Input>()->IsMouseGrabbed());
         }
-    }
-
-    void HandleUpdate(StringHash eventType,VariantMap& eventData)
-    {
-
     }
 };
 
