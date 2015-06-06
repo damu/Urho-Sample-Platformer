@@ -10,6 +10,137 @@
 
 using namespace Urho3D;
 
+level::level(std::string level_filename)
+{
+    pugi::xml_document doc;
+    pugi::xml_parse_result result=doc.load_file(("Data/"+level_filename).c_str());
+    if(!result)
+    {
+        std::cout<<"XML parsed with errors, attr value: ["<<doc.child("node").attribute("attr").value()<<"]\n";
+        std::cout<<"Error description: "<<result.description()<<"\n";
+        std::cout<<"Error offset: "<<result.offset<<" (error at [..."<<(result.offset)<<"]\n\n";
+    }
+
+    for(auto& c:doc.children())
+    {
+        for(pugi::xml_node& child:c.children())
+        {
+            std::string name(child.name());
+            if(name=="static_model")
+            {
+                float pos_x=0;
+                float pos_y=0;
+                float pos_z=0;
+                String name;
+
+                for(pugi::xml_attribute& attr:child.attributes())
+                {
+                    if(std::string(attr.name())=="name")
+                        name=attr.value();
+                    else if(std::string(attr.name())=="pos_x")
+                        pos_x=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="pos_y")
+                        pos_y=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="pos_z")
+                        pos_z=std::stof(std::string(attr.value()));
+                }
+                if(name.Length())
+                    static_models.emplace_back(name,Vector3(pos_x,pos_y,pos_z));
+            }
+            else if(name=="flag")
+            {
+                float pos_x=0;
+                float pos_y=0;
+                float pos_z=0;
+
+                for(pugi::xml_attribute& attr:child.attributes())
+                {
+                    if(std::string(attr.name())=="pos_x")
+                        pos_x=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="pos_y")
+                        pos_y=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="pos_z")
+                        pos_z=std::stof(std::string(attr.value()));
+                }
+
+                flag_positions.emplace_back(pos_x,pos_y,pos_z);
+            }
+            else if(name=="torch")
+            {
+                float pos_x=0;
+                float pos_y=0;
+                float pos_z=0;
+
+                for(pugi::xml_attribute& attr:child.attributes())
+                {
+                    if(std::string(attr.name())=="pos_x")
+                        pos_x=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="pos_y")
+                        pos_y=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="pos_z")
+                        pos_z=std::stof(std::string(attr.value()));
+                }
+
+                torch_positions.emplace_back(pos_x,pos_y,pos_z);
+            }
+            else if(name=="player")
+            {
+                for(pugi::xml_attribute& attr:child.attributes())
+                {
+                    if(std::string(attr.name())=="pos_x")
+                        player_pos.x_=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="pos_y")
+                        player_pos.y_=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="pos_z")
+                        player_pos.z_=std::stof(std::string(attr.value()));
+                }
+            }
+            else if(name=="sound")
+            {
+                for(pugi::xml_attribute& attr:child.attributes())
+                    if(std::string(attr.name())=="name")
+                        sound_name=attr.value();
+            }
+            else if(name=="rock_spawner")
+            {
+                level_rock_spawn rs;
+                for(pugi::xml_attribute& attr:child.attributes())
+                {
+                    if(std::string(attr.name())=="rocks_pos_min_x")
+                        rs.spawn_area.min_.x_=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="rocks_pos_min_y")
+                        rs.spawn_area.min_.y_=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="rocks_pos_min_z")
+                        rs.spawn_area.min_.z_=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="rocks_pos_max_x")
+                        rs.spawn_area.max_.x_=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="rocks_pos_max_y")
+                        rs.spawn_area.max_.y_=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="rocks_pos_max_z")
+                        rs.spawn_area.max_.z_=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="trigger_pos_min_x")
+                        rs.trigger_area.min_.x_=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="trigger_pos_min_y")
+                        rs.trigger_area.min_.y_=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="trigger_pos_min_z")
+                        rs.trigger_area.min_.z_=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="trigger_pos_max_x")
+                        rs.trigger_area.max_.x_=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="trigger_pos_max_y")
+                        rs.trigger_area.max_.y_=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="trigger_pos_max_z")
+                        rs.trigger_area.max_.z_=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="rock_count")
+                        rs.rock_count=std::stoi(std::string(attr.value()));
+                }
+                rock_spawns.push_back(rs);
+            }
+        }
+    }
+}
+
+///////////////
+
 std::string gs_playing::last_level_filename;
 
 gs_playing::gs_playing(std::string level_filename) : game_state()
@@ -38,7 +169,56 @@ gs_playing::gs_playing(std::string level_filename) : game_state()
     SubscribeToEvent(E_UPDATE,HANDLER(gs_playing,update));
     SubscribeToEvent(E_KEYDOWN,HANDLER(gs_playing,HandleKeyDown));
 
-    load_level(level_filename);
+    current_level=level(level_filename);
+    for(auto& sm:current_level.static_models)
+    {
+        Node* boxNode_=globals::instance()->scene->CreateChild();
+        nodes.push_back(boxNode_);
+        boxNode_->SetPosition(sm.pos);
+        StaticModel* boxObject=boxNode_->CreateComponent<StaticModel>();
+        set_model(boxObject,globals::instance()->cache,std::string(sm.name.CString(),sm.name.Length()));
+        boxObject->SetCastShadows(true);
+        boxObject->SetOccludee(true);
+        boxObject->SetOccluder(true);
+
+        float min_y=boxObject->GetWorldBoundingBox().min_.y_;
+        if(level_min_height>min_y)
+            level_min_height=min_y;
+
+        RigidBody* body=boxNode_->CreateComponent<RigidBody>();
+        body->SetCollisionLayer(2); // Use layer bitmask 2 for static geometry
+        CollisionShape* shape=boxNode_->CreateComponent<CollisionShape>();
+        shape->SetTriangleMesh(globals::instance()->cache->GetResource<Model>(sm.name+".mdl"));
+
+        globals::instance()->physical_world->SetGravity(Vector3(0,-9.81*4,0));
+    }
+    if(current_level.sound_name.Length())
+    {
+        Node* n=globals::instance()->scene->CreateChild();
+        nodes.push_back(n);
+        auto sound=globals::instance()->cache->GetResource<Sound>(current_level.sound_name);
+        sound->SetLooped(true);
+        auto sound_source=n->CreateComponent<SoundSource>();
+        sound_source->SetSoundType(SOUND_MUSIC);
+        sound_source->Play(sound);
+    }
+    player_.reset(new player(current_level.player_pos,this));
+    {   // "load" flags
+        for(auto p:current_level.flag_positions)
+        {
+            Node* n=globals::instance()->scene->CreateChild("Flag");
+            nodes.push_back(n);
+
+            n->SetPosition(p);
+            StaticModel* boxObject=n->CreateComponent<StaticModel>();
+            set_model(boxObject,globals::instance()->cache,"Data/Models/flag");
+            boxObject->SetCastShadows(true);
+            flag_nodes.push_back(n);
+        }
+
+        for(auto p:current_level.torch_positions)
+            spawn_torch(p);
+    }
 
     {
         Node* lightNode=globals::instance()->scene->CreateChild("Light");
@@ -90,191 +270,6 @@ gs_playing::gs_playing(std::string level_filename) : game_state()
     timer_playing=0;
 }
 
-void gs_playing::load_level(std::string level_filename)
-{
-    pugi::xml_document doc;
-    pugi::xml_parse_result result=doc.load_file(("Data/"+level_filename).c_str());
-    if(!result)
-    {
-        std::cout<<"XML parsed with errors, attr value: ["<<doc.child("node").attribute("attr").value()<<"]\n";
-        std::cout<<"Error description: "<<result.description()<<"\n";
-        std::cout<<"Error offset: "<<result.offset<<" (error at [..."<<(result.offset)<<"]\n\n";
-    }
-
-    float player_pos_x=0;
-    float player_pos_y=0;
-    float player_pos_z=0;
-    String sound_name;
-
-    for(auto& c:doc.children())
-    {
-        for(pugi::xml_node& child:c.children())
-        {
-            std::string name(child.name());
-            if(name=="static_model")
-            {
-                float pos_x=0;
-                float pos_y=0;
-                float pos_z=0;
-                std::string name;
-
-                for(pugi::xml_attribute& attr:child.attributes())
-                {
-                    if(std::string(attr.name())=="name")
-                        name=attr.value();
-                    else if(std::string(attr.name())=="pos_x")
-                        pos_x=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="pos_y")
-                        pos_y=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="pos_z")
-                        pos_z=std::stof(std::string(attr.value()));
-                }
-
-                if(name.size())
-                {
-                    Node* boxNode_=globals::instance()->scene->CreateChild();
-                    nodes.push_back(boxNode_);
-                    boxNode_->SetPosition(Vector3(pos_x,pos_y,pos_z));
-                    StaticModel* boxObject=boxNode_->CreateComponent<StaticModel>();
-                    set_model(boxObject,globals::instance()->cache,name);
-                    boxObject->SetCastShadows(true);
-                    boxObject->SetOccludee(true);
-                    boxObject->SetOccluder(true);
-
-                    float min_y=boxObject->GetWorldBoundingBox().min_.y_;
-                    if(level_min_height>min_y)
-                        level_min_height=min_y;
-
-                    RigidBody* body=boxNode_->CreateComponent<RigidBody>();
-                    body->SetCollisionLayer(2); // Use layer bitmask 2 for static geometry
-                    CollisionShape* shape=boxNode_->CreateComponent<CollisionShape>();
-                    shape->SetTriangleMesh(globals::instance()->cache->GetResource<Model>(String(name.c_str(),name.size())+".mdl"));
-
-                    globals::instance()->physical_world->SetGravity(Vector3(0,-9.81*4,0));
-                }
-            }
-            else if(name=="flag")
-            {
-                float pos_x=0;
-                float pos_y=0;
-                float pos_z=0;
-
-                for(pugi::xml_attribute& attr:child.attributes())
-                {
-                    if(std::string(attr.name())=="pos_x")
-                        pos_x=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="pos_y")
-                        pos_y=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="pos_z")
-                        pos_z=std::stof(std::string(attr.value()));
-                }
-
-                flag_positions.emplace_back(pos_x,pos_y,pos_z);
-            }
-            else if(name=="torch")
-            {
-                float pos_x=0;
-                float pos_y=0;
-                float pos_z=0;
-
-                for(pugi::xml_attribute& attr:child.attributes())
-                {
-                    if(std::string(attr.name())=="pos_x")
-                        pos_x=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="pos_y")
-                        pos_y=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="pos_z")
-                        pos_z=std::stof(std::string(attr.value()));
-                }
-
-                torch_positions.emplace_back(pos_x,pos_y,pos_z);
-            }
-            else if(name=="player")
-            {
-                for(pugi::xml_attribute& attr:child.attributes())
-                {
-                    if(std::string(attr.name())=="pos_x")
-                        player_pos_x=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="pos_y")
-                        player_pos_y=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="pos_z")
-                        player_pos_z=std::stof(std::string(attr.value()));
-                }
-            }
-            else if(name=="sound")
-            {
-                for(pugi::xml_attribute& attr:child.attributes())
-                    if(std::string(attr.name())=="name")
-                        sound_name=attr.value();
-            }
-            else if(name=="rock_spawner")
-            {
-                rock_spawn rs;
-                for(pugi::xml_attribute& attr:child.attributes())
-                {
-                    if(std::string(attr.name())=="rocks_pos_min_x")
-                        rs.spawn_area.min_.x_=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="rocks_pos_min_y")
-                        rs.spawn_area.min_.y_=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="rocks_pos_min_z")
-                        rs.spawn_area.min_.z_=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="rocks_pos_max_x")
-                        rs.spawn_area.max_.x_=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="rocks_pos_max_y")
-                        rs.spawn_area.max_.y_=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="rocks_pos_max_z")
-                        rs.spawn_area.max_.z_=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="trigger_pos_min_x")
-                        rs.trigger_area.min_.x_=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="trigger_pos_min_y")
-                        rs.trigger_area.min_.y_=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="trigger_pos_min_z")
-                        rs.trigger_area.min_.z_=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="trigger_pos_max_x")
-                        rs.trigger_area.max_.x_=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="trigger_pos_max_y")
-                        rs.trigger_area.max_.y_=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="trigger_pos_max_z")
-                        rs.trigger_area.max_.z_=std::stof(std::string(attr.value()));
-                    else if(std::string(attr.name())=="rock_count")
-                        rs.rock_count=std::stoi(std::string(attr.value()));
-                }
-                rock_spawns.push_back(rs);
-            }
-        }
-    }
-
-    if(sound_name.Length())
-    {
-        Node* n=globals::instance()->scene->CreateChild();
-        nodes.push_back(n);
-        auto sound=globals::instance()->cache->GetResource<Sound>(sound_name);
-        sound->SetLooped(true);
-        auto sound_source=n->CreateComponent<SoundSource>();
-        sound_source->SetSoundType(SOUND_MUSIC);
-        sound_source->Play(sound);
-    }
-
-    player_.reset(new player(Vector3(player_pos_x,player_pos_y,player_pos_z),this));
-
-    {   // "load" flags
-        for(auto p:flag_positions)
-        {
-            Node* n=globals::instance()->scene->CreateChild("Flag");
-            nodes.push_back(n);
-
-            n->SetPosition(p);
-            StaticModel* boxObject=n->CreateComponent<StaticModel>();
-            set_model(boxObject,globals::instance()->cache,"Data/Models/flag");
-            boxObject->SetCastShadows(true);
-            flag_nodes.push_back(n);
-        }
-
-        for(auto p:torch_positions)
-            spawn_torch(p);
-    }
-}
-
 void gs_playing::update(StringHash eventType,VariantMap& eventData)
 {
     if(globals::instance()->game_states.size()>1)
@@ -285,7 +280,7 @@ void gs_playing::update(StringHash eventType,VariantMap& eventData)
     timer_playing+=timeStep;
 
     // check if there should be rocks spawned due to a distance trigger
-    for(rock_spawn& rs:rock_spawns)
+    for(level_rock_spawn& rs:current_level.rock_spawns)
     if(!rs.rocks_spawned&&rs.trigger_area.IsInside(player_->node->GetPosition()))
     {
         rs.rocks_spawned=true;
@@ -359,7 +354,7 @@ std::string str;
         str.append("s\nRemaining Flags: ");
         str.append(std::to_string(flag_nodes.size()));
         str.append("/");
-        str.append(std::to_string(flag_positions.size()));
+        str.append(std::to_string(current_level.flag_positions.size()));
         if(goal_time>0)
             str.append("\nFinished!");
 

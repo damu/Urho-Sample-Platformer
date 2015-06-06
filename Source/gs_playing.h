@@ -46,13 +46,41 @@
 
 class player;
 
-class rock_spawn
+/// A BoundingBox shaped trigger (trigger_area) that spawns rocks inside the spawn_area BoundingBox.
+struct level_rock_spawn
 {
-public:
     Urho3D::BoundingBox trigger_area;
     Urho3D::BoundingBox spawn_area;
     int rock_count=100;
-    bool rocks_spawned=false;
+    bool rocks_spawned=false;           ///< if the trigger has already been activated
+};
+
+struct level_static_model
+{
+    Urho3D::String name;
+    Urho3D::Vector3 pos;
+
+    level_static_model(){}
+    level_static_model(Urho3D::String name,Urho3D::Vector3 pos) : name(name),pos(pos) {}
+};
+
+class gs_playing;
+
+/// Level class used to store all map related data that are read from the XML map files.
+class level
+{
+public:
+    std::vector<Urho3D::Vector3> torch_positions;
+    std::vector<Urho3D::Vector3> flag_positions;
+    std::vector<level_rock_spawn> rock_spawns;
+    std::vector<level_static_model> static_models;    ///< static level geometry like terrain and buildings. Will all get a triangle-mesh collider.
+    Urho3D::Vector3 player_pos;
+    Urho3D::String sound_name;
+
+    level(){}
+    /// loads a level from an XML file
+    level(std::string filename);
+    //void save();                    // saves a level to an XML file, not implemented but could be useful for an editor
 };
 
 /// The game state handling playing a level.
@@ -62,10 +90,7 @@ public:
     Urho3D::Text* text_;
     double timer_playing=0;
     float goal_time=0;
-    std::vector<Urho3D::Vector3> torch_positions;
-    std::vector<Urho3D::Vector3> flag_positions;
     std::vector<Urho3D::Node*> flag_nodes;
-    std::vector<rock_spawn> rock_spawns;
     float cam_distance=14;
     float camera_yaw=20;
     float camera_pitch=20;
@@ -76,12 +101,12 @@ public:
     float level_min_height=999999;
     Urho3D::SoundSource* sound_source_wind;
     Urho3D::Sound* sound_wind;
+    level current_level;
 
     gs_playing(std::string level_filename);
     void update(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
     void HandleKeyDown(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
     void spawn_torch(Urho3D::Vector3 pos);
-    void load_level(std::string level_filename);
 
     virtual const Urho3D::String& GetTypeName() const {static Urho3D::String name("gs_playing");return name;}   // this could be correct
 };
