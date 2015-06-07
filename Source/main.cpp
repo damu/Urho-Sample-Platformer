@@ -106,7 +106,7 @@ public:
         zone->SetFogEnd(5000.0f);
         zone->SetAmbientColor(Color(0.1,0.1,0.1));
 
-        SubscribeToEvent(E_KEYDOWN,HANDLER(MyApp,HandleKeyDown));
+        SubscribeToEvent(E_KEYDOWN,HANDLER(USP,HandleKeyDown));
 
         // fill our game state shared variables
         globals::instance()->cache=cache;
@@ -136,4 +136,4 @@ public:
     }
 };
 
-DEFINE_APPLICATION_MAIN(MyApp)
+DEFINE_APPLICATION_MAIN(USP)
