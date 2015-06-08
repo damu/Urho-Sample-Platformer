@@ -228,12 +228,12 @@ void player::update(Input* input,float timeStep)
 
                 static bool sound_step1_not_played=true;    // not player this animation cycle
                 static bool sound_step2_not_played=true;
-                if(as_run->GetTime()>0.1&&sound_step1_not_played)
+                if(as_run->GetTime()>0.1&&sound_step1_not_played&&as_reversing->GetWeight()<0.5)
                 {
                     sound_source1->Play(sound_step1);
                     sound_step1_not_played=false;
                 }
-                if(as_run->GetTime()>0.6&&sound_step2_not_played)
+                if(as_run->GetTime()>0.6&&sound_step2_not_played&&as_reversing->GetWeight()<0.5)
                 {
                     sound_source2->Play(sound_step2);
                     sound_step2_not_played=false;
@@ -315,14 +315,7 @@ void player::update(Input* input,float timeStep)
         float speed_new=vel.Length();
         if(on_floor)
         if(speed_new>20&&speed_new>speed_old)   // over limit. Don't increase speed further but make direction change possible.
-        {
             vel=vel.Normalized()*speed_old;
-/*            std::string s;
-            s+=std::to_string(speed_old);
-            s+=std::to_string(speed_new);
-            s+=std::to_string(vel.Length());
-            LOGINFO(String(s.data(),s.size()));*/
-        }
         body->SetLinearVelocity(Vector3(vel.x_,body->GetLinearVelocity().y_+(rot*moveDir*timeStep*6000/body->GetMass()).y_,vel.z_));
         body->ApplyImpulse(moveDir_global*timeStep*5000);
 
@@ -340,6 +333,7 @@ void player::update(Input* input,float timeStep)
                 node_model->Yaw(yaw);
             }
 
+            // this was for the four thrusters around the player which should explain the movement changes in air. But I couldn't figure out the correct calculations.
             //if(!on_floor)
             /*{
                 yaw+=90;

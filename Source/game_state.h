@@ -29,7 +29,7 @@ public:
 
     /// The current game states, so that game states can switch to another game state.
     /// Watch out that changing a game state will delete the current one.
-    /// Also game states can be stacked on top of each other so they run paralell. This is used for the pause mode.
+    /// Also game states can be stacked on top of each other so they run parallel. This is used for the pause mode.
     std::vector<std::unique_ptr<game_state>> game_states;
 
     /// Meyer Singleton
@@ -44,12 +44,12 @@ public:
 class game_state : public Urho3D::Object
 {
 public:
-    std::vector<Urho3D::Node*> nodes;   ///< Put all your nodes here so that they are removed on game state deletion.
-    std::vector<Urho3D::UIElement*> gui_elements;   ///< Put all your nodes here so that they are removed on game state deletion.
+    std::vector<Urho3D::Node*> nodes;   ///< Put all your nodes in this vector so that they are removed on game state deletion.
+    std::vector<Urho3D::UIElement*> gui_elements;   ///< Put all your GUI elements here so that they are removed on game state deletion.
     // there could be other vectors here with stuff that will be automatically removed in the destructor
 
     game_state() : Urho3D::Object(globals::instance()->context) {}
-    /// Removes all GUI elements amd all nodes in the 'nodes' vector.
+    /// Removes all GUI elements and all nodes in the 'nodes' vector.
     virtual ~game_state()
     {
         for(auto e:gui_elements)
@@ -60,7 +60,7 @@ public:
         nodes.clear();
     }
 
-    // these three functions need be here because of Urho3D::Object
+    // these three functions need to be here because of Urho3D::Object
     virtual Urho3D::StringHash GetType() const {return GetTypeName();}       // no idea if this is as supposed to be, but it works
     virtual Urho3D::StringHash GetBaseType() const {return GetTypeName();}   // no idea if this is as supposed to be, but it works
     virtual const Urho3D::String& GetTypeName() const {static Urho3D::String name("game_state");return name;}   // this could be correct
