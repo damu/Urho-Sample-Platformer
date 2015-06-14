@@ -142,9 +142,6 @@ gs_main_menu::gs_main_menu() : game_state()
             t->SetVerticalAlignment(VA_CENTER);
             t->SetName("Text");
             t->SetText("Play");
-            //button->AddChild(t);
-            t->SetStyle("Text");
-            t->SetMinHeight(VA_CENTER);
             button->AddChild(t);
         }
         window_menu->AddChild(button);
@@ -164,9 +161,6 @@ gs_main_menu::gs_main_menu() : game_state()
             t->SetVerticalAlignment(VA_CENTER);
             t->SetName("Text");
             t->SetText("Quit");
-            //button->AddChild(t);
-            t->SetStyle("Text");
-            t->SetMinHeight(VA_CENTER);
             button->AddChild(t);
         }
         window_menu->AddChild(button);

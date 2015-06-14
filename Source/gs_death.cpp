@@ -16,8 +16,6 @@ gs_death::gs_death() : game_state()
     window_->SetName("Window");
     window_->SetColor(Color(.0,.15,.3,.5));
 
-    window_->SetStyleAuto();
-
     {
         BorderImage* button=new BorderImage(globals::instance()->context);
         button->SetName("Button");
@@ -31,9 +29,6 @@ gs_death::gs_death() : game_state()
             t->SetVerticalAlignment(VA_CENTER);
             t->SetName("Text");
             t->SetText("You died.");
-            //button->AddChild(t);
-            t->SetStyle("Text");
-            t->SetMinHeight(VA_CENTER);
             button->AddChild(t);
         }
         window_->AddChild(button);
@@ -51,11 +46,7 @@ gs_death::gs_death() : game_state()
             t->SetVerticalAlignment(VA_CENTER);
             t->SetName("Text");
             t->SetText("Restart level");
-            //button->AddChild(t);
-            t->SetStyle("Text");
-            t->SetMinHeight(VA_CENTER);
             button->AddChild(t);
-
         }
         window_->AddChild(button);
         SubscribeToEvent(button,E_RELEASED,HANDLER(gs_death,HandleRestartPressed));
@@ -73,9 +64,6 @@ gs_death::gs_death() : game_state()
             t->SetVerticalAlignment(VA_CENTER);
             t->SetName("Text");
             t->SetText("Exit to main menu");
-            //button->AddChild(t);
-            t->SetStyle("Text");
-            t->SetMinHeight(VA_CENTER);
             button->AddChild(t);
         }
         window_->AddChild(button);

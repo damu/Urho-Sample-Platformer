@@ -17,25 +17,6 @@ gs_pause::gs_pause() : game_state()
     window_->SetAlignment(HA_CENTER,VA_CENTER);
     window_->SetName("Window");
     window_->SetColor(Color(.0,.15,.3,.5));
-/*
-    UIElement* titleBar=new UIElement(globals::instance()->context);
-    titleBar->SetMinSize(0,24);
-    titleBar->SetVerticalAlignment(VA_TOP);
-    titleBar->SetLayoutMode(LM_HORIZONTAL);
-
-    Text* windowTitle=new Text(globals::instance()->context);
-    windowTitle->SetName("WindowTitle");
-    windowTitle->SetText("Hello GUI!");
-    windowTitle->SetStyleAuto();
-    titleBar->AddChild(windowTitle);
-
-    Button* buttonClose=new Button(globals::instance()->context);
-    buttonClose->SetName("CloseButton");
-    buttonClose->SetStyle("CloseButton");
-    titleBar->AddChild(buttonClose);
-
-    window_->AddChild(titleBar);*/
-    window_->SetStyleAuto();
 
     {
         BorderImage* button = new BorderImage(globals::instance()->context);
@@ -50,9 +31,6 @@ gs_pause::gs_pause() : game_state()
             t->SetVerticalAlignment(VA_CENTER);
             t->SetName("Text");
             t->SetText("Pause");
-            //button->AddChild(t);
-            t->SetStyle("Text");
-            t->SetMinHeight(VA_CENTER);
             button->AddChild(t);
         }
         window_->AddChild(button);
@@ -70,9 +48,6 @@ gs_pause::gs_pause() : game_state()
             t->SetVerticalAlignment(VA_CENTER);
             t->SetName("Text");
             t->SetText("Resume game");
-            //button->AddChild(t);
-            t->SetStyle("Text");
-            t->SetMinHeight(VA_CENTER);
             button->AddChild(t);
 
         }
@@ -92,9 +67,6 @@ gs_pause::gs_pause() : game_state()
             t->SetVerticalAlignment(VA_CENTER);
             t->SetName("Text");
             t->SetText("Exit to main menu");
-            //button->AddChild(t);
-            t->SetStyle("Text");
-            t->SetMinHeight(VA_CENTER);
             button->AddChild(t);
         }
         window_->AddChild(button);
@@ -113,9 +85,6 @@ gs_pause::gs_pause() : game_state()
             t->SetVerticalAlignment(VA_CENTER);
             t->SetName("Text");
             t->SetText("Quit the game");
-            //button->AddChild(t);
-            t->SetStyle("Text");
-            t->SetMinHeight(VA_CENTER);
             button->AddChild(t);
         }
         window_->AddChild(button);
