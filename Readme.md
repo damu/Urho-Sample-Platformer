@@ -1,7 +1,7 @@
 # Urho Sample Platformer
 
-This is the first Urho3D sample project developed for the Unofficial Urho wiki: http://urho3d.wikia.com/
-The USP page there with Urho related details is at: http://urho3d.wikia.com/wiki/USP_-_Urho_Sample_Platformer
+This is the first Urho3D sample project developed for the Unofficial Urho wiki: http://urho3d.wikia.com/  
+The USP page there with Urho related details is at: http://urho3d.wikia.com/wiki/USP_-_Urho_Sample_Platformer  
 See the wiki here https://github.com/gawag/Urho-Sample-Platformer/wiki for more game related informations.
 
 ## Build Instructions
