@@ -6,37 +6,37 @@ See the wiki here https://github.com/gawag/Urho-Sample-Platformer/wiki for more 
 
 ## Build Instructions
 
-Like Urho USP uses CMake for building. I'm using Codeblocks on Windows but I also heard USP being build on GNU/Linux and Mac OS X.
+Like Urho USP  uses CMake for building. I'm using Codeblocks on Windows but I also heard USP being build on GNU/Linux and Mac OS X.  
 See http://urho3d.wikia.com/wiki/Creating_a_new_Urho3D_Project for details.
 
 ## Copyright Notes for Third-Party Assets in /Build/bin/Data/
 
-File: Models/robot.mdl and /blends/Robot.blend (the player model)
-Based on http://www.blendswap.com/blends/view/77792 and heavily modified by gawag.
+File: Models/robot.mdl and /blends/Robot.blend (the player model)  
+Based on http://www.blendswap.com/blends/view/77792 and heavily modified by gawag.  
 Original licence: Creative Commons Attribution 3.0 Unported (CC BY 3.0)
 
-File: Sounds/Drums of the Deep.ogg (the music in level_1, I made it ~76% faster)
-Artist: Kevin MacLeod
-Licence: Creative Commons: By Attribution 3.0
+File: Sounds/Drums of the Deep.ogg (the music in level_1, I made it ~76% faster)  
+Artist: Kevin MacLeod  
+Licence: Creative Commons: By Attribution 3.0  
 Found at: http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400021
 
-File: Sounds/Lord of the Land.ogg (the music in level_2)
-Artist: Kevin MacLeod
-Licence: Creative Commons: By Attribution 3.0
+File: Sounds/Lord of the Land.ogg (the music in level_2)  
+Artist: Kevin MacLeod  
+Licence: Creative Commons: By Attribution 3.0  
 Found at: http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400022
 
-File: Sounds/littlerobotsoundfactory__jingle-win-synth-04.ogg (the flag collect sound)
-Artist: LittleRobotSoundFactory
-Licence: Creative Commons Attribution 3.0 Unported (CC BY 3.0)
+File: Sounds/littlerobotsoundfactory__jingle-win-synth-04.ogg (the flag collect sound)  
+Artist: LittleRobotSoundFactory  
+Licence: Creative Commons Attribution 3.0 Unported (CC BY 3.0)  
 Found at: https://www.freesound.org/people/LittleRobotSoundFactory/sounds/274183/
 
-File: Sounds/torch.ogg (torch/fire sound)
-Artist: leosalom
-Licence: Creative Commons Attribution 3.0 Unported (CC BY 3.0)
+File: Sounds/torch.ogg (torch/fire sound)  
+Artist: leosalom  
+Licence: Creative Commons Attribution 3.0 Unported (CC BY 3.0)  
 Found at: https://www.freesound.org/people/leosalom/sounds/234288/
 
-Files: Sounds/step1.ogg, step2.ogg and steam.ogg are recorded by me
-Artist: gawag
+Files: Sounds/step1.ogg, step2.ogg and steam.ogg are recorded by me  
+Artist: gawag  
 Licence: MIT or CC BY 3.0
 
 All other files are either from Urho3D or made by me and under the general license (MIT) described in the LICENSE file.
