@@ -102,6 +102,9 @@ public:
 
     float get(std::string level_name)
     {
+        int pos=level_name.rfind('/')+1;
+        if(pos!=std::string::npos)
+            level_name=level_name.substr(pos);
         return values[level_name];
     }
 
@@ -109,9 +112,9 @@ public:
     void insert(std::string level_name,float time)
     {
         int pos=level_name.rfind('/')+1;
-        if(pos==std::string::npos)
-            pos=0;
-        values[level_name.substr(pos)]=time;
+        if(pos!=std::string::npos)
+            level_name=level_name.substr(pos);
+        values[level_name]=time;
     }
 
     void save()
