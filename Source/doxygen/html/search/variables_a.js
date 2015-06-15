@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['rock_5fcount',['rock_count',['../structlevel__rock__spawn.html#a91c9ec87f6ade8287ddcb9a8018f988f',1,'level_rock_spawn']]],
-  ['rock_5fspawns',['rock_spawns',['../classlevel.html#a40952b770c5ff48d042380811fff8186',1,'level']]],
-  ['rocks_5fspawned',['rocks_spawned',['../structlevel__rock__spawn.html#aa49b5dc0a6711b9512f242fd283d7d0f',1,'level_rock_spawn']]]
+  ['physical_5fworld',['physical_world',['../classglobals.html#adb0a07e51c2160cd9a7603122a86dd56',1,'globals']]],
+  ['player_5f',['player_',['../classgs__playing.html#ac7787f6cb8dfa75c09a34ed5b2ab5d40',1,'gs_playing']]],
+  ['player_5fpos',['player_pos',['../classlevel.html#a7763ca4ae0c61b1c6b8fb0c31125b349',1,'level']]],
+  ['pos',['pos',['../structlevel__static__model.html#a7bce65760e17b27392ef1b632ba5574c',1,'level_static_model']]],
+  ['pos_5flast',['pos_last',['../classplayer.html#ad751d23295c08c8fbd24a579a460a7d1',1,'player']]]
 ];

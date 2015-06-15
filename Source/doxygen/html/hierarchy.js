@@ -7,6 +7,7 @@ var hierarchy =
     [ "level", "classlevel.html", null ],
     [ "level_rock_spawn", "structlevel__rock__spawn.html", null ],
     [ "level_static_model", "structlevel__static__model.html", null ],
+    [ "map_times", "classmap__times.html", null ],
     [ "Object", null, [
       [ "game_state", "classgame__state.html", [
         [ "gs_death", "classgs__death.html", null ],

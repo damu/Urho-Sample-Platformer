@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>Urho Sample Platformer: USP Class Reference</title>
+<title>Urho Sample Platformer: map_times Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -87,7 +87,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('class_u_s_p.html','');});
+$(document).ready(function(){initNavTree('classmap__times.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -107,48 +107,39 @@ $(document).ready(function(){initNavTree('class_u_s_p.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="class_u_s_p-members.html">List of all members</a>  </div>
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="classmap__times-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">USP Class Reference</div>  </div>
+<div class="title">map_times Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="class_u_s_p.html" title="USP main class mainly used for setup. The control is then given to the game states (starting with gs_...">USP</a> main class mainly used for setup. The control is then given to the game states (starting with <a class="el" href="classgs__main__menu.html" title="The main menu displayed when starting the game. ">gs_main_menu</a>).  
- <a href="class_u_s_p.html#details">More...</a></p>
-<div class="dynheader">
-Inheritance diagram for USP:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="class_u_s_p.png" usemap="#USP_map" alt=""/>
-  <map id="USP_map" name="USP_map">
-</map>
- </div></div>
+<p>For reading and storing the best level times. They are stored in a simple text file with a value pair in each line and a comma seperating the two values.  
+ <a href="classmap__times.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="misc_8h_source.html">misc.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:acd5828d9fcfa000791015279e1655c9d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_s_p.html#acd5828d9fcfa000791015279e1655c9d">USP</a> (Context *context)</td></tr>
-<tr class="separator:acd5828d9fcfa000791015279e1655c9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99b61df8b8e0de857506f545ccfef485"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_s_p.html#a99b61df8b8e0de857506f545ccfef485">Setup</a> ()</td></tr>
-<tr class="separator:a99b61df8b8e0de857506f545ccfef485"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd0ceff47a3c95964b2392e5bc059223"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_s_p.html#abd0ceff47a3c95964b2392e5bc059223">Start</a> ()</td></tr>
-<tr class="separator:abd0ceff47a3c95964b2392e5bc059223"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0c79ad9bfca9834d77a24428cc574e6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_s_p.html#ab0c79ad9bfca9834d77a24428cc574e6">Stop</a> ()</td></tr>
-<tr class="separator:ab0c79ad9bfca9834d77a24428cc574e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5b50d09b45910d532e5dbc40b8a3807"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_s_p.html#ad5b50d09b45910d532e5dbc40b8a3807">HandleKeyDown</a> (StringHash eventType, VariantMap &amp;eventData)</td></tr>
-<tr class="separator:ad5b50d09b45910d532e5dbc40b8a3807"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a595a93acc4852f0a868110746b7b9960"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmap__times.html#a595a93acc4852f0a868110746b7b9960">map_times</a> ()</td></tr>
+<tr class="separator:a595a93acc4852f0a868110746b7b9960"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a743c4dca7e36ab0770e2fd0560b2aa0c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmap__times.html#a743c4dca7e36ab0770e2fd0560b2aa0c">get</a> (std::string level_name)</td></tr>
+<tr class="separator:a743c4dca7e36ab0770e2fd0560b2aa0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a830384c580c756de2213a33f9be8d54c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmap__times.html#a830384c580c756de2213a33f9be8d54c">insert</a> (std::string level_name, float time)</td></tr>
+<tr class="memdesc:a830384c580c756de2213a33f9be8d54c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts the given values and trims the level_name to avoid issues.  <a href="#a830384c580c756de2213a33f9be8d54c">More...</a><br /></td></tr>
+<tr class="separator:a830384c580c756de2213a33f9be8d54c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b78769c8104a8f3d98efa28a7913d69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmap__times.html#a9b78769c8104a8f3d98efa28a7913d69">save</a> ()</td></tr>
+<tr class="separator:a9b78769c8104a8f3d98efa28a7913d69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a3bd96889e3ce6ff4f7344d102c10f7c5"><td class="memItemLeft" align="right" valign="top">SharedPtr&lt; Scene &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_s_p.html#a3bd96889e3ce6ff4f7344d102c10f7c5">scene_</a></td></tr>
-<tr class="separator:a3bd96889e3ce6ff4f7344d102c10f7c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7cfd1fc925146d7b7700eaaf843ec5da"><td class="memItemLeft" align="right" valign="top">Node *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_u_s_p.html#a7cfd1fc925146d7b7700eaaf843ec5da">cameraNode_</a></td></tr>
-<tr class="separator:a7cfd1fc925146d7b7700eaaf843ec5da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a823b29d9630f19ee46ad1fcc276dda51"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmap__times.html#a823b29d9630f19ee46ad1fcc276dda51">values</a></td></tr>
+<tr class="separator:a823b29d9630f19ee46ad1fcc276dda51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="class_u_s_p.html" title="USP main class mainly used for setup. The control is then given to the game states (starting with gs_...">USP</a> main class mainly used for setup. The control is then given to the game states (starting with <a class="el" href="classgs__main__menu.html" title="The main menu displayed when starting the game. ">gs_main_menu</a>). </p>
+<div class="textblock"><p>For reading and storing the best level times. They are stored in a simple text file with a value pair in each line and a comma seperating the two values. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="acd5828d9fcfa000791015279e1655c9d"></a>
+<a class="anchor" id="a595a93acc4852f0a868110746b7b9960"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -156,10 +147,9 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">USP::USP </td>
+          <td class="memname">map_times::map_times </td>
           <td>(</td>
-          <td class="paramtype">Context *&#160;</td>
-          <td class="paramname"><em>context</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -173,7 +163,7 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ad5b50d09b45910d532e5dbc40b8a3807"></a>
+<a class="anchor" id="a743c4dca7e36ab0770e2fd0560b2aa0c"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -181,16 +171,40 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void USP::HandleKeyDown </td>
+          <td class="memname">float map_times::get </td>
           <td>(</td>
-          <td class="paramtype">StringHash&#160;</td>
-          <td class="paramname"><em>eventType</em>, </td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>level_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a830384c580c756de2213a33f9be8d54c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void map_times::insert </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>level_name</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">VariantMap &amp;&#160;</td>
-          <td class="paramname"><em>eventData</em>&#160;</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>time</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -205,32 +219,11 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a class="anchor" id="a99b61df8b8e0de857506f545ccfef485"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void USP::Setup </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p>Inserts the given values and trims the level_name to avoid issues. </p>
 
 </div>
 </div>
-<a class="anchor" id="abd0ceff47a3c95964b2392e5bc059223"></a>
+<a class="anchor" id="a9b78769c8104a8f3d98efa28a7913d69"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -238,7 +231,7 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void USP::Start </td>
+          <td class="memname">void map_times::save </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -246,30 +239,7 @@ Public Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ab0c79ad9bfca9834d77a24428cc574e6"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void USP::Stop </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -277,39 +247,35 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a7cfd1fc925146d7b7700eaaf843ec5da"></a>
+<a class="anchor" id="a823b29d9630f19ee46ad1fcc276dda51"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Node* USP::cameraNode_</td>
+          <td class="memname">std::map&lt;std::string,float&gt; map_times::values</td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a3bd96889e3ce6ff4f7344d102c10f7c5"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">SharedPtr&lt;Scene&gt; USP::scene_</td>
-        </tr>
-      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>S:/dev/Urho-Sample-Platformer/Source/<a class="el" href="main_8cpp.html">main.cpp</a></li>
+<li>S:/dev/Urho-Sample-Platformer/Source/<a class="el" href="misc_8h_source.html">misc.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="class_u_s_p.html">USP</a></li>
+    <li class="navelem"><a class="el" href="classmap__times.html">map_times</a></li>
     <li class="footer">Generated on Mon Jun 15 2015 06:40:06 for Urho Sample Platformer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.9.1 </li>

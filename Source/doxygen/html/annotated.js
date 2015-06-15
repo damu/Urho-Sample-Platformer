@@ -10,6 +10,7 @@ var annotated =
     [ "level", "classlevel.html", "classlevel" ],
     [ "level_rock_spawn", "structlevel__rock__spawn.html", "structlevel__rock__spawn" ],
     [ "level_static_model", "structlevel__static__model.html", "structlevel__static__model" ],
+    [ "map_times", "classmap__times.html", "classmap__times" ],
     [ "player", "classplayer.html", "classplayer" ],
     [ "timer", "classtimer.html", "classtimer" ],
     [ "USP", "class_u_s_p.html", "class_u_s_p" ]

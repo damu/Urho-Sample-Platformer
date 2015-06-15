@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['player',['player',['../classplayer.html#a4c43d838817775e2a2b0241d30de4abc',1,'player']]]
+  ['operator_20double',['operator double',['../classtimer.html#a609b1a3fbd468ceeaa21cd2c52261e79',1,'timer']]]
 ];

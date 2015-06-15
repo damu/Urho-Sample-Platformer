@@ -113,82 +113,129 @@ $(document).ready(function(){initNavTree('misc_8h_source.html','');});
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;sys/time.h&gt;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;fstream&gt;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;Urho3D/Urho3D.h&gt;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;Urho3D/Engine/Application.h&gt;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;Urho3D/Engine/Engine.h&gt;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;Urho3D/Core/Context.h&gt;</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;Urho3D/Resource/ResourceCache.h&gt;</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;Urho3D/Graphics/Model.h&gt;</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;Urho3D/Graphics/StaticModel.h&gt;</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;Urho3D/Graphics/Material.h&gt;</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// copied from my source collection.</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classtimer.html">   31</a></span>&#160;<span class="comment"></span><span class="keyword">class </span><a class="code" href="classtimer.html">timer</a></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;{</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classtimer.html#af4e240a91a96ba2a6f4e58f0e88483ba">   34</a></span>&#160;    std::string <a class="code" href="classtimer.html#af4e240a91a96ba2a6f4e58f0e88483ba">str</a>;        </div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classtimer.html#a9c78a1e61679e9697efc5b2e74760f8f">   35</a></span>&#160;    timeval <a class="code" href="classtimer.html#a9c78a1e61679e9697efc5b2e74760f8f">tv</a>;             </div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classtimer.html#a8222594b47fa32fa3fc46db34fec7cd7">   36</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classtimer.html#a8222594b47fa32fa3fc46db34fec7cd7">output</a>;            </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classtimer.html#a8993e2ba695f8af1c2445fecc57ff9f5">   38</a></span>&#160;    <a class="code" href="classtimer.html#a8993e2ba695f8af1c2445fecc57ff9f5">timer</a>(std::string str,<span class="keywordtype">bool</span> output=<span class="keyword">true</span>) : str(str),tv(),output(output){<a class="code" href="classtimer.html#a66fc54d1f33bd9d4bec5f8d563595c2e">reset</a>();}</div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classtimer.html#ae536faf93e02933cd025a6fbcbb48d0a">   39</a></span>&#160;    <a class="code" href="classtimer.html#ae536faf93e02933cd025a6fbcbb48d0a">timer</a>() : str(<span class="stringliteral">&quot;&quot;</span>),tv(),output(false){<a class="code" href="classtimer.html#a66fc54d1f33bd9d4bec5f8d563595c2e">reset</a>();}</div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classtimer.html#aee05958ea6b0fbf36ea1fd22747cd546">   40</a></span>&#160;    <a class="code" href="classtimer.html#aee05958ea6b0fbf36ea1fd22747cd546">~timer</a>()</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keywordflow">if</span>(!output)</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        timeval end;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        gettimeofday(&amp;end,NULL);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        std::cout&lt;&lt;(((end.tv_sec-tv.tv_sec)*1000000.0+(end.tv_usec-tv.tv_usec))/1000000.0)&lt;&lt;<span class="stringliteral">&quot; &lt;- &quot;</span>&lt;&lt;str&lt;&lt;std::endl;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    }</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classtimer.html#a66fc54d1f33bd9d4bec5f8d563595c2e">   50</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classtimer.html#a66fc54d1f33bd9d4bec5f8d563595c2e">reset</a>(){gettimeofday(&amp;tv,0);}</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classtimer.html#a5a583d7ad474d6b950ab85f43d4c29a0">   53</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classtimer.html#a5a583d7ad474d6b950ab85f43d4c29a0">until_now</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        timeval end;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        gettimeofday(&amp;end,NULL);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">return</span>(((end.tv_sec-tv.tv_sec)*1000000.0+(end.tv_usec-tv.tv_usec))/1000000.0);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    }</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
-<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classtimer.html#a609b1a3fbd468ceeaa21cd2c52261e79">   61</a></span>&#160;    <span class="keyword">operator</span> double()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code" href="classtimer.html#a5a583d7ad474d6b950ab85f43d4c29a0">until_now</a>();}</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;};</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="misc_8h.html#a3b27e744d0650769d833678f6d473dc9">   68</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="misc_8h.html#a3b27e744d0650769d833678f6d473dc9">set_model</a>(T* model,Urho3D::ResourceCache* cache,std::string model_name)</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;{</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    std::string filename_model=model_name;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    model-&gt;SetModel(cache-&gt;GetResource&lt;Urho3D::Model&gt;(Urho3D::String(filename_model.append(<span class="stringliteral">&quot;.mdl&quot;</span>).c_str())));</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    std::string filename_txt=model_name;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    filename_txt.append(<span class="stringliteral">&quot;.txt&quot;</span>);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    std::ifstream file(filename_txt);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    std::string line;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordflow">if</span>(file.is_open())</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i=0;getline(file,line);i++)</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            model-&gt;SetMaterial(i,cache-&gt;GetResource&lt;Urho3D::Material&gt;(Urho3D::String(line.c_str())));</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;}</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="preprocessor">#endif // MISC_H</span></div>
-<div class="ttc" id="classtimer_html_aee05958ea6b0fbf36ea1fd22747cd546"><div class="ttname"><a href="classtimer.html#aee05958ea6b0fbf36ea1fd22747cd546">timer::~timer</a></div><div class="ttdeci">~timer()</div><div class="ttdef"><b>Definition:</b> misc.h:40</div></div>
-<div class="ttc" id="classtimer_html_ae536faf93e02933cd025a6fbcbb48d0a"><div class="ttname"><a href="classtimer.html#ae536faf93e02933cd025a6fbcbb48d0a">timer::timer</a></div><div class="ttdeci">timer()</div><div class="ttdef"><b>Definition:</b> misc.h:39</div></div>
-<div class="ttc" id="classtimer_html_a9c78a1e61679e9697efc5b2e74760f8f"><div class="ttname"><a href="classtimer.html#a9c78a1e61679e9697efc5b2e74760f8f">timer::tv</a></div><div class="ttdeci">timeval tv</div><div class="ttdoc">the timeval the timer started on </div><div class="ttdef"><b>Definition:</b> misc.h:35</div></div>
-<div class="ttc" id="classtimer_html_af4e240a91a96ba2a6f4e58f0e88483ba"><div class="ttname"><a href="classtimer.html#af4e240a91a96ba2a6f4e58f0e88483ba">timer::str</a></div><div class="ttdeci">std::string str</div><div class="ttdoc">the message printed, after the measured time, on destruction </div><div class="ttdef"><b>Definition:</b> misc.h:34</div></div>
-<div class="ttc" id="classtimer_html_a5a583d7ad474d6b950ab85f43d4c29a0"><div class="ttname"><a href="classtimer.html#a5a583d7ad474d6b950ab85f43d4c29a0">timer::until_now</a></div><div class="ttdeci">double until_now() const </div><div class="ttdoc">returns the time which has passed since starting the timer </div><div class="ttdef"><b>Definition:</b> misc.h:53</div></div>
-<div class="ttc" id="classtimer_html_a8993e2ba695f8af1c2445fecc57ff9f5"><div class="ttname"><a href="classtimer.html#a8993e2ba695f8af1c2445fecc57ff9f5">timer::timer</a></div><div class="ttdeci">timer(std::string str, bool output=true)</div><div class="ttdef"><b>Definition:</b> misc.h:38</div></div>
-<div class="ttc" id="classtimer_html_a8222594b47fa32fa3fc46db34fec7cd7"><div class="ttname"><a href="classtimer.html#a8222594b47fa32fa3fc46db34fec7cd7">timer::output</a></div><div class="ttdeci">bool output</div><div class="ttdoc">if the timer should print something on destruction </div><div class="ttdef"><b>Definition:</b> misc.h:36</div></div>
-<div class="ttc" id="misc_8h_html_a3b27e744d0650769d833678f6d473dc9"><div class="ttname"><a href="misc_8h.html#a3b27e744d0650769d833678f6d473dc9">set_model</a></div><div class="ttdeci">void set_model(T *model, Urho3D::ResourceCache *cache, std::string model_name)</div><div class="ttdoc">Calls SetModel on the given model and tries to load the model file and all texture files mentioned in...</div><div class="ttdef"><b>Definition:</b> misc.h:68</div></div>
-<div class="ttc" id="classtimer_html_a66fc54d1f33bd9d4bec5f8d563595c2e"><div class="ttname"><a href="classtimer.html#a66fc54d1f33bd9d4bec5f8d563595c2e">timer::reset</a></div><div class="ttdeci">void reset()</div><div class="ttdoc">resets the timer by putting the current time into the member /tv/ </div><div class="ttdef"><b>Definition:</b> misc.h:50</div></div>
-<div class="ttc" id="classtimer_html"><div class="ttname"><a href="classtimer.html">timer</a></div><div class="ttdoc">The timer class can be used to measure times and optionaly output them automatically on destruction...</div><div class="ttdef"><b>Definition:</b> misc.h:31</div></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;sys/time.h&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;fstream&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;Urho3D/Urho3D.h&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;Urho3D/Engine/Application.h&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;Urho3D/Engine/Engine.h&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;Urho3D/Core/Context.h&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;Urho3D/Resource/ResourceCache.h&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;Urho3D/Graphics/Model.h&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;Urho3D/Graphics/StaticModel.h&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;Urho3D/Graphics/Material.h&gt;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// copied from my source collection.</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classtimer.html">   32</a></span>&#160;<span class="comment"></span><span class="keyword">class </span><a class="code" href="classtimer.html">timer</a></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;{</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classtimer.html#af4e240a91a96ba2a6f4e58f0e88483ba">   35</a></span>&#160;    std::string <a class="code" href="classtimer.html#af4e240a91a96ba2a6f4e58f0e88483ba">str</a>;        </div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classtimer.html#a9c78a1e61679e9697efc5b2e74760f8f">   36</a></span>&#160;    timeval <a class="code" href="classtimer.html#a9c78a1e61679e9697efc5b2e74760f8f">tv</a>;             </div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classtimer.html#a8222594b47fa32fa3fc46db34fec7cd7">   37</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classtimer.html#a8222594b47fa32fa3fc46db34fec7cd7">output</a>;            </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classtimer.html#a8993e2ba695f8af1c2445fecc57ff9f5">   39</a></span>&#160;    <a class="code" href="classtimer.html#a8993e2ba695f8af1c2445fecc57ff9f5">timer</a>(std::string str,<span class="keywordtype">bool</span> output=<span class="keyword">true</span>) : str(str),tv(),output(output){<a class="code" href="classtimer.html#a66fc54d1f33bd9d4bec5f8d563595c2e">reset</a>();}</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classtimer.html#ae536faf93e02933cd025a6fbcbb48d0a">   40</a></span>&#160;    <a class="code" href="classtimer.html#ae536faf93e02933cd025a6fbcbb48d0a">timer</a>() : str(<span class="stringliteral">&quot;&quot;</span>),tv(),output(false){<a class="code" href="classtimer.html#a66fc54d1f33bd9d4bec5f8d563595c2e">reset</a>();}</div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classtimer.html#aee05958ea6b0fbf36ea1fd22747cd546">   41</a></span>&#160;    <a class="code" href="classtimer.html#aee05958ea6b0fbf36ea1fd22747cd546">~timer</a>()</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    {</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordflow">if</span>(!output)</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        timeval end;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        gettimeofday(&amp;end,NULL);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        std::cout&lt;&lt;(((end.tv_sec-tv.tv_sec)*1000000.0+(end.tv_usec-tv.tv_usec))/1000000.0)&lt;&lt;<span class="stringliteral">&quot; &lt;- &quot;</span>&lt;&lt;str&lt;&lt;std::endl;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    }</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classtimer.html#a66fc54d1f33bd9d4bec5f8d563595c2e">   51</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classtimer.html#a66fc54d1f33bd9d4bec5f8d563595c2e">reset</a>(){gettimeofday(&amp;tv,0);}</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classtimer.html#a5a583d7ad474d6b950ab85f43d4c29a0">   54</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="classtimer.html#a5a583d7ad474d6b950ab85f43d4c29a0">until_now</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        timeval end;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        gettimeofday(&amp;end,NULL);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">return</span>(((end.tv_sec-tv.tv_sec)*1000000.0+(end.tv_usec-tv.tv_usec))/1000000.0);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    }</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="classtimer.html#a609b1a3fbd468ceeaa21cd2c52261e79">   62</a></span>&#160;    <span class="keyword">operator</span> double()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code" href="classtimer.html#a5a583d7ad474d6b950ab85f43d4c29a0">until_now</a>();}</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;};</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="misc_8h.html#a3b27e744d0650769d833678f6d473dc9">   69</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="misc_8h.html#a3b27e744d0650769d833678f6d473dc9">set_model</a>(T* model,Urho3D::ResourceCache* cache,std::string model_name)</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;{</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    std::string filename_model=model_name;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    model-&gt;SetModel(cache-&gt;GetResource&lt;Urho3D::Model&gt;(Urho3D::String(filename_model.append(<span class="stringliteral">&quot;.mdl&quot;</span>).c_str())));</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    std::string filename_txt=model_name;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    filename_txt.append(<span class="stringliteral">&quot;.txt&quot;</span>);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    std::ifstream file(filename_txt);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    std::string line;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordflow">if</span>(file.is_open())</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i=0;getline(file,line);i++)</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            model-&gt;SetMaterial(i,cache-&gt;GetResource&lt;Urho3D::Material&gt;(Urho3D::String(line.c_str())));</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;}</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classmap__times.html">   84</a></span>&#160;<span class="keyword">class </span><a class="code" href="classmap__times.html">map_times</a></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;{</div>
+<div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="classmap__times.html#a823b29d9630f19ee46ad1fcc276dda51">   86</a></span>&#160;    std::map&lt;std::string,float&gt; <a class="code" href="classmap__times.html#a823b29d9630f19ee46ad1fcc276dda51">values</a>;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="classmap__times.html#a595a93acc4852f0a868110746b7b9960">   88</a></span>&#160;    <a class="code" href="classmap__times.html#a595a93acc4852f0a868110746b7b9960">map_times</a>()</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    {</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        std::ifstream file(<span class="stringliteral">&quot;highscores.txt&quot;</span>);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        std::string line;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordflow">while</span>(getline(file,line))</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            <span class="keywordtype">int</span> comma=line.find(<span class="charliteral">&#39;,&#39;</span>);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <span class="keywordflow">if</span>(comma!=std::string::npos)</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            {</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                std::string time=line.substr(comma+1);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                values[line.substr(0,comma)]=std::stof(time);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            }</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        }</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    }</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
+<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="classmap__times.html#a743c4dca7e36ab0770e2fd0560b2aa0c">  103</a></span>&#160;    <span class="keywordtype">float</span> <span class="keyword">get</span>(std::string level_name)</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    {</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordflow">return</span> values[level_name];</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    }</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
+<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="classmap__times.html#a830384c580c756de2213a33f9be8d54c">  109</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classmap__times.html#a830384c580c756de2213a33f9be8d54c">insert</a>(std::string level_name,<span class="keywordtype">float</span> time)</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    {</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordtype">int</span> pos=level_name.rfind(<span class="charliteral">&#39;/&#39;</span>)+1;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordflow">if</span>(pos==std::string::npos)</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            pos=0;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        values[level_name.substr(pos)]=time;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    }</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
+<div class="line"><a name="l00117"></a><span class="lineno"><a class="line" href="classmap__times.html#a9b78769c8104a8f3d98efa28a7913d69">  117</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classmap__times.html#a9b78769c8104a8f3d98efa28a7913d69">save</a>()</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    {</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        std::ofstream file(<span class="stringliteral">&quot;highscores.txt&quot;</span>,std::ofstream::trunc);</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; p:values)</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            <span class="keywordflow">if</span>(p.second&gt;0)</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                file&lt;&lt;p.first&lt;&lt;<span class="stringliteral">&quot;,&quot;</span>&lt;&lt;p.second&lt;&lt;<span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    }</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;};</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="preprocessor">#endif // MISC_H</span></div>
+<div class="ttc" id="classmap__times_html_a9b78769c8104a8f3d98efa28a7913d69"><div class="ttname"><a href="classmap__times.html#a9b78769c8104a8f3d98efa28a7913d69">map_times::save</a></div><div class="ttdeci">void save()</div><div class="ttdef"><b>Definition:</b> misc.h:117</div></div>
+<div class="ttc" id="classmap__times_html"><div class="ttname"><a href="classmap__times.html">map_times</a></div><div class="ttdoc">For reading and storing the best level times. They are stored in a simple text file with a value pair...</div><div class="ttdef"><b>Definition:</b> misc.h:84</div></div>
+<div class="ttc" id="classtimer_html_aee05958ea6b0fbf36ea1fd22747cd546"><div class="ttname"><a href="classtimer.html#aee05958ea6b0fbf36ea1fd22747cd546">timer::~timer</a></div><div class="ttdeci">~timer()</div><div class="ttdef"><b>Definition:</b> misc.h:41</div></div>
+<div class="ttc" id="classmap__times_html_a823b29d9630f19ee46ad1fcc276dda51"><div class="ttname"><a href="classmap__times.html#a823b29d9630f19ee46ad1fcc276dda51">map_times::values</a></div><div class="ttdeci">std::map&lt; std::string, float &gt; values</div><div class="ttdef"><b>Definition:</b> misc.h:86</div></div>
+<div class="ttc" id="classtimer_html_ae536faf93e02933cd025a6fbcbb48d0a"><div class="ttname"><a href="classtimer.html#ae536faf93e02933cd025a6fbcbb48d0a">timer::timer</a></div><div class="ttdeci">timer()</div><div class="ttdef"><b>Definition:</b> misc.h:40</div></div>
+<div class="ttc" id="classmap__times_html_a830384c580c756de2213a33f9be8d54c"><div class="ttname"><a href="classmap__times.html#a830384c580c756de2213a33f9be8d54c">map_times::insert</a></div><div class="ttdeci">void insert(std::string level_name, float time)</div><div class="ttdoc">Inserts the given values and trims the level_name to avoid issues. </div><div class="ttdef"><b>Definition:</b> misc.h:109</div></div>
+<div class="ttc" id="classtimer_html_a9c78a1e61679e9697efc5b2e74760f8f"><div class="ttname"><a href="classtimer.html#a9c78a1e61679e9697efc5b2e74760f8f">timer::tv</a></div><div class="ttdeci">timeval tv</div><div class="ttdoc">the timeval the timer started on </div><div class="ttdef"><b>Definition:</b> misc.h:36</div></div>
+<div class="ttc" id="classtimer_html_af4e240a91a96ba2a6f4e58f0e88483ba"><div class="ttname"><a href="classtimer.html#af4e240a91a96ba2a6f4e58f0e88483ba">timer::str</a></div><div class="ttdeci">std::string str</div><div class="ttdoc">the message printed, after the measured time, on destruction </div><div class="ttdef"><b>Definition:</b> misc.h:35</div></div>
+<div class="ttc" id="classtimer_html_a5a583d7ad474d6b950ab85f43d4c29a0"><div class="ttname"><a href="classtimer.html#a5a583d7ad474d6b950ab85f43d4c29a0">timer::until_now</a></div><div class="ttdeci">double until_now() const </div><div class="ttdoc">returns the time which has passed since starting the timer </div><div class="ttdef"><b>Definition:</b> misc.h:54</div></div>
+<div class="ttc" id="classtimer_html_a8993e2ba695f8af1c2445fecc57ff9f5"><div class="ttname"><a href="classtimer.html#a8993e2ba695f8af1c2445fecc57ff9f5">timer::timer</a></div><div class="ttdeci">timer(std::string str, bool output=true)</div><div class="ttdef"><b>Definition:</b> misc.h:39</div></div>
+<div class="ttc" id="classtimer_html_a8222594b47fa32fa3fc46db34fec7cd7"><div class="ttname"><a href="classtimer.html#a8222594b47fa32fa3fc46db34fec7cd7">timer::output</a></div><div class="ttdeci">bool output</div><div class="ttdoc">if the timer should print something on destruction </div><div class="ttdef"><b>Definition:</b> misc.h:37</div></div>
+<div class="ttc" id="classmap__times_html_a595a93acc4852f0a868110746b7b9960"><div class="ttname"><a href="classmap__times.html#a595a93acc4852f0a868110746b7b9960">map_times::map_times</a></div><div class="ttdeci">map_times()</div><div class="ttdef"><b>Definition:</b> misc.h:88</div></div>
+<div class="ttc" id="misc_8h_html_a3b27e744d0650769d833678f6d473dc9"><div class="ttname"><a href="misc_8h.html#a3b27e744d0650769d833678f6d473dc9">set_model</a></div><div class="ttdeci">void set_model(T *model, Urho3D::ResourceCache *cache, std::string model_name)</div><div class="ttdoc">Calls SetModel on the given model and tries to load the model file and all texture files mentioned in...</div><div class="ttdef"><b>Definition:</b> misc.h:69</div></div>
+<div class="ttc" id="classtimer_html_a66fc54d1f33bd9d4bec5f8d563595c2e"><div class="ttname"><a href="classtimer.html#a66fc54d1f33bd9d4bec5f8d563595c2e">timer::reset</a></div><div class="ttdeci">void reset()</div><div class="ttdoc">resets the timer by putting the current time into the member /tv/ </div><div class="ttdef"><b>Definition:</b> misc.h:51</div></div>
+<div class="ttc" id="classtimer_html"><div class="ttname"><a href="classtimer.html">timer</a></div><div class="ttdoc">The timer class can be used to measure times and optionaly output them automatically on destruction...</div><div class="ttdef"><b>Definition:</b> misc.h:32</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="misc_8h.html">misc.h</a></li>
-    <li class="footer">Generated on Mon Jun 8 2015 04:27:46 for Urho Sample Platformer by
+    <li class="footer">Generated on Mon Jun 15 2015 06:40:05 for Urho Sample Platformer by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.9.1 </li>
   </ul>
