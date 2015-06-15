@@ -155,7 +155,7 @@ gs_main_menu::gs_main_menu() : game_state()
         button->SetStyleAuto();
         button->SetOpacity(0.75);
         {
-            Text* t = new Text(globals::instance()->context);
+            Text* t=new Text(globals::instance()->context);
             t->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),20);
             t->SetHorizontalAlignment(HA_CENTER);
             t->SetVerticalAlignment(VA_CENTER);
@@ -222,9 +222,9 @@ void gs_main_menu::update(StringHash eventType,VariantMap& eventData)
     {
         Text* t=(Text*)lv_levels->GetItem(i);
         if(lv_levels->IsSelected(i))
-            t->SetText("-> "+t->GetVar("filename").GetString());
+            t->SetText("-> "+t->GetVar("filename").GetString()+" ("+std::to_string(highscores.get((t->GetVar("filename").GetString()+".xml").CString())).c_str()+"s)");
         else
-            t->SetText("   "+t->GetVar("filename").GetString());
+            t->SetText("   "+t->GetVar("filename").GetString()+" ("+std::to_string(highscores.get((t->GetVar("filename").GetString()+".xml").CString())).c_str()+"s)");
     }
 }
 
@@ -244,4 +244,3 @@ void gs_main_menu::HandleKeyDown(StringHash eventType,VariantMap& eventData)
     if(key==KEY_ESC)
         globals::instance()->engine->Exit();
 }
-

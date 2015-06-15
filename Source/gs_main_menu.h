@@ -36,6 +36,7 @@ public:
     Urho3D::Node* node_rotating_flag;
     Urho3D::Window* window_menu;
     Urho3D::ListView* lv_levels;
+    map_times highscores;
 
     gs_main_menu();
     void update(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);

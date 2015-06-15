@@ -384,6 +384,12 @@ std::string str;
             if(flag_nodes.size()==0)
             {
                 goal_time=timer_playing;
+                map_times highscores;
+                // update if time not set or time better as the current highscore
+                if(highscores.get(last_level_filename)<1||goal_time<highscores.get(last_level_filename))
+                    highscores.insert(last_level_filename,goal_time);
+                highscores.save();
+
                 auto e=new gs_level_end;
                 std::string str="You collected all flags!\nNeeded time: "+std::to_string(goal_time)+"s";
                 e->text_finished->SetText(str.c_str());

@@ -66,6 +66,25 @@ gs_pause::gs_pause() : game_state()
             t->SetHorizontalAlignment(HA_CENTER);
             t->SetVerticalAlignment(VA_CENTER);
             t->SetName("Text");
+            t->SetText("Restart level");
+            button->AddChild(t);
+
+        }
+        window_->AddChild(button);
+        SubscribeToEvent(button,E_RELEASED,HANDLER(gs_pause,HandleRestartPressed));
+    }
+    {
+        Button* button = new Button(globals::instance()->context);
+        button->SetName("Button");
+        button->SetMinHeight(50);
+        button->SetStyleAuto();
+        button->SetOpacity(0.75);
+        {
+            Text* t = new Text(globals::instance()->context);
+            t->SetFont(globals::instance()->cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"),16);
+            t->SetHorizontalAlignment(HA_CENTER);
+            t->SetVerticalAlignment(VA_CENTER);
+            t->SetName("Text");
             t->SetText("Exit to main menu");
             button->AddChild(t);
         }
@@ -106,6 +125,14 @@ void gs_pause::HandleResumePressed(Urho3D::StringHash eventType,Urho3D::VariantM
 {
     GetSubsystem<Input>()->SetMouseVisible(false);
     GetSubsystem<Input>()->SetMouseGrabbed(true);
+    globals::instance()->game_states.resize(1);
+}
+
+void gs_pause::HandleRestartPressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData)
+{
+    GetSubsystem<Input>()->SetMouseVisible(false);
+    GetSubsystem<Input>()->SetMouseGrabbed(true);
+    globals::instance()->game_states[0].reset(new gs_playing(gs_playing::last_level_filename));
     globals::instance()->game_states.resize(1);
 }
 

@@ -32,6 +32,7 @@ public:
     ~gs_pause();
     void HandleKeyDown(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
     void HandleResumePressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
+    void HandleRestartPressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
     void HandleMainMenuPressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
     void HandleQuitPressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData){globals::instance()->engine->Exit();}
 
