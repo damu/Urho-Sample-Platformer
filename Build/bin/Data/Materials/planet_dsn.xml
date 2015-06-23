@@ -3,6 +3,6 @@
 	<texture name="Textures/planet_diffuse.jpg" unit="diffuse"/>
 	<texture name="Textures/planet_normals.jpg" unit="normal"/>
 	<texture name="Textures/planet_specular.jpg" unit="specular"/>
-	<parameter name="MatDiffColor" value="1.5 1.5 1.5 1"/>
-	<parameter name="MatSpecColor" value="8 8 8 40"/>
+	<parameter name="MatDiffColor" value="0.4 0.4 0.4 1"/>
+	<parameter name="MatSpecColor" value="2 2 2 40"/>
 </material>
