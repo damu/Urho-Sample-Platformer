@@ -241,7 +241,7 @@ gs_playing::gs_playing(std::string level_filename) : game_state()
     {
         Node* skyNode=globals::instance()->scene->CreateChild("Sky");
         nodes.push_back(skyNode);
-        skyNode->SetScale(7000.0f);
+        skyNode->SetScale(50000.0f);
         Skybox* skybox=skyNode->CreateComponent<Skybox>();
         skybox->SetModel(globals::instance()->cache->GetResource<Model>("Models/Box.mdl"));
         skybox->SetMaterial(globals::instance()->cache->GetResource<Material>(current_level.skybox_material));
@@ -262,14 +262,14 @@ gs_playing::gs_playing(std::string level_filename) : game_state()
         lightNode->SetDirection(Vector3::FORWARD);
         lightNode->Yaw(-150);   // horizontal
         lightNode->Pitch(60);   // vertical
-        lightNode->Translate(Vector3(0,0,-2000));
+        lightNode->Translate(Vector3(0,0,-20000));
 
         BillboardSet* billboardObject=lightNode->CreateComponent<BillboardSet>();
         billboardObject->SetNumBillboards(1);
         billboardObject->SetMaterial(globals::instance()->cache->GetResource<Material>("Materials/sun.xml"));
         billboardObject->SetSorted(true);
         Billboard* bb=billboardObject->GetBillboard(0);
-        bb->size_=Vector2(1000,1000);
+        bb->size_=Vector2(10000,10000);
         bb->rotation_=Random()*360.0f;
         bb->enabled_=true;
         billboardObject->Commit();
