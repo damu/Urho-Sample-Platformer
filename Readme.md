@@ -15,15 +15,21 @@ File: Models/robot.mdl and /blends/Robot.blend (the player model)
 Based on http://www.blendswap.com/blends/view/77792 and heavily modified by gawag.  
 Original licence: Creative Commons Attribution 3.0 Unported (CC BY 3.0)
 
-File: Sounds/Drums of the Deep.ogg (the music in level_1, I made it ~76% faster)  
+File: Music/Drums of the Deep.ogg (the music in level_1, I made it ~76% faster)  
 Artist: Kevin MacLeod  
 Licence: Creative Commons: By Attribution 3.0  
 Found at: http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400021
 
-File: Sounds/Lord of the Land.ogg (the music in level_2)  
+File: Music/Lord of the Land.ogg (the music in level_2)  
 Artist: Kevin MacLeod  
 Licence: Creative Commons: By Attribution 3.0  
 Found at: http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400022
+
+File: Music/271866__mrpork__era-of-space.ogg (the music in level_3)  
+Artist: MrPork  
+Licence: Creative Commons: 0 License  
+Found at: https://www.freesound.org/people/MrPork/sounds/271866/  
+Comment: Slowed down by 50% and added flanger effect.
 
 File: Sounds/littlerobotsoundfactory__jingle-win-synth-04.ogg (the flag collect sound)  
 Artist: LittleRobotSoundFactory  

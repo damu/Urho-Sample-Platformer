@@ -72,13 +72,6 @@ public:
         scene_->CreateComponent<Octree>();
         scene_->CreateComponent<DebugRenderer>();
 
-        // until we get a better sky system
-        Node* skyNode=scene_->CreateChild("Sky");
-        skyNode->SetScale(500.0f);
-        Skybox* skybox=skyNode->CreateComponent<Skybox>();
-        skybox->SetModel(cache->GetResource<Model>("Models/Box.mdl"));
-        skybox->SetMaterial(cache->GetResource<Material>("Materials/Skybox.xml"));
-
         cameraNode_=scene_->CreateChild("Camera");
         Camera* camera=cameraNode_->CreateComponent<Camera>();
         camera->SetFarClip(10000);

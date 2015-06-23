@@ -1,0 +1,16 @@
+<xml skybox="Materials/skybox_space.xml" level_min_height="-1500" gravity="-10">
+  <static_model name="Data/Models/level_3" pos_x="0" pos_y="0" pos_z="0" />
+  <static_model name="Data/Models/planet" pos_x="0" pos_y="-7500" pos_z="0" scale="3000" />
+  <player pos_x="0" pos_y="0" pos_z="0" />
+  <flag pos_x="3" pos_y="33" pos_z="62" />
+  <flag pos_x="0" pos_y="18" pos_z="183" />
+  <flag pos_x="-36" pos_y="-67" pos_z="-28" />
+  <flag pos_x="-46" pos_y="-76" pos_z="97" />
+  <flag pos_x="43" pos_y="-121" pos_z="21" />
+  <flag pos_x="-154" pos_y="-178" pos_z="96" />
+  <flag pos_x="-100" pos_y="-165" pos_z="34" />
+  <flag pos_x="-33" pos_y="-314" pos_z="-44" />
+  <flag pos_x="370" pos_y="-474" pos_z="76" />
+  <flag pos_x="117" pos_y="-877" pos_z="18" />
+  <sound name="Music/271866__mrpork__era-of-space.ogg" />
+</xml>

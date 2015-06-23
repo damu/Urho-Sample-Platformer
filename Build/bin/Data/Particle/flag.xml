@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<particleeffect>
+	<material name="Materials/Particle.xml" />
+	<numparticles value="1000" />
+	<updateinvisible enable="true" />
+	<relative enable="false" />
+	<scaled enable="true" />
+	<sorted enable="false" />
+     <emittertype value="sphere" />
+	<emittersize value="5 1 5" />
+	<direction min="-0.3 0.3 -0.3" max="0.3 1.2 0.3" />
+	<constantforce value="0 2 0" />
+	<dampingforce value="0.1" />
+	<activetime value="0" />
+	<inactivetime value="0" />
+	<emissionrate min="40" max="45" />
+	<particlesize min="0.4 0.4" max="0.6 0.6" />
+	<timetolive min="9" max="9" />
+	<velocity min="0.1" max="5" />
+	<rotation min="0" max="0" />
+	<rotationspeed min="0" max="0" />
+	<sizedelta add="0" mul="0.95" />
+	<colorfade color="0 0 0 0" time="0" />
+	<colorfade color="0.8 0.8 1.0 0.2" time="2" />
+	<colorfade color="0 0 0 0" time="9" />
+</particleeffect>

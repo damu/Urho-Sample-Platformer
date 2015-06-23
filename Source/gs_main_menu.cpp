@@ -21,7 +21,20 @@ gs_main_menu::gs_main_menu() : game_state()
         boxObject->SetMaterial(1,globals::instance()->cache->GetResource<Material>("Materials/flag_cloth.xml"));
         boxObject->SetCastShadows(true);
 
+        ParticleEmitter* emitter=node_rotating_flag->CreateComponent<ParticleEmitter>();
+        emitter->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/flag.xml"));
+
         globals::instance()->physical_world=node_rotating_flag->CreateComponent<RigidBody>()->GetPhysicsWorld();    // there may be better ways to get the physical world object
+    }
+
+    // skybox
+    {
+        Node* skyNode=globals::instance()->scene->CreateChild("Sky");
+        nodes.push_back(skyNode);
+        skyNode->SetScale(1500.0f);
+        Skybox* skybox=skyNode->CreateComponent<Skybox>();
+        skybox->SetModel(globals::instance()->cache->GetResource<Model>("Models/Box.mdl"));
+        skybox->SetMaterial(globals::instance()->cache->GetResource<Material>("Materials/Skybox.xml"));
     }
 
     // a torch with a light, sound and particle effects

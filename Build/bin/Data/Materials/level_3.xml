@@ -1,0 +1,5 @@
+<material>
+    <technique name="Techniques/level_3.xml" quality="0" />
+    <parameter name="MatDiffColor" value="0.5 0.5 0.5 1"/>
+    <parameter name="MatSpecColor" value="0.5 0.5 0.5 250"/>
+</material>

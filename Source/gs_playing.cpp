@@ -1,6 +1,6 @@
 #include "gs_playing.h"
 
-#include <Urho3D/Graphics/Terrain.h>
+#include <Urho3D/Graphics/BillboardSet.h>
 #include <Urho3D/ThirdParty/PugiXml/pugixml.hpp>
 
 #include "gs_pause.h"
@@ -23,6 +23,14 @@ level::level(std::string level_filename)
 
     for(auto& c:doc.children())
     {
+        for(pugi::xml_attribute& attr:c.attributes())
+            if(std::string(attr.name())=="skybox")
+                skybox_material=attr.value();
+            else if(std::string(attr.name())=="level_min_height")
+                level_min_height=std::stof(std::string(attr.value()));
+            else if(std::string(attr.name())=="gravity")
+                gravity=std::stof(std::string(attr.value()));
+
         for(pugi::xml_node& child:c.children())
         {
             std::string name(child.name());
@@ -31,6 +39,7 @@ level::level(std::string level_filename)
                 float pos_x=0;
                 float pos_y=0;
                 float pos_z=0;
+                float scale=1.0;
                 String name;
 
                 for(pugi::xml_attribute& attr:child.attributes())
@@ -43,9 +52,11 @@ level::level(std::string level_filename)
                         pos_y=std::stof(std::string(attr.value()));
                     else if(std::string(attr.name())=="pos_z")
                         pos_z=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="scale")
+                        scale=std::stof(std::string(attr.value()));
                 }
                 if(name.Length())
-                    static_models.emplace_back(name,Vector3(pos_x,pos_y,pos_z));
+                    static_models.emplace_back(name,Vector3(pos_x,pos_y,pos_z),scale);
             }
             else if(name=="flag")
             {
@@ -175,6 +186,7 @@ gs_playing::gs_playing(std::string level_filename) : game_state()
         Node* boxNode_=globals::instance()->scene->CreateChild();
         nodes.push_back(boxNode_);
         boxNode_->SetPosition(sm.pos);
+        boxNode_->SetScale(Vector3(sm.scale,sm.scale,sm.scale));
         StaticModel* boxObject=boxNode_->CreateComponent<StaticModel>();
         set_model(boxObject,globals::instance()->cache,std::string(sm.name.CString(),sm.name.Length()));
         boxObject->SetCastShadows(true);
@@ -182,15 +194,18 @@ gs_playing::gs_playing(std::string level_filename) : game_state()
         boxObject->SetOccluder(true);
 
         float min_y=boxObject->GetWorldBoundingBox().min_.y_;
-        if(level_min_height>min_y)
-            level_min_height=min_y;
+        if(current_level.level_min_height)
+            level_min_height=current_level.level_min_height;
+        else
+            if(level_min_height>min_y)
+                level_min_height=min_y;
 
         RigidBody* body=boxNode_->CreateComponent<RigidBody>();
         body->SetCollisionLayer(2); // Use layer bitmask 2 for static geometry
         CollisionShape* shape=boxNode_->CreateComponent<CollisionShape>();
         shape->SetTriangleMesh(globals::instance()->cache->GetResource<Model>(sm.name+".mdl"));
 
-        globals::instance()->physical_world->SetGravity(Vector3(0,-9.81*4,0));
+        globals::instance()->physical_world->SetGravity(Vector3(0,current_level.gravity,0));
     }
     if(current_level.sound_name.Length())
     {
@@ -214,12 +229,25 @@ gs_playing::gs_playing(std::string level_filename) : game_state()
             set_model(boxObject,globals::instance()->cache,"Data/Models/flag");
             boxObject->SetCastShadows(true);
             flag_nodes.push_back(n);
+
+            ParticleEmitter* emitter=n->CreateComponent<ParticleEmitter>();
+            emitter->SetEffect(globals::instance()->cache->GetResource<ParticleEffect>("Particle/flag.xml"));
         }
 
         for(auto p:current_level.torch_positions)
             spawn_torch(p);
     }
+    // skybox
+    {
+        Node* skyNode=globals::instance()->scene->CreateChild("Sky");
+        nodes.push_back(skyNode);
+        skyNode->SetScale(7000.0f);
+        Skybox* skybox=skyNode->CreateComponent<Skybox>();
+        skybox->SetModel(globals::instance()->cache->GetResource<Model>("Models/Box.mdl"));
+        skybox->SetMaterial(globals::instance()->cache->GetResource<Material>(current_level.skybox_material));
+    }
 
+    // sun
     {
         Node* lightNode=globals::instance()->scene->CreateChild("Light");
         nodes.push_back(lightNode);
@@ -232,8 +260,19 @@ gs_playing::gs_playing(std::string level_filename) : game_state()
         light->SetBrightness(1.2);
         light->SetColor(Color(1.5,1.2,1,1));
         lightNode->SetDirection(Vector3::FORWARD);
-        lightNode->Yaw(-150);     // horizontal
+        lightNode->Yaw(-150);   // horizontal
         lightNode->Pitch(60);   // vertical
+        lightNode->Translate(Vector3(0,0,-2000));
+
+        BillboardSet* billboardObject=lightNode->CreateComponent<BillboardSet>();
+        billboardObject->SetNumBillboards(1);
+        billboardObject->SetMaterial(globals::instance()->cache->GetResource<Material>("Materials/sun.xml"));
+        billboardObject->SetSorted(true);
+        Billboard* bb=billboardObject->GetBillboard(0);
+        bb->size_=Vector2(1000,1000);
+        bb->rotation_=Random()*360.0f;
+        bb->enabled_=true;
+        billboardObject->Commit();
     }
 
     // spawn one rock and remove it to cache the collider mesh (to avoid a ~1 second lag when spawning the first rock during the game)
