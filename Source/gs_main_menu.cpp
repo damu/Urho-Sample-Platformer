@@ -84,26 +84,43 @@ gs_main_menu::gs_main_menu() : game_state()
         {
             Node* boxNode_=globals::instance()->scene->CreateChild("Box");
             nodes.push_back(boxNode_);
-            boxNode_->SetPosition(Vector3(x,-1,y));
+            boxNode_->SetPosition(Vector3(x,-1.5,y));
+            boxNode_->SetScale(Vector3(2,2,2));
             StaticModel* boxObject=boxNode_->CreateComponent<StaticModel>();
             boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/Box.mdl"));
-            boxObject->SetMaterial(globals::instance()->cache->GetResource<Material>("Materials/Stone.xml"));
+            boxObject->SetMaterial(globals::instance()->cache->GetResource<Material>("Materials/mossy_stone.xml"));
             boxObject->SetCastShadows(true);
         }
 
+    // sun
     {
-        Node* lightNode=globals::instance()->camera->GetNode()->CreateChild("Light");
+        Node* lightNode=globals::instance()->scene->CreateChild("Light");
         nodes.push_back(lightNode);
-        lightNode->SetPosition(Vector3(0,2,10));
         Light* light=lightNode->CreateComponent<Light>();
-        light->SetLightType(LIGHT_POINT);
-        light->SetRange(10);
-        light->SetBrightness(2.0);
-        light->SetColor(Color(.8,1,.8,1.0));
+        light->SetLightType(LIGHT_DIRECTIONAL);
         light->SetCastShadows(true);
+        light->SetShadowBias(BiasParameters(0.00000025f,0.1f));
+        light->SetShadowCascade(CascadeParameters(20.0f,60.0f,180.0f,560.0f,100.0f,100.0f));
+        light->SetShadowResolution(1.0);
+        light->SetBrightness(1.2);
+        light->SetColor(Color(1.5,1.2,1,1));
+        lightNode->SetDirection(Vector3::FORWARD);
+        lightNode->Yaw(-150);   // horizontal
+        lightNode->Pitch(60);   // vertical
+        lightNode->Translate(Vector3(0,0,-20000));
+
+        BillboardSet* billboardObject=lightNode->CreateComponent<BillboardSet>();
+        billboardObject->SetNumBillboards(1);
+        billboardObject->SetMaterial(globals::instance()->cache->GetResource<Material>("Materials/sun.xml"));
+        billboardObject->SetSorted(true);
+        Billboard* bb=billboardObject->GetBillboard(0);
+        bb->size_=Vector2(10000,10000);
+        bb->rotation_=Random()*360.0f;
+        bb->enabled_=true;
+        billboardObject->Commit();
     }
 
-    Window* window_menu=new Window(globals::instance()->context);
+    window_menu=new Window(globals::instance()->context);
     gui_elements.push_back(window_menu);
     globals::instance()->ui_root->AddChild(window_menu);
 
@@ -256,4 +273,6 @@ void gs_main_menu::HandleKeyDown(StringHash eventType,VariantMap& eventData)
     int key=eventData[P_KEY].GetInt();
     if(key==KEY_ESC)
         globals::instance()->engine->Exit();
+    else if(key==KEY_G)
+        window_menu->SetVisible(!window_menu->IsVisible());
 }

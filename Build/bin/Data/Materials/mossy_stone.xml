@@ -1,0 +1,8 @@
+<material>
+	<technique name="Techniques/DiffNormalSpec.xml"/>
+	<texture name="Textures/mossy_stone_diff.jpg" unit="diffuse"/>
+	<texture name="Textures/mossy_stone_norm.jpg" unit="normal"/>
+	<texture name="Textures/mossy_stone_spec.jpg" unit="specular"/>
+	<parameter name="MatDiffColor" value="0.9 0.9 0.9 1"/>
+	<parameter name="MatSpecColor" value="1.5 1.5 1.5 250"/>
+</material>

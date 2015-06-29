@@ -1,0 +1,79 @@
+#NTEVersion 6
+#BeginNodes 18
+475 78 0
+engine.graphics.synthesis.texture.PatternCellular
+ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 2 0.0 0.0 0.0 1.0 0.024154589 1.0 1.0 1.0 1.0 0.41062802 Cell_Type 4 Distance_ 0 PointGen 1 Seed 1 Intensity 1.0 Jitter 0.375 NumPoints 36 RandColor false Periodic true endparameters
+532 215 0
+engine.graphics.synthesis.texture.FilterWarp
+ExportName "" Strength 0.5 endparameters
+583 81 0
+engine.graphics.synthesis.texture.PatternPerlinNoise
+ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 ScaleX 2.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.5 Spectral_Control 9 0.5 1.0 0.5 0.25 0.125 0.0625 0.03125 0.015625 0.0078125 StartBand 1 EndBand 8 Seed 1 Periodic true endparameters
+760 81 0
+engine.graphics.synthesis.texture.PatternPerlinNoise
+ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 6 0.34901962 0.29803923 0.2627451 1.0 0.0 0.42352942 0.39607844 0.3529412 1.0 0.17391305 0.006127451 0.006127451 0.006127451 1.0 0.352657 0.18998075 0.16630016 0.11761947 1.0 0.6231884 0.36862746 0.3529412 0.32156864 1.0 0.79227054 0.5764706 0.5411765 0.5019608 1.0 0.9951691 ScaleX 7.0 ScaleY 5.0 ValueScale 1.0 Persistence 0.7375 Spectral_Control 9 0.5 1.0 0.7375 0.5439063 0.40113088 0.29583403 0.2181776 0.16090599 0.11866817 StartBand 1 EndBand 8 Seed 1 Periodic true endparameters
+868 80 0
+engine.graphics.synthesis.texture.PatternPerlinNoise
+ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 6 0.5764706 0.5411765 0.5019608 1.0 0.004830897 0.36862746 0.3529412 0.32156864 1.0 0.20772946 0.18998075 0.16630016 0.11761947 1.0 0.37681162 0.006127451 0.006127451 0.006127451 1.0 0.64734304 0.42352942 0.39607844 0.3529412 1.0 0.82608694 0.34901962 0.29803923 0.2627451 1.0 1.0 ScaleX 4.0 ScaleY 5.0 ValueScale 1.0 Persistence 0.75 Spectral_Control 9 0.5 1.0 0.75 0.5625 0.421875 0.31640625 0.23730469 0.17797852 0.13348389 StartBand 1 EndBand 8 Seed 22 Periodic true endparameters
+762 224 0
+engine.graphics.synthesis.texture.FilterMask
+ExportName "" Invert true endparameters
+956 81 0
+engine.graphics.synthesis.texture.PatternPerlinNoise
+ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 ScaleX 4.0 ScaleY 4.0 ValueScale 0.625 Persistence 0.9625 Spectral_Control 12 0.5 0.5 1.0 0.9625 0.9264062 0.89166594 0.85822845 0.82604486 0.79506814 0.76525307 0.73655605 0.7089352 StartBand 2 EndBand 11 Seed 23 Periodic true endparameters
+62 69 0
+engine.graphics.synthesis.texture.PatternPerlinNoise
+ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 2 0.14901961 0.23921569 0.078431375 1.0 0.0 0.42352942 0.32941177 0.24705882 1.0 1.0 ScaleX 8.0 ScaleY 8.0 ValueScale 1.0 Persistence 0.6875 Spectral_Control 9 0.5 1.0 0.6875 0.47265625 0.32495117 0.22340393 0.1535902 0.105593264 0.07259537 StartBand 1 EndBand 8 Seed 33 Periodic true endparameters
+278 204 0
+engine.graphics.synthesis.texture.PatternPerlinNoise
+ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 ScaleX 20.0 ScaleY 20.0 ValueScale 1.0 Persistence 1.0 Spectral_Control 9 0.5 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 StartBand 1 EndBand 8 Seed 34 Periodic true endparameters
+215 71 0
+engine.graphics.synthesis.texture.PatternPerlinNoise
+ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 4 0.6745098 0.6431373 0.6156863 0.4296875 0.0 0.35286987 0.319287 0.2742959 0.05795454 0.25603864 0.3254902 0.2901961 0.23921569 0.0 0.5942029 0.6392157 0.62352943 0.6 0.453125 1.0 ScaleX 4.0 ScaleY 4.0 ValueScale 1.0 Persistence 0.5625 Spectral_Control 10 0.5 1.0 0.5625 0.31640625 0.17797852 0.100112915 0.056313515 0.031676352 0.017817948 0.0100225955 StartBand 1 EndBand 9 Seed 21 Periodic true endparameters
+141 198 0
+engine.graphics.synthesis.texture.FilterBlend
+ExportName "" Layer_Func. 0 Opacity 1.0 Inv._Alpha false endparameters
+232 553 0
+engine.graphics.synthesis.texture.FilterMask
+ExportName "" Invert false endparameters
+925 593 0
+engine.graphics.synthesis.texture.FilterNormalMap
+ExportName "" Strength 2.0 endparameters
+827 498 0
+engine.graphics.synthesis.texture.FilterBlend
+ExportName "" Layer_Func. 0 Opacity 0.125 Inv._Alpha false endparameters
+544 488 0
+engine.graphics.synthesis.texture.FilterBlend
+ExportName "" Layer_Func. 4 Opacity 1.0 Inv._Alpha false endparameters
+221 325 0
+engine.graphics.synthesis.texture.FilterBlend
+ExportName "" Layer_Func. 0 Opacity 0.125 Inv._Alpha false endparameters
+665 576 0
+engine.graphics.synthesis.texture.FilterColorCorrect
+ExportName "" Brightness 0.25 Contrast 1.25 Gamma 1.0 Desaturate 0.125 endparameters
+717 378 0
+engine.graphics.synthesis.texture.FilterBlur
+ExportName "" Radius 1.0 #_Samples 32 Weight 0 Anisotropy 0.0 Angle 0.0 endparameters
+#EndNodes
+#BeginConnections 19
+2 1 1
+6 5 2
+1 11 2
+9 10 1
+7 10 0
+0 1 0
+3 5 0
+4 5 1
+6 13 1
+13 12 0
+10 15 0
+8 15 1
+15 11 0
+15 14 0
+5 11 1
+13 14 1
+14 16 0
+1 17 0
+17 13 0
+#EndConnections
+glpreview 11 12 16 -1 Object 0 Spec._Power 20.0 POM_Strength 0.25 Ambient 0.25 TexScale_U 1 TexScale_V 1 CamRotX 40.0 CamRotY 342.0 CamDist 1.8999995 endglpreview
