@@ -5,7 +5,7 @@
 #include <memory>
 #include <vector>
 #include <map>
-#include <sys/time.h>
+#include <chrono>
 #include <iostream>
 #include <fstream>
 
@@ -33,29 +33,26 @@ class timer
 {
 public:
     std::string str;        ///< the message printed, after the measured time, on destruction
-    timeval tv;             ///< the timeval the timer started on
+    std::chrono::steady_clock::time_point start;    ///< the time the timer was started on
     bool output;            ///< if the timer should print something on destruction
 
-    timer(std::string str,bool output=true) : str(str),tv(),output(output){reset();}
-    timer() : str(""),tv(),output(false){reset();}
+    timer(std::string str,bool output=true) : str(str),output(output){reset();}
+    timer() : str(""),start(),output(false){reset();}
     ~timer()
     {
         if(!output)
             return;
-        timeval end;
-        gettimeofday(&end,NULL);
-        std::cout<<(((end.tv_sec-tv.tv_sec)*1000000.0+(end.tv_usec-tv.tv_usec))/1000000.0)<<" <- "<<str<<std::endl;
+        std::cout<<until_now()<<" <- "<<str<<std::endl;
     }
 
-    /// resets the timer by putting the current time into the member /tv/
-    void reset(){gettimeofday(&tv,0);}
+    /// resets the timer by putting the current time into the member /start/
+    void reset(){start=std::chrono::steady_clock::now();}
 
     /// returns the time which has passed since starting the timer
     double until_now() const
     {
-        timeval end;
-        gettimeofday(&end,NULL);
-        return(((end.tv_sec-tv.tv_sec)*1000000.0+(end.tv_usec-tv.tv_usec))/1000000.0);
+        std::chrono::steady_clock::time_point end=std::chrono::steady_clock::now();
+        return(std::chrono::duration_cast<std::chrono::microseconds>(end-start).count()/1000000.0);
     }
 
     /// same as until_now()
