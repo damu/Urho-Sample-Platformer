@@ -33,7 +33,6 @@ WizardImageStretch=False
 Compression=lzma
 LicenseFile=license.txt
 VersionInfoVersion=1.0
-; VersionInfoCompany=Picture Instruments - PI UG
 VersionInfoProductVersion=1.0
 VersionInfoProductTextVersion={#MyAppVersion}
 

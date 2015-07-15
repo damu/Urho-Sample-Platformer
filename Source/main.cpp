@@ -87,7 +87,8 @@ public:
 
         RenderPath* effectRenderPath=viewport->GetRenderPath();
         effectRenderPath->Append(cache->GetResource<XMLFile>("PostProcess/AutoExposure.xml"));
-        effectRenderPath->Append(cache->GetResource<XMLFile>("PostProcess/BloomHDR.xml"));
+        //effectRenderPath->Append(cache->GetResource<XMLFile>("PostProcess/BloomHDR.xml"));
+        effectRenderPath->Append(cache->GetResource<XMLFile>("PostProcess/BloomHDR_r2.xml"));
         //effectRenderPath->Append(cache->GetResource<XMLFile>("PostProcess/ColorCorrection.xml"));
         effectRenderPath->Append(cache->GetResource<XMLFile>("PostProcess/FXAA2.xml"));
         //effectRenderPath.SetEnabled("GammaCorrection",false);

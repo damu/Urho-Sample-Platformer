@@ -22,13 +22,13 @@
     </command>
     <command type="quad" tag="BloomHDR" vs="BloomHDR" ps="BloomHDR" vsdefines="BLUR16" psdefines="BLUR16" output="blur16">
         <parameter name="BloomHDRBlurDir" value="1.0 0.0" />
-        <parameter name="BloomHDRBlurRadius" value="1.0" />
+        <parameter name="BloomHDRBlurRadius" value="8.0" />
         <parameter name="BloomHDRBlurSigma" value="2.0" />
         <texture unit="diffuse" name="bright16" />
     </command>
     <command type="quad" tag="BloomHDR" vs="BloomHDR" ps="BloomHDR" vsdefines="BLUR16" psdefines="BLUR16" output="bright16">
         <parameter name="BloomHDRBlurDir" value="0.0 1.0" />
-        <parameter name="BloomHDRBlurRadius" value="1.0" />
+        <parameter name="BloomHDRBlurRadius" value="8.0" />
         <parameter name="BloomHDRBlurSigma" value="2.0" />
         <texture unit="diffuse" name="blur16" />
     </command>
@@ -38,13 +38,13 @@
     </command>
     <command type="quad" tag="BloomHDR" vs="BloomHDR" ps="BloomHDR" vsdefines="BLUR8" psdefines="BLUR8" output="bright8">
         <parameter name="BloomHDRBlurDir" value="1.0 0.0" />
-        <parameter name="BloomHDRBlurRadius" value="1.0" />
+        <parameter name="BloomHDRBlurRadius" value="4.0" />
         <parameter name="BloomHDRBlurSigma" value="2.0" />
         <texture unit="diffuse" name="blur8" />
     </command>
     <command type="quad" tag="BloomHDR" vs="BloomHDR" ps="BloomHDR" vsdefines="BLUR8" psdefines="BLUR8" output="blur8">
         <parameter name="BloomHDRBlurDir" value="0.0 1.0" />
-        <parameter name="BloomHDRBlurRadius" value="1.0" />
+        <parameter name="BloomHDRBlurRadius" value="4.0" />
         <parameter name="BloomHDRBlurSigma" value="2.0" />
         <texture unit="diffuse" name="bright8" />
     </command>
@@ -54,13 +54,13 @@
     </command>
     <command type="quad" tag="BloomHDR" vs="BloomHDR" ps="BloomHDR" vsdefines="BLUR4" psdefines="BLUR4" output="bright4">
         <parameter name="BloomHDRBlurDir" value="1.0 0.0" />
-        <parameter name="BloomHDRBlurRadius" value="1.0" />
+        <parameter name="BloomHDRBlurRadius" value="2.0" />
         <parameter name="BloomHDRBlurSigma" value="2.0" />
         <texture unit="diffuse" name="blur4" />
     </command>
     <command type="quad" tag="BloomHDR" vs="BloomHDR" ps="BloomHDR" vsdefines="BLUR4" psdefines="BLUR4" output="blur4">
         <parameter name="BloomHDRBlurDir" value="0.0 1.0" />
-        <parameter name="BloomHDRBlurRadius" value="1.0" />
+        <parameter name="BloomHDRBlurRadius" value="2.0" />
         <parameter name="BloomHDRBlurSigma" value="2.0" />
         <texture unit="diffuse" name="bright4" />
     </command>
