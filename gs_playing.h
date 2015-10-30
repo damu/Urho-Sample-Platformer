@@ -62,9 +62,16 @@ struct level_static_model
     Urho3D::String name;
     Urho3D::Vector3 pos;
     float scale=1.0;
+    float gravity=0.0;
 
     level_static_model(){}
-    level_static_model(Urho3D::String name,Urho3D::Vector3 pos,float scale=1.0) : name(name),pos(pos),scale(scale) {}
+    level_static_model(Urho3D::String name,Urho3D::Vector3 pos,float scale=1.0,float gravity=0.0) : name(name),pos(pos),scale(scale),gravity(gravity) {}
+};
+
+struct gravity_point
+{
+    Urho3D::Vector3 pos;
+    float gravity;
 };
 
 /// Level class used to store all map related data that are read from the XML map files.
@@ -75,6 +82,7 @@ public:
     std::vector<Urho3D::Vector3> flag_positions;
     std::vector<level_rock_spawn> rock_spawns;
     std::vector<level_static_model> static_models;    ///< static level geometry like terrain and buildings. Will all get a triangle-mesh collider.
+    std::vector<gravity_point> gravity_points;
     Urho3D::Vector3 player_pos;
     Urho3D::String sound_name;
     Urho3D::String skybox_material="Materials/Skybox.xml";

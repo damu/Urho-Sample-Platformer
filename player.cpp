@@ -2,7 +2,7 @@
 
 using namespace Urho3D;
 
-player::player(Vector3 pos,game_state* gs)
+player::player(Vector3 pos,gs_playing* gs) : gs(gs)
 {
     node=globals::instance()->scene->CreateChild("Player");
     gs->nodes.push_back(node);
@@ -20,7 +20,8 @@ player::player(Vector3 pos,game_state* gs)
     body->SetMass(80.0);
     body->SetLinearDamping(0.0f);
     body->SetAngularDamping(0.98f);
-    body->SetAngularFactor(Vector3(0,1,0));
+    if(!gs->current_level.gravity_points.size())
+        body->SetAngularFactor(Vector3(0,1,0));
     body->SetFriction(0.8);
     CollisionShape* shape=node->CreateComponent<CollisionShape>();
     shape->SetCapsule(1.3,2,Vector3(0,1.05,0));
@@ -355,6 +356,19 @@ str.append(std::to_string(camera_yaw));
 String s(str.c_str(),str.size());
 text_->SetText(s);
             }*/
+        }
+
+        {
+            Vector3 gravity_dir;
+            for(gravity_point g:gs->current_level.gravity_points)
+            {
+                Vector3 vec_diff=g.pos-body->GetPosition();
+                float dist_factor=1.0-std::min(1.0f,vec_diff.Length()*0.01f);
+                gravity_dir+=vec_diff.Normalized()*g.gravity*dist_factor;
+            }
+            body->ApplyImpulse(gravity_dir*timeStep*1000);
+            //body->SetRotation(Quaternion().FromLookRotation(gravity_dir.Normalized()));
+            //node->SetRotation();
         }
 
         {   // physic raycast to avoid the player glitching through stuff when moving very fast

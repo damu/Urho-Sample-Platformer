@@ -14,7 +14,7 @@ gs_main_menu::gs_main_menu() : game_state()
     {
         node_rotating_flag=globals::instance()->scene->CreateChild("Flag");
         nodes.push_back(node_rotating_flag);
-        node_rotating_flag->SetPosition(Vector3(0,-0.5,6));
+        node_rotating_flag->SetPosition(Vector3(100,-0.5,6));
         StaticModel* boxObject=node_rotating_flag->CreateComponent<StaticModel>();
         boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/flag.mdl"));
         boxObject->SetMaterial(0,globals::instance()->cache->GetResource<Material>("Materials/flag_pole.xml"));
@@ -57,7 +57,7 @@ gs_main_menu::gs_main_menu() : game_state()
         light->SetLightType(LIGHT_POINT);
         light->SetRange(50);
         light->SetBrightness(1.2);
-        light->SetColor(Color(1.0,.6,.4,1.0));
+        light->SetColor(Color(1.0,0.6,0.3,1.0));
         light->SetCastShadows(true);
         light->SetShadowDistance(200);
         light->SetDrawDistance(200);
@@ -79,17 +79,18 @@ gs_main_menu::gs_main_menu() : game_state()
     }
 
     // grid of 400 cubes, known from the basic sample application at the Urho Wiki
+    if(false)
     for(int x=-30;x<30;x+=3)
         for(int y=-30;y<30;y+=3)
         {
             Node* boxNode_=globals::instance()->scene->CreateChild("Box");
             nodes.push_back(boxNode_);
-            boxNode_->SetPosition(Vector3(x,-1.5,y));
-            boxNode_->SetScale(Vector3(2,2,2));
+            boxNode_->SetPosition(Vector3(x,-1,y));
+            boxNode_->SetScale(Vector3(3,3,3));
             StaticModel* boxObject=boxNode_->CreateComponent<StaticModel>();
             boxObject->SetModel(globals::instance()->cache->GetResource<Model>("Models/Box.mdl"));
-            boxObject->SetMaterial(globals::instance()->cache->GetResource<Material>("Materials/mossy_stone.xml"));
-            boxObject->SetCastShadows(true);
+            boxObject->SetMaterial(globals::instance()->cache->GetResource<Material>("Materials/stones_quad.xml"));
+            //boxObject->SetCastShadows(true);
         }
 
     // sun
@@ -102,11 +103,11 @@ gs_main_menu::gs_main_menu() : game_state()
         light->SetShadowBias(BiasParameters(0.00000025f,0.1f));
         light->SetShadowCascade(CascadeParameters(20.0f,60.0f,180.0f,560.0f,100.0f,100.0f));
         light->SetShadowResolution(1.0);
-        light->SetBrightness(1.2);
-        light->SetColor(Color(1.5,1.2,1,1));
+        light->SetBrightness(1.0);
+        light->SetColor(Color(1.0,0.6,0.3,1));
         lightNode->SetDirection(Vector3::FORWARD);
         lightNode->Yaw(-150);   // horizontal
-        lightNode->Pitch(60);   // vertical
+        lightNode->Pitch(30);   // vertical
         lightNode->Translate(Vector3(0,0,-20000));
 
         BillboardSet* billboardObject=lightNode->CreateComponent<BillboardSet>();
@@ -208,6 +209,28 @@ void gs_main_menu::update(StringHash eventType,VariantMap& eventData)
 {
     float timeStep=eventData[Update::P_TIMESTEP].GetFloat();
 
+
+
+
+    static double last_second=0;
+    static double last_second_frames=1;
+    static timer this_second;
+    static double this_second_frames=0;
+    this_second_frames++;
+    if(this_second.until_now()>=1)
+    {
+        last_second=this_second.until_now();
+        last_second_frames=this_second_frames;
+        this_second.reset();
+        this_second_frames=0;
+    }
+
+    //if(last_second!=0)
+    //    cout<<std::to_string(last_second_frames/last_second)<<endl;
+
+
+
+
     node_rotating_flag->Rotate(Quaternion(0,64*timeStep,0));
 
     // Movement speed as world units per second
@@ -275,4 +298,6 @@ void gs_main_menu::HandleKeyDown(StringHash eventType,VariantMap& eventData)
         globals::instance()->engine->Exit();
     else if(key==KEY_G)
         window_menu->SetVisible(!window_menu->IsVisible());
+    else if(key==KEY_T)
+        globals::instance()->camera->SetFillMode(globals::instance()->camera->GetFillMode()==FILL_WIREFRAME?FILL_SOLID:FILL_WIREFRAME);
 }

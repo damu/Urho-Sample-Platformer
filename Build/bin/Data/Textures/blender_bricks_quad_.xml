@@ -1,0 +1,4 @@
+<texture>
+    <address coord="u" mode="clamp" />
+    <filter mode="nearest" />
+</texture>

@@ -41,6 +41,7 @@ level::level(std::string level_filename)
                 float pos_y=0;
                 float pos_z=0;
                 float scale=1.0;
+                float gravity=0.0;
                 String name;
 
                 for(pugi::xml_attribute& attr:child.attributes())
@@ -55,9 +56,11 @@ level::level(std::string level_filename)
                         pos_z=std::stof(std::string(attr.value()));
                     else if(std::string(attr.name())=="scale")
                         scale=std::stof(std::string(attr.value()));
+                    else if(std::string(attr.name())=="gravity")
+                        gravity=std::stof(std::string(attr.value()));
                 }
                 if(name.Length())
-                    static_models.emplace_back(name,Vector3(pos_x,pos_y,pos_z),scale);
+                    static_models.emplace_back(name,Vector3(pos_x,pos_y,pos_z),scale,gravity);
             }
             else if(name=="flag")
             {
@@ -206,8 +209,14 @@ gs_playing::gs_playing(std::string level_filename) : game_state()
         CollisionShape* shape=boxNode_->CreateComponent<CollisionShape>();
         shape->SetTriangleMesh(globals::instance()->cache->GetResource<Model>(sm.name+".mdl"));
 
-        globals::instance()->physical_world->SetGravity(Vector3(0,current_level.gravity,0));
+        if(sm.gravity)
+            current_level.gravity_points.push_back(gravity_point{sm.pos,sm.gravity});
     }
+    if(!current_level.gravity_points.size())
+        globals::instance()->physical_world->SetGravity(Vector3(0,current_level.gravity,0));
+    else
+        globals::instance()->physical_world->SetGravity(Vector3(0,0,0));
+
     if(current_level.sound_name.Length())
     {
         Node* n=globals::instance()->scene->CreateChild();

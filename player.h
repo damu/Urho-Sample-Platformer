@@ -35,9 +35,10 @@ public:
     float camera_yaw=20;
     float camera_pitch=20;
     bool camera_first_person=false;
+    gs_playing* gs;
 
     /// \brief The game state is given to add the player nodes to the node clean-up list of the game state.
-    player(Urho3D::Vector3 pos,game_state* gs);
+    player(Urho3D::Vector3 pos,gs_playing* gs);
     /// \brief Called each frame.
     void update(Urho3D::Input* input,float timeStep);
 };
