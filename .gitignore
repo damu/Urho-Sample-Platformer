@@ -5,7 +5,10 @@ Build/bin/Urho3D.log
 Build/*.cmake
 *.bin
 *.exe
-Build/libUrho-Sample-Platformer.dll.a
-Build/Urho-Sample-Platformer.cbp
-Build/Urho-Sample-Platformer.layout
+Build/*.dll.a
+Build/*.cbp
+Build/*.layout
 *.blend1
+*.swp
+*.swo
+Clean/
