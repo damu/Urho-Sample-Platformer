@@ -44,7 +44,7 @@ public:
     void HandleKeyDown(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData);
     void HandleClosePressed(Urho3D::StringHash eventType,Urho3D::VariantMap& eventData){globals::instance()->engine->Exit();}
 
-    virtual const Urho3D::String& GetTypeName() const {static Urho3D::String name("gs_main_menu");return name;}   // this could be correct
+    virtual const Urho3D::String& GetTypeName() const override {static Urho3D::String name("gs_main_menu");return name;}   // this could be correct
 };
 
 #endif // GS_MAIN_MENU_H

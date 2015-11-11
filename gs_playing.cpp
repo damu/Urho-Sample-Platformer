@@ -1,7 +1,8 @@
 #include "gs_playing.h"
 
 #include <Urho3D/Graphics/BillboardSet.h>
-#include <Urho3D/ThirdParty/PugiXml/pugixml.hpp>
+
+#include "include/PugiXml/pugixml.hpp"
 
 #include "gs_pause.h"
 #include "gs_level_end.h"
