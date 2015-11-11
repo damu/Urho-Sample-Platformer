@@ -131,18 +131,11 @@ public:
 };
 
 //DEFINE_APPLICATION_MAIN(USP)
-// --snip-- this macro expands to:
+// this macro expands to:
 int RunApplication()
 {
     Urho3D::SharedPtr<Urho3D::Context> context(new Urho3D::Context());
     Urho3D::SharedPtr<USP> application(new USP(context));
     return application->Run();
 }
-//DEFINE_MAIN(RunApplication());
-// --snap--
-// the DEFINE_MAIN macro expands to:
-int main(int argc,char** argv)
-{
-    Urho3D::ParseArguments(argc,argv);
-    return RunApplication();
-}
+DEFINE_MAIN(RunApplication());
