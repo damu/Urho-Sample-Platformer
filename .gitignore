@@ -8,7 +8,10 @@ Build/*.cmake
 Build/*.dll.a
 Build/*.cbp
 Build/*.layout
+Build/bin/Data/
+Build/bin/CoreData/
 *.blend1
 *.swp
 *.swo
 Clean/
+bin/Urho3D.log
