@@ -49,7 +49,7 @@ gs_death::gs_death() : game_state()
             button->AddChild(t);
         }
         window_->AddChild(button);
-        SubscribeToEvent(button,E_RELEASED,HANDLER(gs_death,HandleRestartPressed));
+        SubscribeToEvent(button,E_RELEASED,URHO3D_HANDLER(gs_death,HandleRestartPressed));
     }
     {
         Button* button = new Button(globals::instance()->context);
@@ -67,7 +67,7 @@ gs_death::gs_death() : game_state()
             button->AddChild(t);
         }
         window_->AddChild(button);
-        SubscribeToEvent(button,E_RELEASED,HANDLER(gs_death,HandleMainMenuPressed));
+        SubscribeToEvent(button,E_RELEASED,URHO3D_HANDLER(gs_death,HandleMainMenuPressed));
     }
 
     GetSubsystem<Input>()->SetMouseVisible(true);

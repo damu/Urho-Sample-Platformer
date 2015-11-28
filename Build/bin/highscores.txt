@@ -1,3 +1,0 @@
-level_1.xml,79.5266
-level_2.xml,115.323
-level_3.xml,73.3359

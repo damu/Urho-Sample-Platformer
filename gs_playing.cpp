@@ -178,8 +178,8 @@ gs_playing::gs_playing(std::string level_filename) : game_state()
     GetSubsystem<Input>()->SetMouseVisible(false);
     GetSubsystem<Input>()->SetMouseGrabbed(true);
 
-    SubscribeToEvent(E_UPDATE,HANDLER(gs_playing,update));
-    SubscribeToEvent(E_KEYDOWN,HANDLER(gs_playing,HandleKeyDown));
+    SubscribeToEvent(E_UPDATE,URHO3D_HANDLER(gs_playing,update));
+    SubscribeToEvent(E_KEYDOWN,URHO3D_HANDLER(gs_playing,HandleKeyDown));
 
     current_level=level(level_filename);
     for(auto& sm:current_level.static_models)

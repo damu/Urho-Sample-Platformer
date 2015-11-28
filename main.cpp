@@ -100,7 +100,7 @@ public:
         zone->SetFogEnd(200000.0f);
         zone->SetAmbientColor(Color(0.1,0.1,0.1));
 
-        SubscribeToEvent(E_KEYDOWN,HANDLER(USP,HandleKeyDown));
+        SubscribeToEvent(E_KEYDOWN,URHO3D_HANDLER(USP,HandleKeyDown));
 
         // fill our game state shared variables
         globals::instance()->cache=cache;
@@ -130,7 +130,7 @@ public:
     }
 };
 
-//DEFINE_APPLICATION_MAIN(USP)
+//URHO3D_DEFINE_APPLICATION_MAIN(USP)   // this made some trouble in Visual Studio
 // this macro expands to:
 int RunApplication()
 {
@@ -138,4 +138,4 @@ int RunApplication()
     Urho3D::SharedPtr<USP> application(new USP(context));
     return application->Run();
 }
-DEFINE_MAIN(RunApplication());
+URHO3D_DEFINE_MAIN(RunApplication());

@@ -60,10 +60,7 @@ public:
         nodes.clear();
     }
 
-    // these three functions need to be here because of Urho3D::Object
-    virtual Urho3D::StringHash GetType() const override {return GetTypeName();}       // no idea if this is as supposed to be, but it works
-    virtual Urho3D::StringHash GetBaseType() const override {return GetTypeName();}   // no idea if this is as supposed to be, but it works
-    virtual const Urho3D::String& GetTypeName() const override {static Urho3D::String name("game_state");return name;}   // this could be correct
+    URHO3D_OBJECT(game_state,Urho3D::Object)
 };
 
 #endif // GAME_STATE_H
