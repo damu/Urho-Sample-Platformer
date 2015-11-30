@@ -5,6 +5,13 @@
 
 #include <string>
 #include <memory>
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) || defined(__WIN32__)
+ #include <direct.h>
+ void change_dir(const char* dir){_chdir(dir);}
+#else
+ #include <unistd.h>
+ void change_dir(const char* dir){chdir(dir);}
+#endif
 
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Core/CoreEvents.h>
@@ -134,6 +141,11 @@ public:
 // this macro expands to:
 int RunApplication()
 {
+    // Visual Studio start the program from the wrong directory (Build/ instead of Build/bin).
+    // Try to change the working directory, if it succeeds, we should have been in the wrong
+    // directory and are now correct and if it fails we may hav already been in the bin/ directory.
+    change_dir("bin");
+
     Urho3D::SharedPtr<Urho3D::Context> context(new Urho3D::Context());
     Urho3D::SharedPtr<USP> application(new USP(context));
     return application->Run();
