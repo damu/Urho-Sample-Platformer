@@ -15,3 +15,5 @@ Build/bin/CoreData/
 *.swo
 Clean/
 bin/Urho3D.log
+bin/Data/Shaders/HLSL/Cache/*
+bin/CoreData/Shaders/HLSL/Cache/*
