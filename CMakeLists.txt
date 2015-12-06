@@ -1,7 +1,9 @@
 # Set project name
 project (Urho-Sample-Platformer)
+
 # Define target name
 set (TARGET_NAME Urho-Sample-Platformer)
+
 # Set minimum version
 cmake_minimum_required (VERSION 2.8.6)
 if (COMMAND cmake_policy)
@@ -17,15 +19,21 @@ if (COMMAND cmake_policy)
         cmake_policy (SET CMP0042 NEW)
     endif ()
 endif ()
+
 # Set CMake modules search path
 set (CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake/Modules)
+
 add_compile_options ("-std=c++11")
+
 # Include Urho3D Cmake common module
 include (Urho3D-CMake-common)
+
 # Find Urho3D library
 find_package (Urho3D REQUIRED)
 include_directories (${URHO3D_INCLUDE_DIRS})
+
 # Define source files
 define_source_files ()
+
 # Setup target with resource copying
 setup_main_executable ()

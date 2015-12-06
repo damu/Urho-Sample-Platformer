@@ -110,7 +110,6 @@ float noise_height(vec3 p)
     return f;
 }
 
-
 void PS()
 {
     // Get material specular albedo

@@ -96,7 +96,7 @@ void VS()
 float noise_height(vec3 p)
 {
     float f;
-    f=snoise(vWorldPos.xyz*0.5);
+    f=snoise(p.xyz*0.5);
     f=pow(f,4);
     f=clamp(f*8.0,0,1);
 
